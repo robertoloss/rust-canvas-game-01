@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <title>rust canvas game</title>
 </head>
-<body style="background-color: gray; display: flex; flex-direction: column; justify-content: center; align-items: center">
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+<body style="background-color: #282b2e; display: flex; flex-direction: column; justify-content: center; align-items: center">
+    <canvas id="gameCanvas" width="800" height="800"></canvas>
     <script type="module">
 			import init from "./pkg/game_canvas.js";
 
@@ -14,7 +14,7 @@
 			async function start() {
 				wasm = await init();
 				document.addEventListener('keydown', handleKeyDown);
-				//wasm.initialize()
+				wasm.initialize()
 				requestAnimationFrame(gameloop);
 			}
 
