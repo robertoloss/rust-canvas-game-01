@@ -18,8 +18,8 @@ impl Default for Player {
     fn default() -> Self {
         Player {
             position: Vec2 {
-                x: 0.0,
-                y: 0.0
+                x: 50.0,
+                y: 50.0
             },
             velocity: Vec2 {
                 x: 0.0,
@@ -38,6 +38,17 @@ pub fn move_right() {
     let mut player = PLAYER.lock().unwrap();
     player.velocity.x = 2.0; 
 }
+#[wasm_bindgen]
+pub fn stop_horizontal() {
+    let mut player = PLAYER.lock().unwrap();
+    player.velocity.x = 0.0; 
+}
+#[wasm_bindgen]
+pub fn stop_vertical() {
+    let mut player = PLAYER.lock().unwrap();
+    player.velocity.y = 0.0; 
+}
+
 
 #[wasm_bindgen]
 pub fn move_left() {
@@ -59,24 +70,6 @@ pub fn move_down() {
 
 #[wasm_bindgen]
 pub fn initialize() {
-    //let mut player = PLAYER.lock().unwrap();
-    //let game_map = get_map();
-    //match get_context() {
-    //    Ok((context, _)) => {
-    //        let ctx = &context;
-    //        game_map
-    //            .iter().enumerate().for_each(move |(y, row)| { 
-    //                row.iter().enumerate().for_each(move |(x,tile)| {
-    //                     if *tile == 0 {
-    //                        ctx.set_fill_style(&JsValue::from_str("blue"));
-    //                        ctx.fill_rect(x as f64*50.0, y as f64 * 50.0, 50., 50.0);
-    //                        console::log_1(&JsValue::from(format!("Filling blue at {}, {}", x, y)));
-    //                     }
-    //                 })
-    //            });
-    //    },
-    //    Err(e) => eprintln!("Error getting context: {:?}", e)
-    //}
 }
 
 #[wasm_bindgen]

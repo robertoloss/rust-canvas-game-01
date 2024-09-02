@@ -14,6 +14,7 @@
 			async function start() {
 				wasm = await init();
 				document.addEventListener('keydown', handleKeyDown);
+				document.addEventListener('keyup', handleKeyUp);
 				wasm.initialize()
 				requestAnimationFrame(gameloop);
 			}
@@ -33,7 +34,18 @@
 					wasm.move_down();
 				}
 			}
-			
+			function handleKeyUp(event) {
+				switch (event.code) {
+					case 'ArrowLeft':
+					case 'ArrowRight':
+						wasm.stop_horizontal()
+						break
+					case 'ArrowUp':
+					case 'ArrowDown':
+						wasm.stop_vertical()
+						break
+				}
+			}
 
 			function gameloop(timestamp) {
 				try {
