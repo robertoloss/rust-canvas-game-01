@@ -12,21 +12,36 @@ struct Vec2 {
     x: f64,
     y: f64,
 }
+struct Moves {
+    left: bool,
+    right: bool,
+    up: bool,
+    down: bool,
+    jump: bool
+}
 
 struct Player {
     position: Vec2,
     velocity: Vec2,
+    moves: Moves
 }
 impl Default for Player {
     fn default() -> Self {
         Player {
             position: Vec2 {
-                x: 50.0,
-                y: 50.0
+                x: 350.0,
+                y: 650.0
             },
             velocity: Vec2 {
                 x: 0.0,
                 y: 0.0
+            },
+            moves: Moves {
+                left: false,
+                right: false,
+                up: false,
+                down: false,
+                jump: false
             }
         }
     }
@@ -38,37 +53,61 @@ lazy_static! {
 }
 
 #[wasm_bindgen]
-pub fn move_right() {
+pub fn stop_up() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.x = 4.0; 
+    player.moves.up = false
 }
 #[wasm_bindgen]
-pub fn stop_horizontal() {
+pub fn stop_down() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.x = 0.0; 
+    player.moves.down = false
 }
 #[wasm_bindgen]
-pub fn stop_vertical() {
+pub fn stop_left() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.y = 0.0; 
+    player.moves.left = false
+}
+#[wasm_bindgen]
+pub fn stop_right() {
+    let mut player = PLAYER.lock().unwrap();
+    player.moves.right = false
+}
+#[wasm_bindgen]
+pub fn stop_jumping() {
+    let mut player = PLAYER.lock().unwrap();
+    player.moves.jump = false
 }
 
 #[wasm_bindgen]
+pub fn move_right() {
+    let mut player = PLAYER.lock().unwrap();
+    player.moves.right = true;
+    player.moves.left = false;
+}
+#[wasm_bindgen]
 pub fn move_left() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.x = -4.0; 
+    player.moves.left = true;
+    player.moves.right = false;
 }
 
 #[wasm_bindgen]
 pub fn move_up() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.y = -4.0; 
+    player.moves.up = true;
+    player.moves.down = false;
 }
 
 #[wasm_bindgen]
 pub fn move_down() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.y = 4.0; 
+    player.moves.down = true;
+    player.moves.up = false;
+}
+#[wasm_bindgen]
+pub fn jump() {
+    let mut player = PLAYER.lock().unwrap();
+    player.moves.jump = true;
 }
 
 #[wasm_bindgen]
@@ -130,6 +169,17 @@ fn generate_map_collisions() -> HashMap<(usize,usize), Tile> {
 pub fn render() -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
     let collision_map = MAP_COLLISIONS.lock().unwrap();
+    
+    player.velocity.x = if player.moves.right { 4.0 } else if player.moves.left { -4.0 } else { 0. };
+    //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
+    
+    if player.moves.jump {
+        player.moves.jump = false;
+        player.velocity.y = -9.;
+    }
+    if player.velocity.y < 100.0 {
+        player.velocity.y += 0.5;
+    }
 
     player.position.x += player.velocity.x;
     player.position.y += player.velocity.y;

@@ -20,29 +20,41 @@
 			}
 
 			function handleKeyDown(event) {
-				if (event.code === 'ArrowRight') {
-					event.preventDefault()
-					wasm.move_right();
-				} else if (event.code === 'ArrowLeft') {
-					event.preventDefault()
-					wasm.move_left();
-				} else if (event.code === 'ArrowUp') {
-					event.preventDefault()
-					wasm.move_up();
-				} else if (event.code === 'ArrowDown') {
-					event.preventDefault()
-					wasm.move_down();
+				event.preventDefault()
+				switch (event.code) {
+					case 'ArrowRight':
+						wasm.move_right()
+						break
+					case 'ArrowLeft':
+						wasm.move_left()
+						break
+					case 'ArrowUp':
+						wasm.move_up()
+						break
+					case 'ArrowDown':
+						wasm.move_down()
+						break
+					case 'KeyX':
+						wasm.jump()
+						break
 				}
 			}
 			function handleKeyUp(event) {
 				switch (event.code) {
 					case 'ArrowLeft':
+						wasm.stop_left()
+						break
 					case 'ArrowRight':
-						wasm.stop_horizontal()
+						wasm.stop_right()
 						break
 					case 'ArrowUp':
+						wasm.stop_up()
+						break
 					case 'ArrowDown':
-						wasm.stop_vertical()
+						wasm.stop_down()
+						break
+					case 'KeyX':
+						wasm.stop_jumping()
 						break
 				}
 			}
