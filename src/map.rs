@@ -1,4 +1,16 @@
+use crate::Vec2;
 
+#[derive(Debug)]
+pub struct Vec2usize {
+    pub x: usize,
+    pub y: usize
+}
+
+#[derive(Debug)]
+pub struct Tile {
+    pub tile_pos: Vec2usize,
+    pub position: Vec2,
+}
 
 pub fn get_map() -> Vec<Vec<u8>> {
     vec![
