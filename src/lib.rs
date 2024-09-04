@@ -1,9 +1,11 @@
+mod collisions;
+mod map;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::{HtmlCanvasElement, CanvasRenderingContext2d, console};
 use std::{collections::HashMap, sync::Mutex};
-mod map;
 use map::*;
+use collisions::*;
 
 #[derive(Debug)]
 struct Vec2 {
@@ -38,7 +40,7 @@ lazy_static! {
 #[wasm_bindgen]
 pub fn move_right() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.x = 2.0; 
+    player.velocity.x = 4.0; 
 }
 #[wasm_bindgen]
 pub fn stop_horizontal() {
@@ -51,23 +53,22 @@ pub fn stop_vertical() {
     player.velocity.y = 0.0; 
 }
 
-
 #[wasm_bindgen]
 pub fn move_left() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.x = -2.0; 
+    player.velocity.x = -4.0; 
 }
 
 #[wasm_bindgen]
 pub fn move_up() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.y = -2.0; 
+    player.velocity.y = -4.0; 
 }
 
 #[wasm_bindgen]
 pub fn move_down() {
     let mut player = PLAYER.lock().unwrap();
-    player.velocity.y = 2.0; 
+    player.velocity.y = 4.0; 
 }
 
 #[wasm_bindgen]
@@ -124,63 +125,6 @@ fn generate_map_collisions() -> HashMap<(usize,usize), Tile> {
     collisions_map
 }
 
-fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usize), Tile>) -> (bool,Option<&map::Tile>) {
-    (collision_map.contains_key(&tuple),collision_map.get(&tuple))
-}
-
-fn manage_player_collision_with_tile(player: &mut Player, collision_map: &HashMap<(usize, usize), Tile>) {
-    let top_right = (
-        ((player.position.x + player.velocity.x + 50.0) / 50.0).floor() as usize,
-        ((player.position.y + player.velocity.y) / 50.0).floor() as usize
-    );
-    let bottom_right = (
-        ((player.position.x + player.velocity.x + 50.0) / 50.0).floor() as usize,
-        ((player.position.y + player.velocity.y + 50.0) / 50.0).floor() as usize
-    );
-    let top_left = (
-        ((player.position.x + player.velocity.x) / 50.0).floor() as usize,
-        ((player.position.y + player.velocity.y) / 50.0).floor() as usize
-    );
-    let bottom_left = (
-        ((player.position.x + player.velocity.x) / 50.0).floor() as usize,
-        ((player.position.y + player.velocity.y + 50.0) / 50.0).floor() as usize
-    );
-    if player.velocity.x == 0. && player.velocity.y == 0. { return }
-    if player.velocity.y == 0. {
-        if player.velocity.x > 0. && 
-            tile_collision(top_right, &collision_map).0 || tile_collision(bottom_right, &collision_map).0 
-        {
-            player.velocity.x = 0.;
-            if tile_collision(top_right, &collision_map).0 {
-                let tile = tile_collision(top_right, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.x = t.position.x - 50.0;
-                }
-            } else {
-                let tile = tile_collision(bottom_right, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.x = t.position.x - 50.0;
-                }
-
-            }
-        } else if tile_collision(top_left, &collision_map).0 || tile_collision(bottom_left, &collision_map).0  {
-            player.velocity.x = 0.;
-            if tile_collision(top_left, &collision_map).0 {
-                let tile = tile_collision(top_left, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.x = t.position.x + 50.0;
-                }
-            } else {
-                let tile = tile_collision(bottom_left, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.x = t.position.x + 50.0;
-                }
-
-            }
-            
-        }
-    }
-}
 
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
