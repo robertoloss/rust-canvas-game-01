@@ -1,5 +1,5 @@
-
 mod map;
+mod collisions;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::{HtmlCanvasElement, CanvasRenderingContext2d, console};
@@ -153,15 +153,18 @@ fn generate_map_collisions(origin_x: usize, origin_y: usize) -> HashMap<(usize,u
             if game_map[y][x] == 0 {
                 let tile = Tile {
                     tile_pos: Vec2usize {
-                        x,
-                        y
+                        x: (x % 16),
+                        y: (y % 16)
                     },
                     position: Vec2 {
-                        x: x as f64 * 50.0,
-                        y: y as f64 * 50.0
+                        x: (x % 16) as f64 * 50.0,
+                        y: (y % 16) as f64 * 50.0
                     }
                 };
-                collisions_map.insert((x,y), tile);
+                collisions_map.insert(
+                    ( (x % 16) , (y % 16) ), 
+                    tile
+                );
             }
         }
     }
@@ -171,7 +174,7 @@ fn generate_map_collisions(origin_x: usize, origin_y: usize) -> HashMap<(usize,u
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
-    let collision_map = MAP_COLLISIONS.lock().unwrap();
+    let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     
     player.velocity.x = if player.moves.right { 4.0 } else if player.moves.left { -4.0 } else { 0. };
     //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
@@ -187,6 +190,27 @@ pub fn render() -> Result<(), JsValue> {
     player.position.x += player.velocity.x;
     player.position.y += player.velocity.y;
 
+    if player.position.x > 50.0 * 16.0 {
+        player.map_origin.x += 16;
+        player.position.x = 0.;
+        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y);
+    }
+    if player.position.x < -50.0 {
+        player.map_origin.x -= 16;
+        player.position.x = 16.0 * 50.0;
+        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y);
+    }
+    if player.position.y > 50.0 * 16.0 {
+        player.map_origin.y += 16;
+        player.position.y = 0.;
+        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y);
+    }
+    if player.position.y < -50.0 {
+        player.map_origin.y -= 16;
+        player.position.y = 16.0 * 50.0;
+        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y);
+    }
+
     manage_player_collision_with_tile(&mut(*player), &collision_map);
 
     let game_map = get_map();
@@ -199,27 +223,19 @@ pub fn render() -> Result<(), JsValue> {
 
             for y in player.map_origin.y..player.map_origin.y+16 {
                 for x in player.map_origin.x..player.map_origin.x+16 {
+                    //let message = format!("tile: {}, {}, {}", game_map[y][x], x, y);
+                    //console::log_1(&JsValue::from_str(&message));
                      if  game_map[y][x] == 0 {
                         ctx.set_fill_style(&JsValue::from_str("blue"));
-                        ctx.fill_rect(x as f64*50.0, y as f64 * 50.0, 50., 50.0);
+                        ctx.fill_rect(
+                            (x % 16) as f64*50.0, 
+                            (y % 16) as f64 * 50.0, 
+                            50., 
+                            50.
+                        );
                      }
                 }
             }
-
-            //game_map.iter()
-            //    .enumerate()
-            //    .for_each(move |(y, row)| { 
-            //        if y > 15 { return }
-            //        row.iter()
-            //            .enumerate()
-            //            .for_each(move |(x,tile)| {
-            //                if x > 15 { return }
-            //                 if *tile == 0 {
-            //                    ctx.set_fill_style(&JsValue::from_str("blue"));
-            //                    ctx.fill_rect(x as f64*50.0, y as f64 * 50.0, 50., 50.0);
-            //                 }
-            //             })
-            //    });
 
             context.set_fill_style(&JsValue::from_str("red"));
             context.fill_rect(player.position.x, player.position.y, 50.0, 50.0);
