@@ -1,7 +1,10 @@
 use std::collections::HashMap;
+use std::fmt::format;
+use wasm_bindgen::JsValue;
 use crate::Player;
 use crate::map;
 use crate::Tile;
+use web_sys::console;
 
 
 pub fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usize), Tile>) -> (bool,Option<&map::Tile>) {
@@ -9,6 +12,8 @@ pub fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usi
 }
 
 pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &HashMap<(usize, usize), Tile>) {
+
+    //tiles around the player
     let top_right = (
         ((player.position.x + player.velocity.x + 50.0) / 50.0).floor() as usize,
         ((player.position.y + player.velocity.y) / 50.0).floor() as usize
@@ -175,7 +180,7 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
                         // Calculate slope
                         let m = player.velocity.y / player.velocity.x;
                         // Calculate intersection y-coordinate
-                        let intersection_y = m * (t.position.x - (player.position.x + 50.0)) + player.position.y;
+                        let intersection_y = m * (t.position.x - (player.position.x + 50.0)) + player.position.y + 50.0;
                         let from_below = intersection_y > t.position.y + 50.0;
                         if from_below {
                             player.velocity.y = 0.;
@@ -222,8 +227,9 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
                         // Calculate slope
                         let m = player.velocity.y / player.velocity.x;
                         // Calculate intersection y-coordinate
-                        let intersection_y = m * (t.position.x - player.position.x) + player.position.y;
+                        let intersection_y = m * (t.position.x + 50.0 - player.position.x) + player.position.y + 50.0;
                         let from_above = intersection_y < t.position.y;
+
                         if from_above {
                             player.velocity.y = 0.;
                             player.position.y = t.position.y - 50.1;
@@ -267,7 +273,7 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
                         // Calculate slope
                         let m = player.velocity.y / player.velocity.x;
                         // Calculate intersection y-coordinate
-                        let intersection_y = m * (t.position.x + 50.0 - player.position.x) + player.position.y;
+                        let intersection_y = m * (t.position.x - player.position.x) + player.position.y;
                         let from_above = intersection_y < t.position.y;
                         if from_above {
                             player.velocity.y = 0.;

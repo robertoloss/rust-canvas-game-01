@@ -197,7 +197,7 @@ pub fn render() -> Result<(), JsValue> {
     }
     if player.position.x < -50.0 {
         player.map_origin.x -= 16;
-        player.position.x = 16.0 * 50.0;
+        player.position.x = 15.0 * 50.0;
         *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y);
     }
     if player.position.y > 50.0 * 16.0 {
@@ -207,9 +207,10 @@ pub fn render() -> Result<(), JsValue> {
     }
     if player.position.y < -50.0 {
         player.map_origin.y -= 16;
-        player.position.y = 16.0 * 50.0;
+        player.position.y = 15.0 * 50.0;
         *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y);
     }
+    //console::log_1(&JsValue::from_str(&format!("map_origin: {},{}", player.map_origin.x, player.map_origin.y)));
 
     manage_player_collision_with_tile(&mut(*player), &collision_map);
 
@@ -226,7 +227,7 @@ pub fn render() -> Result<(), JsValue> {
                     //let message = format!("tile: {}, {}, {}", game_map[y][x], x, y);
                     //console::log_1(&JsValue::from_str(&message));
                      if  game_map[y][x] == 0 {
-                        ctx.set_fill_style(&JsValue::from_str("blue"));
+                        ctx.set_fill_style(&JsValue::from_str("gray"));
                         ctx.fill_rect(
                             (x % 16) as f64*50.0, 
                             (y % 16) as f64 * 50.0, 
