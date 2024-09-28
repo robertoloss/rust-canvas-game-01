@@ -178,6 +178,66 @@ function takeObject(idx) {
 }
 /**
 */
+export function stop_up() {
+    wasm.stop_up();
+}
+
+/**
+*/
+export function stop_down() {
+    wasm.stop_down();
+}
+
+/**
+*/
+export function stop_left() {
+    wasm.stop_left();
+}
+
+/**
+*/
+export function stop_right() {
+    wasm.stop_right();
+}
+
+/**
+*/
+export function stop_jumping() {
+    wasm.stop_jumping();
+}
+
+/**
+*/
+export function move_right() {
+    wasm.move_right();
+}
+
+/**
+*/
+export function move_left() {
+    wasm.move_left();
+}
+
+/**
+*/
+export function move_up() {
+    wasm.move_up();
+}
+
+/**
+*/
+export function move_down() {
+    wasm.move_down();
+}
+
+/**
+*/
+export function jump() {
+    wasm.jump();
+}
+
+/**
+*/
 export function initialize() {
     wasm.initialize();
 }
@@ -285,6 +345,9 @@ function __wbg_get_imports() {
     imports.wbg.__wbg_setfillStyle_98060f7b257936ba = function(arg0, arg1) {
         getObject(arg0).fillStyle = getObject(arg1);
     };
+    imports.wbg.__wbg_clearRect_384c24b287b30369 = function(arg0, arg1, arg2, arg3, arg4) {
+        getObject(arg0).clearRect(arg1, arg2, arg3, arg4);
+    };
     imports.wbg.__wbg_fillRect_a5a5da573f0412b5 = function(arg0, arg1, arg2, arg3, arg4) {
         getObject(arg0).fillRect(arg1, arg2, arg3, arg4);
     };
@@ -296,6 +359,14 @@ function __wbg_get_imports() {
             result = false;
         }
         const ret = result;
+        return ret;
+    };
+    imports.wbg.__wbg_width_53a5bd0268e99485 = function(arg0) {
+        const ret = getObject(arg0).width;
+        return ret;
+    };
+    imports.wbg.__wbg_height_6fb32e51e54037ae = function(arg0) {
+        const ret = getObject(arg0).height;
         return ret;
     };
     imports.wbg.__wbg_getContext_69ec873410cbba3c = function() { return handleError(function (arg0, arg1, arg2) {
