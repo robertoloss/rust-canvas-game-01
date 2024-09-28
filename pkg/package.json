@@ -1,0 +1,14 @@
+{
+  "name": "game_canvas",
+  "version": "0.1.0",
+  "files": [
+    "game_canvas_bg.wasm",
+    "game_canvas.js",
+    "game_canvas.d.ts"
+  ],
+  "module": "game_canvas.js",
+  "types": "game_canvas.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
