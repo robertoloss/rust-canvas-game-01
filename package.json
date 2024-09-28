@@ -1,7 +1,7 @@
 
 {
   "scripts": {
-    "prebuild": "mkdir -p ./bin && curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh -s -- -d ./bin",
+    "prebuild": "mkdir -p ./bin && curl -L https://github.com/rustwasm/wasm-pack/releases/download/v0.10.2/wasm-pack-v0.10.2-x86_64-unknown-linux-musl.tar.gz | tar -xz -C ./bin --strip-components=1",
     "build": "./bin/wasm-pack build",
     "watch": "cargo watch -s './bin/wasm-pack build'",
     "start": "npm run watch & http-server --port=57837 --watch=./pkg"
