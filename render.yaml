@@ -1,0 +1,5 @@
+headers:
+  - path: /*
+    headers:
+      - key: Content-Type
+        value: application/wasm
