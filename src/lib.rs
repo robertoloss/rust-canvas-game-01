@@ -238,7 +238,7 @@ pub fn render() -> Result<(), JsValue> {
                 }
             }
 
-            context.set_fill_style(&JsValue::from_str("red"));
+            context.set_fill_style(&JsValue::from_str("#b52c1d"));
             context.fill_rect(player.position.x, player.position.y, 50.0, 50.0);
         },
         Err(e) => eprintln!("Error getting context: {:?}", e)

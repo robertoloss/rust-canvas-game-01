@@ -1,9 +1,0 @@
-headers:
-  - path: /*.wasm
-    headers:
-      - key: Content-Type
-        value: application/wasm
-  - path: /*.js
-    headers:
-      - key: Content-Type
-        value: application/javascript
