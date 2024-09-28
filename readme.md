@@ -1,4 +1,4 @@
-Platformer game written in Rust using wasm and canvas. 
+Platformer game written in Rust using wasm-bindgen and canvas. 
 
 Left and right arrow to move.
 'x' to jump.
