@@ -1,4 +1,4 @@
-mod collisions;
+
 mod map;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
@@ -19,11 +19,11 @@ struct Moves {
     down: bool,
     jump: bool
 }
-
 struct Player {
     position: Vec2,
     velocity: Vec2,
-    moves: Moves
+    moves: Moves,
+    map_origin: Vec2usize
 }
 impl Default for Player {
     fn default() -> Self {
@@ -42,6 +42,10 @@ impl Default for Player {
                 up: false,
                 down: false,
                 jump: false
+            },
+            map_origin: Vec2usize {
+                x: 0,
+                y: 0
             }
         }
     }
@@ -113,7 +117,8 @@ pub fn jump() {
 #[wasm_bindgen]
 pub fn initialize() {
     let mut map_collisions = MAP_COLLISIONS.lock().unwrap();
-    *map_collisions = generate_map_collisions();
+    let player = PLAYER.lock().unwrap();
+    *map_collisions = generate_map_collisions(player.map_origin.x, player.map_origin.y);
     //let map_string = format!("{:?}", *map_collisions);
     //console::log_1(&JsValue::from_str(&map_string));
 }
@@ -121,7 +126,6 @@ pub fn initialize() {
 #[wasm_bindgen]
 pub fn update() {
     let _player = PLAYER.lock().unwrap();
-    // Update player state or game logic here
     //player.pos_y += 1.0;
 }
 
@@ -137,15 +141,15 @@ fn get_context() -> Result<(CanvasRenderingContext2d,HtmlCanvasElement), JsValue
     Ok((context,canvas))
 }
 
-fn generate_map_collisions() -> HashMap<(usize,usize), Tile> {
+fn generate_map_collisions(origin_x: usize, origin_y: usize) -> HashMap<(usize,usize), Tile> {
     let mut collisions_map = HashMap::new(); 
     let game_map = get_map();
     
     if game_map.len() == 0 {
         return collisions_map
     }
-    for y in 0..game_map.len() {
-        for x in 0..game_map[0].len() {
+    for y in origin_y..origin_y+16 {
+        for x in origin_x..origin_x+16 {
             if game_map[y][x] == 0 {
                 let tile = Tile {
                     tile_pos: Vec2usize {
@@ -163,7 +167,6 @@ fn generate_map_collisions() -> HashMap<(usize,usize), Tile> {
     }
     collisions_map
 }
-
 
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
@@ -191,27 +194,38 @@ pub fn render() -> Result<(), JsValue> {
         Ok((context, canvas)) => {
             let ctx = &context;
             ctx.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
-
             ctx.set_fill_style(&JsValue::from_str("black"));
             ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
-            game_map
-                .iter().enumerate().for_each(move |(y, row)| { 
-                    if y > 15 { return }
-                    row.iter().enumerate().for_each(move |(x,tile)| {
-                        if x > 15 { return }
-                         if *tile == 0 {
-                            ctx.set_fill_style(&JsValue::from_str("blue"));
-                            ctx.fill_rect(x as f64*50.0, y as f64 * 50.0, 50., 50.0);
-                            //console::log_1(&JsValue::from(format!("Filling blue at {}, {}", x, y)));
-                         }
-                     })
-                });
+
+            for y in player.map_origin.y..player.map_origin.y+16 {
+                for x in player.map_origin.x..player.map_origin.x+16 {
+                     if  game_map[y][x] == 0 {
+                        ctx.set_fill_style(&JsValue::from_str("blue"));
+                        ctx.fill_rect(x as f64*50.0, y as f64 * 50.0, 50., 50.0);
+                     }
+                }
+            }
+
+            //game_map.iter()
+            //    .enumerate()
+            //    .for_each(move |(y, row)| { 
+            //        if y > 15 { return }
+            //        row.iter()
+            //            .enumerate()
+            //            .for_each(move |(x,tile)| {
+            //                if x > 15 { return }
+            //                 if *tile == 0 {
+            //                    ctx.set_fill_style(&JsValue::from_str("blue"));
+            //                    ctx.fill_rect(x as f64*50.0, y as f64 * 50.0, 50., 50.0);
+            //                 }
+            //             })
+            //    });
+
             context.set_fill_style(&JsValue::from_str("red"));
             context.fill_rect(player.position.x, player.position.y, 50.0, 50.0);
         },
         Err(e) => eprintln!("Error getting context: {:?}", e)
     }
-
     Ok(())
 }
 

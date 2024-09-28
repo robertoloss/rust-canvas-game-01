@@ -1,6 +1,4 @@
 use std::collections::HashMap;
-use wasm_bindgen::JsValue;
-use web_sys::console;
 use crate::Player;
 use crate::map;
 use crate::Tile;
