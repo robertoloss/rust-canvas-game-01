@@ -2,7 +2,7 @@ mod map;
 mod collisions;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
-use web_sys::{HtmlCanvasElement, CanvasRenderingContext2d, console};
+use web_sys::{HtmlCanvasElement, CanvasRenderingContext2d };
 use std::{collections::HashMap, sync::Mutex};
 use map::*;
 use collisions::*;

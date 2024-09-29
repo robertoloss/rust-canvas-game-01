@@ -1,18 +1,51 @@
 use std::collections::HashMap;
-use std::fmt::format;
-use wasm_bindgen::JsValue;
 use crate::Player;
 use crate::map;
 use crate::Tile;
-use web_sys::console;
 
+pub enum DirectionHV {
+    Horizontal,
+    Vertical
+}
 
-pub fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usize), Tile>) -> (bool,Option<&map::Tile>) {
+pub fn tile_collision(
+    tuple: (usize, usize), 
+    collision_map: &HashMap<(usize, usize), Tile>
+) -> (bool,Option<&map::Tile>) {
     (collision_map.contains_key(&tuple),collision_map.get(&tuple))
 }
 
-pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &HashMap<(usize, usize), Tile>) {
+pub fn manage_hv_collision(
+    t1_t2_off: ((usize, usize), (usize, usize), f64), 
+    collision_map: &HashMap<(usize, usize), Tile>,
+    player: &mut Player,
+    direction: DirectionHV
+) {
+    fn new_position(
+        direction: DirectionHV, 
+        t: &Tile, 
+        t1_t2_off: ((usize, usize), (usize, usize), f64), 
+        player: &mut Player
+    ) {
+        match direction {
+            DirectionHV::Vertical => player.position.y = t.position.y + t1_t2_off.2,
+            DirectionHV::Horizontal => player.position.x = t.position.x + t1_t2_off.2
+        }
+    }
+    match direction {
+        DirectionHV::Vertical => player.velocity.y = 0.,
+        DirectionHV::Horizontal => player.velocity.x = 0.
+    }
+    let tile1 = tile_collision(t1_t2_off.0, collision_map).1;
+    let tile2 = tile_collision(t1_t2_off.1, collision_map).1;
+    if let Some(t) = tile1 {
+        new_position(direction, t, t1_t2_off, player);
+    } else if let Some(t) = tile2 {
+        new_position(direction, t, t1_t2_off, player);
+    }
+}
 
+pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &HashMap<(usize, usize), Tile>) {
     //tiles around the player
     let top_right = (
         ((player.position.x + player.velocity.x + 50.0) / 50.0).floor() as usize,
@@ -33,82 +66,34 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
 
     if player.velocity.x == 0. && player.velocity.y == 0. { return }
 
+    // Purely vertical or purely Horizontal movement
+    let mut h_cases = HashMap::new(); 
+    h_cases.insert(String::from("right"),(top_right, bottom_right, -50.1));
+    h_cases.insert(String::from("left"),(top_left, bottom_left, 50.0));
+    h_cases.insert(String::from("down"),(bottom_left, bottom_right, -50.1));
+    h_cases.insert(String::from("up"),(top_left, top_right, 50.0));
+
     if player.velocity.y == 0. {
         if player.velocity.x > 0. && 
             tile_collision(top_right, &collision_map).0 || tile_collision(bottom_right, &collision_map).0 
         {
-            player.velocity.x = 0.;
-            if tile_collision(top_right, &collision_map).0 {
-                //console::log_1(&JsValue::from_str("right"));
-                let tile = tile_collision(top_right, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.x = t.position.x - 50.1;
-                }
-            } else {
-                //console::log_1(&JsValue::from_str("right"));
-                let tile = tile_collision(bottom_right, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.x = t.position.x - 50.1;
-                }
-
-            }
+            manage_hv_collision(*h_cases.get("right").unwrap(), collision_map, player, DirectionHV::Horizontal)
         } else if tile_collision(top_left, &collision_map).0 || tile_collision(bottom_left, &collision_map).0  {
-            player.velocity.x = 0.;
-            if tile_collision(top_left, &collision_map).0 {
-                //console::log_1(&JsValue::from_str("left"));
-                let tile = tile_collision(top_left, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.x = t.position.x + 50.0;
-                }
-            } else {
-                //console::log_1(&JsValue::from_str("left"));
-                let tile = tile_collision(bottom_left, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.x = t.position.x + 50.0;
-                }
-
-            }
-            
+            manage_hv_collision(*h_cases.get("left").unwrap(), collision_map, player, DirectionHV::Horizontal);
         }
     } else if player.velocity.x == 0. {
         if player.velocity.y > 0. && 
             tile_collision(bottom_left, &collision_map).0 || tile_collision(bottom_right, &collision_map).0 
         {
-            player.velocity.y = 0.;
-            if tile_collision(bottom_left, &collision_map).0 {
-                //console::log_1(&JsValue::from_str("bottom"));
-                let tile = tile_collision(bottom_left, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.y = t.position.y - 50.1;
-                }
-            } else {
-                //console::log_1(&JsValue::from_str("bottom"));
-                let tile = tile_collision(bottom_right, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.y = t.position.y - 50.1;
-                }
-
-            }
+            manage_hv_collision(*h_cases.get("down").unwrap(), collision_map, player, DirectionHV::Vertical)
         }
         if player.velocity.y < 0. && 
             tile_collision(top_left, &collision_map).0 || tile_collision(top_right, &collision_map).0 
         {
-            player.velocity.y = 0.;
-            if tile_collision(top_left, &collision_map).0 {
-                //console::log_1(&JsValue::from_str("top"));
-                let tile = tile_collision(top_left, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.y = t.position.y + 50.0;
-                }
-            } else {
-                //console::log_1(&JsValue::from_str("top"));
-                let tile = tile_collision(top_right, &collision_map).1;
-                if let Some(t) = tile {
-                    player.position.y = t.position.y + 50.0;
-                }
-
-            }
+            manage_hv_collision(*h_cases.get("up").unwrap(), collision_map, player, DirectionHV::Vertical)
         }
+
+    //diagonal movement
     } else if player.velocity.y < 0. {
         if player.velocity.x < 0. {
             if tile_collision(top_left, &collision_map).0 {
