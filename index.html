@@ -35,6 +35,7 @@
 						wasm.move_down()
 						break
 					case 'KeyX':
+						if (event.repeat) break
 						wasm.jump()
 						break
 				}
