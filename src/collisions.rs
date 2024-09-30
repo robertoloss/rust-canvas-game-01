@@ -1,4 +1,8 @@
 use std::collections::HashMap;
+use std::fmt::format;
+use wasm_bindgen::JsValue;
+use web_sys::console;
+
 use crate::Player;
 use crate::map;
 use crate::Tile;
@@ -36,6 +40,7 @@ pub fn manage_hv_collision(
     } else if let Some(t) = tile2 {
         new_position(t);
     }
+    //console::log_1(&JsValue::from_str(&format!("player {:?}: ", player)))
 }
 pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &HashMap<(usize, usize), Tile>) {
     //tiles around the player
@@ -72,6 +77,7 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
 
     if player.velocity.y == 0. {
         if player.velocity.x > 0. && collision_top_right || collision_bottom_right {
+            console::log_1(&JsValue::from_str(&format!("here")));
             manage_hv_collision(*h_cases.get("right").unwrap(), collision_map, player, DirectionHV::Horizontal)
         } else if collision_top_left || collision_bottom_left  {
             manage_hv_collision(*h_cases.get("left").unwrap(), collision_map, player, DirectionHV::Horizontal);
@@ -88,23 +94,23 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
     } else if player.velocity.y < 0. {
         if player.velocity.x < 0. {
             if tile_collision(top_left, &collision_map).0 {
-                //console::log_1(&JsValue::from_str("top left hit"));
+                console::log_1(&JsValue::from_str("top left hit"));
                 if tile_collision(top_right, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("top"));
+                    console::log_1(&JsValue::from_str("top"));
                     player.velocity.y = 0.;
                     if let Some(t) = tile_collision(top_right, &collision_map).1 {
                         player.position.y = t.position.y + 50.0
                     }
                 } 
                 if tile_collision(bottom_left, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("left"));
+                    console::log_1(&JsValue::from_str("left"));
                     player.velocity.x = 0.;
                     if let Some(t) = tile_collision(bottom_left, &collision_map).1 {
                         player.position.x = t.position.x + 50.0
                     }
                 }
                 if !tile_collision(top_right, &collision_map).0 && !tile_collision(bottom_left, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("only top left"));
+                    console::log_1(&JsValue::from_str("only top left"));
                     let tile = tile_collision(top_left, &collision_map).1;
                     if let Some(t) = tile {
                         // Calculate slope
@@ -123,40 +129,41 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
                 }
             } else if tile_collision(top_right, &collision_map).0 || tile_collision(bottom_left, &collision_map).0 {
                 if let Some(t) = tile_collision(top_right, &collision_map).1 {
+                    console::log_1(&JsValue::from_str("top right ---"));
                     player.velocity.y = 0.;
                     player.position.y = t.position.y + 50.0
                 }
                 if let Some(t) = tile_collision(bottom_left, &collision_map).1 {
+                    console::log_1(&JsValue::from_str("top bottom_left ---"));
                     player.velocity.x = 0.;
                     player.position.x = t.position.x + 50.0
                 }
-                
             }
         } else {
             if tile_collision(top_right, &collision_map).0 {
-                //console::log_1(&JsValue::from_str("top right hit"));
+                console::log_1(&JsValue::from_str("top right hit"));
                 if tile_collision(top_left, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("top"));
+                    console::log_1(&JsValue::from_str("top"));
                     player.velocity.y = 0.;
                     if let Some(t) = tile_collision(top_right, &collision_map).1 {
                         player.position.y = t.position.y + 50.0
                     }
                 } 
                 if tile_collision(bottom_right, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("right"));
+                    console::log_1(&JsValue::from_str("right"));
                     player.velocity.x = 0.;
                     if let Some(t) = tile_collision(bottom_right, &collision_map).1 {
                         player.position.x = t.position.x - 50.1
                     }
                 }
                 if !tile_collision(top_left, &collision_map).0 && !tile_collision(bottom_right, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("only top right"));
+                    console::log_1(&JsValue::from_str("only top right"));
                     let tile = tile_collision(top_right, &collision_map).1;
                     if let Some(t) = tile {
                         // Calculate slope
                         let m = player.velocity.y / player.velocity.x;
                         // Calculate intersection y-coordinate
-                        let intersection_y = m * (t.position.x - (player.position.x + 50.0)) + player.position.y + 50.0;
+                        let intersection_y = m * (t.position.x - (player.position.x + 50.0)) + player.position.y ;
                         let from_below = intersection_y > t.position.y + 50.0;
                         if from_below {
                             player.velocity.y = 0.;
@@ -169,10 +176,12 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
                 }
             } else if tile_collision(top_left, &collision_map).0 || tile_collision(bottom_right, &collision_map).0 {
                 if let Some(t) = tile_collision(top_left, &collision_map).1 {
+                    console::log_1(&JsValue::from_str("top left ---"));
                     player.velocity.y = 0.;
                     player.position.y = t.position.y + 50.0
                 }
                 if let Some(t) = tile_collision(bottom_right, &collision_map).1 {
+                    console::log_1(&JsValue::from_str("bottom right ---"));
                     player.velocity.x = 0.;
                     player.position.x = t.position.x - 50.01
                 }
@@ -181,29 +190,29 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
     } else if player.velocity.y > 0. {
         if player.velocity.x < 0. {
             if tile_collision(bottom_left, &collision_map).0 {
-                //console::log_1(&JsValue::from_str("bottom left hit"));
+                console::log_1(&JsValue::from_str("bottom left hit"));
                 if tile_collision(bottom_right, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("bottom"));
+                    console::log_1(&JsValue::from_str("bottom"));
                     player.velocity.y = 0.;
                     if let Some(t) = tile_collision(bottom_right, &collision_map).1 {
                         player.position.y = t.position.y - 50.1
                     }
                 } 
                 if tile_collision(top_left, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("left"));
+                    console::log_1(&JsValue::from_str("left"));
                     player.velocity.x = 0.;
                     if let Some(t) = tile_collision(top_left, &collision_map).1 {
                         player.position.x = t.position.x + 50.0
                     }
                 }
                 if !tile_collision(bottom_right, &collision_map).0 && !tile_collision(top_left, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("only bottom left"));
+                    console::log_1(&JsValue::from_str("only bottom left"));
                     let tile = tile_collision(bottom_left, &collision_map).1;
                     if let Some(t) = tile {
                         // Calculate slope
                         let m = player.velocity.y / player.velocity.x;
                         // Calculate intersection y-coordinate
-                        let intersection_y = m * (t.position.x + 50.0 - player.position.x) + player.position.y + 50.0;
+                        let intersection_y = m * ((t.position.x + 50.0) - player.position.x) + (player.position.y + 50.0);
                         let from_above = intersection_y < t.position.y;
 
                         if from_above {
@@ -227,34 +236,36 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
             }
         } else {
             if tile_collision(bottom_right, &collision_map).0 {
-                //console::log_1(&JsValue::from_str("bottom right hit"));
+                console::log_1(&JsValue::from_str("bottom right hit"));
                 if tile_collision(bottom_left, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("bottom"));
+                    console::log_1(&JsValue::from_str("bottom"));
                     player.velocity.y = 0.;
                     if let Some(t) = tile_collision(bottom_right, &collision_map).1 {
                         player.position.y = t.position.y - 50.1
                     }
                 } 
                 if tile_collision(top_right, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("right"));
+                    console::log_1(&JsValue::from_str("right"));
                     player.velocity.x = 0.;
                     if let Some(t) = tile_collision(top_right, &collision_map).1 {
                         player.position.x = t.position.x - 50.1
                     }
                 }
                 if !tile_collision(bottom_left, &collision_map).0 && !tile_collision(top_right, &collision_map).0 {
-                    //console::log_1(&JsValue::from_str("only bottom right"));
+                    console::log_1(&JsValue::from_str("only bottom right"));
                     let tile = tile_collision(bottom_right, &collision_map).1;
                     if let Some(t) = tile {
                         // Calculate slope
                         let m = player.velocity.y / player.velocity.x;
                         // Calculate intersection y-coordinate
-                        let intersection_y = m * (t.position.x - player.position.x) + player.position.y;
+                        let intersection_y = m * (t.position.x - (player.position.x + 50.0)) + player.position.y + 50.0;
                         let from_above = intersection_y < t.position.y;
                         if from_above {
+                            console::log_1(&JsValue::from_str(&format!("onlyBotRight from above")));
                             player.velocity.y = 0.;
                             player.position.y = t.position.y - 50.1;
                         } else {
+                            console::log_1(&JsValue::from_str(&format!("onlyBotRight NOT from above")));
                             player.velocity.x = 0.;
                             player.position.x = t.position.x - 50.1
                         }

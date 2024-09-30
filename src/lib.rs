@@ -12,6 +12,7 @@ struct Vec2 {
     x: f64,
     y: f64,
 }
+#[derive(Debug)]
 struct Moves {
     left: bool,
     right: bool,
@@ -19,6 +20,7 @@ struct Moves {
     down: bool,
     jump: bool
 }
+#[derive(Debug)]
 struct Player {
     position: Vec2,
     velocity: Vec2,
