@@ -163,7 +163,7 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
     } else if player.velocity.y < 0. {
         let mut d_cases = HashMap::new();
         // off_tile_x, off_tile_y, off_tile_x_intersection, off_tile_y_intersection, off_player_x, off_player_y
-        d_cases.insert(String::from("up-left"), (top_left, top_right, bottom_left, 50.0, 50.0, 0., 50.0, 0., 0.));
+        d_cases.insert(String::from("up-left"), (top_left, top_right, bottom_left, 50.0, 50.0, 50., 50.0, 0., 0.));
         d_cases.insert(String::from("up-right"), (top_right, top_left, bottom_right, -50.1, 50.0, 0., 50.0, 50., 0.));
 
         if player.velocity.x < 0. {
