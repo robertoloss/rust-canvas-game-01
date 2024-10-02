@@ -349,9 +349,15 @@ function __wbg_get_imports() {
         const ret = getObject(arg0).width;
         return ret;
     };
+    imports.wbg.__wbg_setwidth_e371a8d6b16ebe84 = function(arg0, arg1) {
+        getObject(arg0).width = arg1 >>> 0;
+    };
     imports.wbg.__wbg_height_6fb32e51e54037ae = function(arg0) {
         const ret = getObject(arg0).height;
         return ret;
+    };
+    imports.wbg.__wbg_setheight_ba99ad2df4295e89 = function(arg0, arg1) {
+        getObject(arg0).height = arg1 >>> 0;
     };
     imports.wbg.__wbg_getContext_69ec873410cbba3c = function() { return handleError(function (arg0, arg1, arg2) {
         const ret = getObject(arg0).getContext(getStringFromWasm0(arg1, arg2));
