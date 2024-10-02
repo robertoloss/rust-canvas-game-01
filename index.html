@@ -19,50 +19,29 @@
 				requestAnimationFrame(gameloop);
 			}
 
-			function handleKeyDown(event) {
-				event.preventDefault()
-				switch (event.code) {
-					case 'ArrowRight':
-						wasm.move_right()
-						break
-					case 'ArrowLeft':
-						wasm.move_left()
-						break
-					case 'ArrowUp':
-						wasm.move_up()
-						break
-					case 'ArrowDown':
-						wasm.move_down()
-						break
-					case 'KeyX':
-						if (event.repeat) break
-						wasm.jump()
-						break
+			function getKeyCode(eventCode) {
+				let keyCode;
+				switch(eventCode) {
+						case 'ArrowLeft': keyCode = 0; break;
+						case 'ArrowRight': keyCode = 1; break;
+						case 'KeyX': keyCode = 2; break;
+						default: keyCode = -1;
 				}
+				return keyCode
+			}
+
+			function handleKeyDown(event) {
+				event.preventDefault();
+				if (event.code === 'KeyX' && event.repeat) return;
+				wasm.movement(getKeyCode(event.code));
 			}
 			function handleKeyUp(event) {
-				switch (event.code) {
-					case 'ArrowLeft':
-						wasm.stop_left()
-						break
-					case 'ArrowRight':
-						wasm.stop_right()
-						break
-					case 'ArrowUp':
-						wasm.stop_up()
-						break
-					case 'ArrowDown':
-						wasm.stop_down()
-						break
-					case 'KeyX':
-						wasm.stop_jumping()
-						break
-				}
+				event.preventDefault();
+				wasm.stop_movement(getKeyCode(event.code));
 			}
 
 			function gameloop(timestamp) {
 				try {
-						wasm.update(); 
 						wasm.render(); 
 				} catch (error) {
 						console.error('Error in game loop:', error);

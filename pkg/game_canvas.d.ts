@@ -1,41 +1,16 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
+* @param {number} key_code
 */
-export function stop_up(): void;
+export function movement(key_code: number): void;
 /**
+* @param {number} key_code
 */
-export function stop_down(): void;
-/**
-*/
-export function stop_left(): void;
-/**
-*/
-export function stop_right(): void;
-/**
-*/
-export function stop_jumping(): void;
-/**
-*/
-export function move_right(): void;
-/**
-*/
-export function move_left(): void;
-/**
-*/
-export function move_up(): void;
-/**
-*/
-export function move_down(): void;
-/**
-*/
-export function jump(): void;
+export function stop_movement(key_code: number): void;
 /**
 */
 export function initialize(): void;
-/**
-*/
-export function update(): void;
 /**
 */
 export function render(): void;
@@ -46,17 +21,8 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly initialize: () => void;
   readonly render: (a: number) => void;
-  readonly stop_up: () => void;
-  readonly stop_down: () => void;
-  readonly stop_left: () => void;
-  readonly stop_right: () => void;
-  readonly stop_jumping: () => void;
-  readonly jump: () => void;
-  readonly update: () => void;
-  readonly move_right: () => void;
-  readonly move_left: () => void;
-  readonly move_up: () => void;
-  readonly move_down: () => void;
+  readonly movement: (a: number) => void;
+  readonly stop_movement: (a: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;

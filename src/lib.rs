@@ -3,7 +3,7 @@ mod collisions;
 mod player;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
-use web_sys::{HtmlCanvasElement, CanvasRenderingContext2d };
+use web_sys::{console, CanvasRenderingContext2d, HtmlCanvasElement };
 use std::{collections::HashMap, sync::Mutex};
 use map::*;
 use collisions::*;
@@ -14,72 +14,44 @@ lazy_static! {
     static ref MAP_COLLISIONS: Mutex<HashMap<(usize,usize), Tile>> = Mutex::new(HashMap::new());
 }
 #[wasm_bindgen]
-pub fn stop_up() {
+pub fn movement(key_code: i32) {
     let mut player = PLAYER.lock().unwrap();
-    player.moves.up = false
+    match key_code {
+        0 => {
+            player.moves.left = true;
+            player.moves.right = false;
+        },
+        1 => {
+            player.moves.right = true;
+            player.moves.left = false;
+        },
+        2 => {
+            player.moves.jump = true;
+        },
+        _ => {}
+    }
 }
 #[wasm_bindgen]
-pub fn stop_down() {
+pub fn stop_movement(key_code: i32) {
     let mut player = PLAYER.lock().unwrap();
-    player.moves.down = false
-}
-#[wasm_bindgen]
-pub fn stop_left() {
-    let mut player = PLAYER.lock().unwrap();
-    player.moves.left = false
-}
-#[wasm_bindgen]
-pub fn stop_right() {
-    let mut player = PLAYER.lock().unwrap();
-    player.moves.right = false
-}
-#[wasm_bindgen]
-pub fn stop_jumping() {
-    let mut player = PLAYER.lock().unwrap();
-    player.moves.jump = false
-}
-
-#[wasm_bindgen]
-pub fn move_right() {
-    let mut player = PLAYER.lock().unwrap();
-    player.moves.right = true;
-    player.moves.left = false;
-}
-#[wasm_bindgen]
-pub fn move_left() {
-    let mut player = PLAYER.lock().unwrap();
-    player.moves.left = true;
-    player.moves.right = false;
-}
-#[wasm_bindgen]
-pub fn move_up() {
-    let mut player = PLAYER.lock().unwrap();
-    player.moves.up = true;
-    player.moves.down = false;
-}
-#[wasm_bindgen]
-pub fn move_down() {
-    let mut player = PLAYER.lock().unwrap();
-    player.moves.down = true;
-    player.moves.up = false;
-}
-#[wasm_bindgen]
-pub fn jump() {
-    let mut player = PLAYER.lock().unwrap();
-    player.moves.jump = true;
+    match key_code {
+        0 => {
+            player.moves.left = false;
+        },
+        1 => {
+            player.moves.right = false;
+        },
+        2 => {
+            player.moves.jump = false;
+        },
+        _ => {}
+    }
 }
 #[wasm_bindgen]
 pub fn initialize() {
     let mut map_collisions = MAP_COLLISIONS.lock().unwrap();
     let player = PLAYER.lock().unwrap();
     *map_collisions = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player));
-    //let map_string = format!("{:?}", *map_collisions);
-    //console::log_1(&JsValue::from_str(&map_string));
-}
-#[wasm_bindgen]
-pub fn update() {
-    let _player = PLAYER.lock().unwrap();
-    //player.pos_y += 1.0;
 }
 
 fn get_context(player: &Player) -> Result<(CanvasRenderingContext2d,HtmlCanvasElement), JsValue> {

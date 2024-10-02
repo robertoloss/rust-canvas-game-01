@@ -13,6 +13,7 @@ web-sys = { version = "0.3", features = [
 	"console"
 ] }
 lazy_static = "1.4"
+js-sys = "0.3.70"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

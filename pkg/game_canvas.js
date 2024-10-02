@@ -177,75 +177,23 @@ function getDataViewMemory0() {
     return cachedDataViewMemory0;
 }
 /**
+* @param {number} key_code
 */
-export function stop_up() {
-    wasm.stop_up();
+export function movement(key_code) {
+    wasm.movement(key_code);
 }
 
 /**
+* @param {number} key_code
 */
-export function stop_down() {
-    wasm.stop_down();
-}
-
-/**
-*/
-export function stop_left() {
-    wasm.stop_left();
-}
-
-/**
-*/
-export function stop_right() {
-    wasm.stop_right();
-}
-
-/**
-*/
-export function stop_jumping() {
-    wasm.stop_jumping();
-}
-
-/**
-*/
-export function move_right() {
-    wasm.move_right();
-}
-
-/**
-*/
-export function move_left() {
-    wasm.move_left();
-}
-
-/**
-*/
-export function move_up() {
-    wasm.move_up();
-}
-
-/**
-*/
-export function move_down() {
-    wasm.move_down();
-}
-
-/**
-*/
-export function jump() {
-    wasm.jump();
+export function stop_movement(key_code) {
+    wasm.stop_movement(key_code);
 }
 
 /**
 */
 export function initialize() {
     wasm.initialize();
-}
-
-/**
-*/
-export function update() {
-    wasm.update();
 }
 
 /**
