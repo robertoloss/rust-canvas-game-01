@@ -106,7 +106,7 @@ fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player) ->
 }
 
 #[wasm_bindgen]
-pub fn render() -> Result<(), JsValue> {
+pub fn render(is_mobile: bool) -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let tile_size = player.tile_size;
@@ -116,7 +116,11 @@ pub fn render() -> Result<(), JsValue> {
     let current_timestamp = Instant::now();
 
     let delta_time = if let Some(last) = *last_timestamp {
-        current_timestamp.duration_since(last).as_secs_f64() * 60.
+        if !is_mobile { 
+            current_timestamp.duration_since(last).as_secs_f64() * 60.
+        } else {
+            current_timestamp.duration_since(last).as_secs_f64() * 10.
+        }
     } else {
         0.0
     };

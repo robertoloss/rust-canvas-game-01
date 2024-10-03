@@ -31,6 +31,10 @@ function handleKeyUp(event) {
 	wasm.stop_movement(getKeyCode(event.code));
 }
 
+function isMobile() {
+    return /Mobi|Android/i.test(navigator.userAgent) || window.matchMedia("(max-width: 768px)").matches;
+}
+
 //let lastTimestamp = 0
 function gameloop(
 	//timestamp
@@ -40,6 +44,7 @@ function gameloop(
 
 	try {
 			wasm.render(
+				isMobile()
 				//deltaTime
 			); 
 	} catch (error) {

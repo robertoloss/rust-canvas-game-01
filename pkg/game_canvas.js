@@ -197,11 +197,12 @@ export function initialize() {
 }
 
 /**
+* @param {boolean} is_mobile
 */
-export function render() {
+export function render(is_mobile) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.render(retptr);
+        wasm.render(retptr, is_mobile);
         var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
         var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
         if (r1) {
