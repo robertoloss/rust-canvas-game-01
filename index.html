@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>rust canvas game</title>
+		<style>
+        html, body {
+            touch-action: manipulation;
+        }
+    </style>
 </head>
 <body 
 	style="
@@ -10,14 +16,18 @@
 		display: flex; 
 		flex-direction: row; 
 		justify-content: center; 
+		width: 100vw;
+		height: 100vh;
 		align-items: center;
-		gap: 40px;
+		gap: 16px;
 	"
 >
 		<div
 			id="mobile-jump"
 			style="
-				width: 100px;
+				display: flex;
+				flex-grow: 1;
+				max-width: 50px;
 				height: 100px;
 				background-color: darkblue;
 				align-self: end;
@@ -28,16 +38,19 @@
 		<div
 			style="
 				display: flex;
+				flex-grow: 1;
 				flex-direction: row;
 				align-self: end;
-				width: 200px;
+				max-width: 200px;
 				height: 100px;
 			"
 		>
 			<div
 				id="mobile-left"
 				style="
-					width: 100px;
+					display: flex;
+					flex-grow: 1;
+					max-width: 100px;
 					height: 100px;
 					background-color: red;
 					align-self: end;
@@ -46,7 +59,9 @@
 			<div
 				id="mobile-right"
 				style="
-					width: 100px;
+					display: flex;
+					flex-grow: 1;
+					max-width: 100px;
 					height: 100px;
 					background-color: darkblue;
 					align-self: end;
