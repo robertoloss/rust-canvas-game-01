@@ -4,53 +4,55 @@
     <meta charset="utf-8">
     <title>rust canvas game</title>
 </head>
-<body style="background-color: #282b2e; display: flex; flex-direction: column; justify-content: center; align-items: center">
+<body 
+	style="
+		background-color: #282b2e; 
+		display: flex; 
+		flex-direction: row; 
+		justify-content: center; 
+		align-items: center;
+		gap: 40px;
+	"
+>
+		<div
+			id="mobile-jump"
+			style="
+				width: 100px;
+				height: 100px;
+				background-color: darkblue;
+				align-self: end;
+			"
+		>
+		</div>
     <canvas id="gameCanvas" width="800" height="800"></canvas>
-    <script type="module">
-			import init from "./pkg/game_canvas.js";
-
-			let wasm;
-
-			async function start() {
-				wasm = await init();
-				document.addEventListener('keydown', handleKeyDown);
-				document.addEventListener('keyup', handleKeyUp);
-				wasm.initialize()
-				requestAnimationFrame(gameloop);
-			}
-
-			function getKeyCode(eventCode) {
-				let keyCode;
-				switch(eventCode) {
-						case 'ArrowLeft': keyCode = 0; break;
-						case 'ArrowRight': keyCode = 1; break;
-						case 'KeyX': keyCode = 2; break;
-						default: keyCode = -1;
-				}
-				return keyCode
-			}
-
-			function handleKeyDown(event) {
-				event.preventDefault();
-				if (event.code === 'KeyX' && event.repeat) return;
-				wasm.movement(getKeyCode(event.code));
-			}
-			function handleKeyUp(event) {
-				event.preventDefault();
-				wasm.stop_movement(getKeyCode(event.code));
-			}
-
-			function gameloop(timestamp) {
-				try {
-						wasm.render(); 
-				} catch (error) {
-						console.error('Error in game loop:', error);
-				} 
-
-				requestAnimationFrame(gameloop); 
-			}
-
-			start();
-    </script>
+		<div
+			style="
+				display: flex;
+				flex-direction: row;
+				align-self: end;
+				width: 200px;
+				height: 100px;
+			"
+		>
+			<div
+				id="mobile-left"
+				style="
+					width: 100px;
+					height: 100px;
+					background-color: red;
+					align-self: end;
+				"
+				></div>
+			<div
+				id="mobile-right"
+				style="
+					width: 100px;
+					height: 100px;
+					background-color: darkblue;
+					align-self: end;
+				"
+				></div>
+		</div>
+    <script type="module" src='./index.js'></script>
 </body>
 </html>
