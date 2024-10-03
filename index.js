@@ -31,13 +31,20 @@ function handleKeyUp(event) {
 	wasm.stop_movement(getKeyCode(event.code));
 }
 
-function gameloop() {
+//let lastTimestamp = 0
+function gameloop(
+	//timestamp
+) {
+	//let deltaTime = (timestamp - lastTimestamp) * 10
+	//lastTimestamp = timestamp;
+
 	try {
-			wasm.render(); 
+			wasm.render(
+				//deltaTime
+			); 
 	} catch (error) {
 			console.error('Error in game loop:', error);
 	} 
-
 	requestAnimationFrame(gameloop); 
 }
 

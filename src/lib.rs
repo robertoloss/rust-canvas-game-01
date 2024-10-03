@@ -8,10 +8,13 @@ use std::{collections::HashMap, sync::Mutex};
 use map::*;
 use collisions::*;
 use player::*;
+use web_time::{Instant};
+
 
 lazy_static! {
     static ref PLAYER: Mutex<Player> = Mutex::new(Player::default());
     static ref MAP_COLLISIONS: Mutex<HashMap<(usize,usize), Tile>> = Mutex::new(HashMap::new());
+    static ref LAST_TIMESTAMP: Mutex<Option<Instant>> = Mutex::new(None);
 }
 #[wasm_bindgen]
 pub fn movement(key_code: i32) {
@@ -33,6 +36,7 @@ pub fn movement(key_code: i32) {
 }
 #[wasm_bindgen]
 pub fn stop_movement(key_code: i32) {
+    //console::log_1(&JsValue::from_str(&format!("key_code: {}", key_code)));
     let mut player = PLAYER.lock().unwrap();
     match key_code {
         0 => {
@@ -107,20 +111,38 @@ pub fn render() -> Result<(), JsValue> {
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
+
+    let mut last_timestamp = LAST_TIMESTAMP.lock().unwrap();
+    let current_timestamp = Instant::now();
+
+    let delta_time = if let Some(last) = *last_timestamp {
+        current_timestamp.duration_since(last).as_secs_f64() * 60.
+    } else {
+        0.0
+    };
+
+    *last_timestamp = Some(current_timestamp);
+
+    //console::log_1(&JsValue::from_str(&format!("rust delta: {}", delta_time)));
     
-    player.velocity.x = if player.moves.right { 4.0 } else if player.moves.left { -4.0 } else { 0. };
+    
+    player.velocity.x = if player.moves.right { 
+        4.0 * delta_time 
+    } else if player.moves.left { 
+        -4.0 * delta_time
+    } else { 0. };
     //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
     
     if player.moves.jump {
         player.moves.jump = false;
-        player.velocity.y = -9.;
+        player.velocity.y = -9. * delta_time;
     }
     if player.velocity.y < 100.0 {
-        player.velocity.y += 0.5;
+        player.velocity.y += 0.5 * delta_time;
     }
 
-    player.position.x += player.velocity.x;
-    player.position.y += player.velocity.y;
+    player.position.x += player.velocity.x * delta_time;
+    player.position.y += player.velocity.y * delta_time;
 
     if player.position.x > tile_size * (num_of_tiles as f64) {
         player.map_origin.x += num_of_tiles;
