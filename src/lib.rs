@@ -3,18 +3,16 @@ mod collisions;
 mod player;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
-use web_sys::{console, CanvasRenderingContext2d, HtmlCanvasElement };
+use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement };
 use std::{collections::HashMap, sync::Mutex};
 use map::*;
 use collisions::*;
 use player::*;
-use web_time::{Instant};
 
 
 lazy_static! {
     static ref PLAYER: Mutex<Player> = Mutex::new(Player::default());
     static ref MAP_COLLISIONS: Mutex<HashMap<(usize,usize), Tile>> = Mutex::new(HashMap::new());
-    static ref LAST_TIMESTAMP: Mutex<Option<Instant>> = Mutex::new(None);
 }
 #[wasm_bindgen]
 pub fn movement(key_code: i32) {
