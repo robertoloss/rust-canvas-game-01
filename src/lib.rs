@@ -125,7 +125,7 @@ pub fn render(is_mobile: bool) -> Result<(), JsValue> {
         if !is_mobile { 
             current_timestamp.duration_since(last).as_secs_f64() * 60.
         } else {
-            current_timestamp.duration_since(last).as_secs_f64() * 100.0
+            current_timestamp.duration_since(last).as_secs_f64() * 200.0
         }
     } else {
         0.0
