@@ -12,6 +12,10 @@ export function stop_movement(key_code: number): void;
 */
 export function initialize(): void;
 /**
+* @returns {number}
+*/
+export function get_delta_time(): number;
+/**
 * @param {boolean} is_mobile
 */
 export function render(is_mobile: boolean): void;
@@ -21,6 +25,7 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly initialize: () => void;
+  readonly get_delta_time: () => number;
   readonly render: (a: number, b: number) => void;
   readonly movement: (a: number) => void;
   readonly stop_movement: (a: number) => void;

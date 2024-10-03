@@ -106,6 +106,12 @@ fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player) ->
 }
 
 #[wasm_bindgen]
+pub fn get_delta_time() -> f64 {
+    let player = PLAYER.lock().unwrap();
+    player.delta_time
+}
+
+#[wasm_bindgen]
 pub fn render(is_mobile: bool) -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
@@ -124,6 +130,7 @@ pub fn render(is_mobile: bool) -> Result<(), JsValue> {
     } else {
         0.0
     };
+    player.delta_time = delta_time;
 
     *last_timestamp = Some(current_timestamp);
 
@@ -194,8 +201,16 @@ pub fn render(is_mobile: bool) -> Result<(), JsValue> {
                 }
             }
 
-            context.set_fill_style(&JsValue::from_str("#b52c1d"));
-            context.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
+            ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
+            ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
+            //ctx.set_image_smoothing_enabled(false);
+
+            ctx.set_font("12px Arial");
+            ctx.set_fill_style(&JsValue::from_str("yellow"));
+            
+            
+            let delta_time_text = format!("Delta Time: {:.2}", delta_time);
+            ctx.fill_text(&delta_time_text, canvas.width() as f64 - 100.0, 20.0).unwrap();
         },
         Err(e) => eprintln!("Error getting context: {:?}", e)
     }

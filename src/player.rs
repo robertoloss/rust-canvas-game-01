@@ -22,6 +22,7 @@ pub struct Player {
     pub tile_size: f64,
     pub tile_size_plus_off: f64,
     pub screen_tiles: usize,
+    pub delta_time: f64,
 }
 impl Default for Player {
     fn default() -> Self {
@@ -49,6 +50,7 @@ impl Default for Player {
             tile_size,
             tile_size_plus_off: tile_size + 0.1,
             screen_tiles: 16,
+            delta_time: 0.,
         }
     }
 }

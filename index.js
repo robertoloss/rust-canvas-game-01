@@ -1,4 +1,4 @@
-import init from "./pkg/game_canvas.js";
+import init, { get_delta_time } from "./pkg/game_canvas.js";
 
 let wasm;
 
@@ -41,7 +41,7 @@ function gameloop(
 ) {
 	//let deltaTime = (timestamp - lastTimestamp) * 10
 	//lastTimestamp = timestamp;
-
+	//console.log("get_delta_time: ", get_delta_time())
 	try {
 			wasm.render(
 				isMobile()
