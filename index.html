@@ -8,6 +8,11 @@
         html, body {
             touch-action: manipulation;
         }
+				@media (min-width: 800px) {
+          #mobile-jump, #mobile-left-and-right {
+            display: none !important;
+          }
+        }
     </style>
 </head>
 <body 
@@ -36,6 +41,7 @@
 		</div>
     <canvas id="gameCanvas" width="800" height="800"></canvas>
 		<div
+			id="mobile-left-and-right"
 			style="
 				display: flex;
 				flex-grow: 1;

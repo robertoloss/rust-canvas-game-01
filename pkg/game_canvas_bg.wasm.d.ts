@@ -2,8 +2,7 @@
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
 export function initialize(): void;
-export function get_delta_time(): number;
-export function render(a: number, b: number): void;
+export function render(a: number): void;
 export function movement(a: number): void;
 export function stop_movement(a: number): void;
 export function __wbindgen_malloc(a: number, b: number): number;

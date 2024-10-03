@@ -1,4 +1,4 @@
-import init, { get_delta_time } from "./pkg/game_canvas.js";
+import init from "./pkg/game_canvas.js";
 
 let wasm;
 
@@ -35,17 +35,10 @@ function isMobile() {
     return /Mobi|Android/i.test(navigator.userAgent) || window.matchMedia("(max-width: 768px)").matches;
 }
 
-//let lastTimestamp = 0
-function gameloop(
-	//timestamp
-) {
-	//let deltaTime = (timestamp - lastTimestamp) * 10
-	//lastTimestamp = timestamp;
-	//console.log("get_delta_time: ", get_delta_time())
+function gameloop() {
 	try {
 			wasm.render(
 				isMobile()
-				//deltaTime
 			); 
 	} catch (error) {
 			console.error('Error in game loop:', error);
