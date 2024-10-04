@@ -44,7 +44,7 @@ pub fn stop_movement(key_code: i32) {
             player.moves.right = false;
         },
         2 => {
-            player.moves.jump = false;
+            player.moves.stop_jump = true;
         },
         _ => {}
     }
@@ -119,14 +119,20 @@ pub fn render() -> Result<(), JsValue> {
     
     if player.moves.jump {
         player.moves.jump = false;
-        player.velocity.y = -9. ;
+        player.velocity.y = -10.1 ;
+    }
+    if player.moves.stop_jump {
+        player.moves.stop_jump = false;
+        if player.velocity.y < -3.5 {
+            player.velocity.y += 3.5
+        }
     }
     if player.velocity.y < 100.0 {
-        player.velocity.y += 0.5 ;
+        player.velocity.y += player.gravity
     }
 
-    player.position.x += player.velocity.x ;
-    player.position.y += player.velocity.y ;
+    player.position.x += player.velocity.x;
+    player.position.y += player.velocity.y;
 
     if player.position.x > tile_size * (num_of_tiles as f64) {
         player.map_origin.x += num_of_tiles;
