@@ -324,6 +324,9 @@ function __wbg_get_imports() {
     imports.wbg.__wbg_setfillStyle_98060f7b257936ba = function(arg0, arg1) {
         getObject(arg0).fillStyle = getObject(arg1);
     };
+    imports.wbg.__wbg_setimageSmoothingEnabled_6e90dfbb519b2846 = function(arg0, arg1) {
+        getObject(arg0).imageSmoothingEnabled = arg1 !== 0;
+    };
     imports.wbg.__wbg_clearRect_384c24b287b30369 = function(arg0, arg1, arg2, arg3, arg4) {
         getObject(arg0).clearRect(arg1, arg2, arg3, arg4);
     };

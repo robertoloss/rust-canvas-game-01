@@ -162,6 +162,7 @@ pub fn render() -> Result<(), JsValue> {
     match get_context(&(*player)) {
         Ok((context, canvas)) => {
             let ctx = &context;
+            ctx.set_image_smoothing_enabled(false);
             ctx.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
             ctx.set_fill_style(&JsValue::from_str("black"));
             ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
