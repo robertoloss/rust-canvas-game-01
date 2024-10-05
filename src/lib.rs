@@ -123,8 +123,8 @@ pub fn render() -> Result<(), JsValue> {
     }
     if player.moves.stop_jump {
         player.moves.stop_jump = false;
-        if player.velocity.y < -3.5 {
-            player.velocity.y += 3.5
+        if player.velocity.y < -3. {
+            player.velocity.y += 3.
         }
     }
     if player.velocity.y < 100.0 {
