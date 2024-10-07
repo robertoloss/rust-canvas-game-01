@@ -28,6 +28,8 @@ pub fn movement(key_code: i32) {
         },
         2 => {
             player.moves.jump = true;
+            player.wants_to_cling = false;
+            player.is_clinging = false;
         },
         3 => {
             player.wants_to_cling = true;

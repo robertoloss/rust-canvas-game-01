@@ -27,9 +27,9 @@ pub fn manage_collision(
     left_right: LeftRight
 ) {
     let (
-        main_tile,
-        second_tile,
-        third_tile,
+        corner_tile,
+        next_to_corner_tile,
+        opposite_y_to_corner_tile,
         off_tile_x,
         off_tile_y,
         off_tile_x_intersection,
@@ -38,20 +38,20 @@ pub fn manage_collision(
         off_player_y
     ) = ntuple;
 
-    if let Some(t) = tile_collision(main_tile, &collision_map) {
+    if let Some(t) = tile_collision(corner_tile, &collision_map) {
         //console::log_1(&JsValue::from_str(""));
-        if let Some(t) = tile_collision(second_tile, &collision_map) {
+        if let Some(t) = tile_collision(next_to_corner_tile, &collision_map) {
             player.velocity.y = 0.;
             player.position.y = t.position.y + off_tile_y
         }
-        if let Some(t) = tile_collision(third_tile, &collision_map) {
+        if let Some(t) = tile_collision(opposite_y_to_corner_tile, &collision_map) {
             player.velocity.x = 0.;
             player.position.x = t.position.x + off_tile_x;
             player.can_cling = left_right.clone();
         } else {
             player.can_cling = LeftRight::None
         }
-        if tile_collision(second_tile, &collision_map).is_none() && tile_collision(third_tile, &collision_map).is_none() {
+        if tile_collision(next_to_corner_tile, &collision_map).is_none() && tile_collision(opposite_y_to_corner_tile, &collision_map).is_none() {
             //console::log_1(&JsValue::from_str("calc inter"));
             let m = player.velocity.y / player.velocity.x;
             let intersection_y = m * (
@@ -73,13 +73,13 @@ pub fn manage_collision(
             }
         }
     } else {
-        if let Some(t) = tile_collision(second_tile, &collision_map) {
+        if let Some(t) = tile_collision(next_to_corner_tile, &collision_map) {
             //console::log_1(&JsValue::from_str("top right ---"));
             player.velocity.y = 0.;
             player.position.y = t.position.y + off_tile_y
         }
-        if let Some(t) = tile_collision(third_tile, &collision_map) {
-            //console::log_1(&JsValue::from_str("top third_tile ---"));
+        if let Some(t) = tile_collision(opposite_y_to_corner_tile, &collision_map) {
+            //console::log_1(&JsValue::from_str("top opposite_y_to_corner_tile ---"));
             player.velocity.x = 0.;
             player.position.x = t.position.x + off_tile_x;
             player.can_cling = left_right.clone();
