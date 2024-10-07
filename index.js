@@ -69,11 +69,15 @@ window.addEventListener('resize', () => resizeCanvas(document.getElementById('ga
 window.addEventListener('load', () => resizeCanvas(document.getElementById('gameCanvas')));
 
 const mobileJump = document.getElementById('mobile-jump')
+const mobileCling = document.getElementById('mobile-cling')
 const mobileLeft = document.getElementById('mobile-left')
 const mobileRight = document.getElementById('mobile-right')
 
 mobileJump.addEventListener('touchstart', ()=>{
 	wasm.movement(2)
+})
+mobileCling.addEventListener('touchstart', ()=>{
+	wasm.movement(3)
 })
 mobileLeft.addEventListener('touchstart', ()=>{
 	wasm.movement(0)
@@ -89,6 +93,9 @@ mobileLeft.addEventListener('touchend', ()=>{
 })
 mobileRight.addEventListener('touchend', ()=>{
 	wasm.stop_movement(1)
+})
+mobileCling.addEventListener('touchend', ()=>{
+	wasm.stop_movement(3)
 })
 
 

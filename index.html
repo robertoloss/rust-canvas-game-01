@@ -9,7 +9,7 @@
             touch-action: manipulation;
         }
 				@media (min-width: 1200px) {
-          #mobile-jump, #mobile-left-and-right {
+          #mobile-jump, #mobile-cling, #mobile-left-and-right {
             display: none !important;
           }
         }
@@ -24,9 +24,20 @@
 		width: 100vw;
 		height: 100vh;
 		align-items: center;
-		gap: 16px;
 	"
 >
+		<div
+			id="mobile-cling"
+			style="
+				display: flex;
+				flex-grow: 1;
+				max-width: 100px;
+				height: 100px;
+				background-color: darkgreen;
+				align-self: end;
+			"
+		>
+		</div>
 		<div
 			id="mobile-jump"
 			style="
