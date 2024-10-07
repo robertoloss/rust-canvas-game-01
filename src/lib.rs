@@ -29,6 +29,9 @@ pub fn movement(key_code: i32) {
         2 => {
             player.moves.jump = true;
         },
+        3 => {
+            player.wants_to_cling = true;
+        }
         _ => {}
     }
 }
@@ -46,6 +49,10 @@ pub fn stop_movement(key_code: i32) {
         2 => {
             player.moves.stop_jump = true;
         },
+        3 => {
+            player.wants_to_cling = false;
+            player.is_clinging = false;
+        }
         _ => {}
     }
 }
@@ -129,6 +136,13 @@ pub fn render() -> Result<(), JsValue> {
     }
     if player.velocity.y < 100.0 {
         player.velocity.y += player.gravity
+    }
+    if player.wants_to_cling && player.can_cling != collisions::LeftRight::None {
+        player.is_clinging = true
+    }
+    if player.is_clinging {
+        player.velocity.y = 0.;
+        player.velocity.x = 0.;
     }
 
     player.position.x += player.velocity.x;

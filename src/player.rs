@@ -1,4 +1,4 @@
-use crate::Vec2usize;
+use crate::{LeftRight, Vec2usize};
 
 #[derive(Debug)]
 pub struct Vec2 {
@@ -24,6 +24,9 @@ pub struct Player {
     pub tile_size: f64,
     pub tile_size_plus_off: f64,
     pub screen_tiles: usize,
+    pub can_cling: LeftRight,
+    pub wants_to_cling: bool,
+    pub is_clinging: bool,
 }
 impl Default for Player {
     fn default() -> Self {
@@ -51,8 +54,11 @@ impl Default for Player {
                 y: 0
             },
             tile_size,
-            tile_size_plus_off: tile_size + 0.1,
+            tile_size_plus_off: tile_size + 0.0,
             screen_tiles: 16,
+            can_cling: LeftRight::None,
+            wants_to_cling: false,
+            is_clinging: false,
         }
     }
 }

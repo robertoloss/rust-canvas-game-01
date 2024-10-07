@@ -10,6 +10,12 @@ pub enum UpDown {
     Up,
     Down
 }
+#[derive(Debug,PartialEq,Clone)]
+pub enum LeftRight {
+    Left,
+    Right,
+    None
+}
 pub fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usize), Tile>) -> Option<&map::Tile> {
     collision_map.get(&tuple)
 }
@@ -17,7 +23,8 @@ pub fn manage_collision(
     ntuple: ((usize, usize), (usize, usize), (usize, usize), f64, f64, f64, f64, f64, f64), 
     collision_map: &HashMap<(usize, usize), Tile>,
     player: &mut Player,
-    up_down: UpDown
+    up_down: UpDown,
+    left_right: LeftRight
 ) {
     let (
         main_tile,
@@ -39,7 +46,10 @@ pub fn manage_collision(
         }
         if let Some(t) = tile_collision(third_tile, &collision_map) {
             player.velocity.x = 0.;
-            player.position.x = t.position.x + off_tile_x
+            player.position.x = t.position.x + off_tile_x;
+            player.can_cling = left_right.clone();
+        } else {
+            player.can_cling = LeftRight::None
         }
         if tile_collision(second_tile, &collision_map).is_none() && tile_collision(third_tile, &collision_map).is_none() {
             //console::log_1(&JsValue::from_str("calc inter"));
@@ -59,6 +69,7 @@ pub fn manage_collision(
             } else {
                 player.velocity.x = 0.;
                 player.position.x = t.position.x + off_tile_x;
+                player.can_cling = left_right.clone();
             }
         }
     } else {
@@ -70,7 +81,10 @@ pub fn manage_collision(
         if let Some(t) = tile_collision(third_tile, &collision_map) {
             //console::log_1(&JsValue::from_str("top third_tile ---"));
             player.velocity.x = 0.;
-            player.position.x = t.position.x + off_tile_x
+            player.position.x = t.position.x + off_tile_x;
+            player.can_cling = left_right.clone();
+        } else {
+            player.can_cling = LeftRight::None;
         }
     }
 }
@@ -119,15 +133,15 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
 
     if player.velocity.y <= 0. {
         if player.velocity.x < 0. {
-            manage_collision(*d_cases.get("up-left").unwrap(), collision_map, player,UpDown::Up)
+            manage_collision(*d_cases.get("up-left").unwrap(), collision_map, player,UpDown::Up, LeftRight::Left)
         } else {
-            manage_collision(*d_cases.get("up-right").unwrap(), collision_map, player,UpDown::Up);
+            manage_collision(*d_cases.get("up-right").unwrap(), collision_map, player,UpDown::Up, LeftRight::Right);
         }
     } else if player.velocity.y > 0. {
         if player.velocity.x < 0. {
-            manage_collision(*d_cases.get("down-left").unwrap(), collision_map, player,UpDown::Down);
+            manage_collision(*d_cases.get("down-left").unwrap(), collision_map, player,UpDown::Down,LeftRight::Left);
         } else {
-            manage_collision(*d_cases.get("down-right").unwrap(), collision_map, player, UpDown::Down);
+            manage_collision(*d_cases.get("down-right").unwrap(), collision_map, player, UpDown::Down,LeftRight::Right);
         }
     }
 }
