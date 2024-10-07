@@ -76,7 +76,7 @@ const mobileRight = document.getElementById('mobile-right')
 mobileJump.addEventListener('touchstart', ()=>{
 	wasm.movement(2)
 })
-mobileCling.addEventListener('touchstart', ()=>{
+mobileCling.addEventListener('touchmove', ()=>{
 	wasm.movement(3)
 })
 mobileLeft.addEventListener('touchstart', ()=>{
