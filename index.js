@@ -77,6 +77,11 @@ mobileJump.addEventListener('touchstart', ()=>{
 	wasm.movement(2)
 })
 mobileCling.addEventListener('touchmove', ()=>{
+	console.log('touchmove')
+	wasm.movement(3)
+})
+mobileCling.addEventListener('touchstart', ()=>{
+	console.log('touchstart')
 	wasm.movement(3)
 })
 mobileLeft.addEventListener('touchstart', ()=>{
