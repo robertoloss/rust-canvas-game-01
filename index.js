@@ -36,7 +36,10 @@ function isMobile() {
     return /Mobi|Android/i.test(navigator.userAgent) || window.matchMedia("(max-width: 768px)").matches;
 }
 
+
+let currentTime = new Date();
 function gameloop() {
+	
 	try {
 			wasm.render(
 				isMobile()
