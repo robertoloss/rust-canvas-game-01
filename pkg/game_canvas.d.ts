@@ -12,6 +12,10 @@ export function stop_movement(key_code: number): void;
 */
 export function initialize(): void;
 /**
+* @param {number} num
+*/
+export function get_and_give_f64(num: number): void;
+/**
 */
 export function render(): void;
 
@@ -21,6 +25,7 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly initialize: () => void;
   readonly render: (a: number) => void;
+  readonly get_and_give_f64: (a: number) => void;
   readonly movement: (a: number) => void;
   readonly stop_movement: (a: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;

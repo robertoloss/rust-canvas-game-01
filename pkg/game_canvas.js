@@ -197,6 +197,13 @@ export function initialize() {
 }
 
 /**
+* @param {number} num
+*/
+export function get_and_give_f64(num) {
+    wasm.get_and_give_f64(num);
+}
+
+/**
 */
 export function render() {
     try {

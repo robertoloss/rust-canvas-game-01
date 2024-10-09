@@ -27,6 +27,7 @@ pub struct Player {
     pub can_cling: LeftRight,
     pub wants_to_cling: bool,
     pub is_clinging: bool,
+    pub delta: f64,
 }
 impl Default for Player {
     fn default() -> Self {
@@ -58,6 +59,7 @@ impl Default for Player {
             screen_tiles: 16,
             can_cling: LeftRight::None,
             wants_to_cling: false,
+            delta: 0.0,
             is_clinging: false,
         }
     }

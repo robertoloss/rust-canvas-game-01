@@ -1,4 +1,4 @@
-import init from "./pkg/game_canvas.js";
+import init, { get_and_give_f64 } from "./pkg/game_canvas.js";
 
 let wasm;
 
@@ -32,18 +32,20 @@ function handleKeyUp(event) {
 	wasm.stop_movement(getKeyCode(event.code));
 }
 
-function isMobile() {
-    return /Mobi|Android/i.test(navigator.userAgent) || window.matchMedia("(max-width: 768px)").matches;
-}
 
 
-let currentTime = new Date();
-function gameloop() {
+let lastTimestamp = performance.now();
+
+function gameloop(timestamp) {
+	if (lastTimestamp === 0) {
+        lastTimestamp = timestamp; // Initialize the lastTimestamp for the first time
+    }
+	let deltaTime = (timestamp - lastTimestamp) / 1000
+	lastTimestamp = timestamp;
 	
 	try {
-			wasm.render(
-				isMobile()
-			); 
+			wasm.render(get_and_give_f64(deltaTime)); 
+			//console.log("delta JS: ", Math.floor((deltaTime * 10000)) / 10000)
 	} catch (error) {
 			console.error('Error in game loop:', error);
 	} 

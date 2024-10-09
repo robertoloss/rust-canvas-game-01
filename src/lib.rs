@@ -1,9 +1,10 @@
 mod map;
 mod collisions;
 mod player;
+use js_sys::Float64Array;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
-use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement };
+use web_sys::{console, CanvasRenderingContext2d, HtmlCanvasElement };
 use std::{collections::HashMap, sync::Mutex};
 use map::*;
 use collisions::*;
@@ -111,6 +112,12 @@ fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player) ->
     }
     collisions_map
 }
+#[wasm_bindgen]
+pub fn get_and_give_f64(num: f64) {
+    //console::log_1(&JsValue::from_str(&format!("{}", num)));
+    let mut player = PLAYER.lock().unwrap();
+    player.delta = num;
+}
 
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
@@ -118,6 +125,9 @@ pub fn render() -> Result<(), JsValue> {
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
+
+    let delta = player.delta * 55.;
+    //console::log_1( &JsValue::from_str( &format!( "delta {}", player.delta) ));
 
     player.velocity.x = if player.moves.right { 
         4.0  
@@ -128,16 +138,16 @@ pub fn render() -> Result<(), JsValue> {
     
     if player.moves.jump {
         player.moves.jump = false;
-        player.velocity.y = -10.1 ;
+        player.velocity.y = -10.1 * delta;
     }
     if player.moves.stop_jump {
         player.moves.stop_jump = false;
         if player.velocity.y < -3. {
-            player.velocity.y += 3.
+            player.velocity.y += 3. * delta
         }
     }
     if player.velocity.y < 100.0 {
-        player.velocity.y += player.gravity
+        player.velocity.y += player.gravity * delta
     }
     if player.wants_to_cling && player.can_cling != collisions::LeftRight::None {
         player.is_clinging = true
@@ -147,8 +157,8 @@ pub fn render() -> Result<(), JsValue> {
         player.velocity.x = 0.;
     }
 
-    player.position.x += player.velocity.x;
-    player.position.y += player.velocity.y;
+    player.position.x += player.velocity.x * delta;
+    player.position.y += player.velocity.y * delta;
 
     if player.position.x > tile_size * (num_of_tiles as f64) {
         player.map_origin.x += num_of_tiles;
