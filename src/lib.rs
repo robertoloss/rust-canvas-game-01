@@ -126,7 +126,7 @@ pub fn render() -> Result<(), JsValue> {
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
 
-    let delta = player.delta * 55.;
+    let delta = player.delta * (player.delta * 1000. * 3.3);
     //console::log_1( &JsValue::from_str( &format!( "delta {}", player.delta) ));
 
     player.velocity.x = if player.moves.right { 
