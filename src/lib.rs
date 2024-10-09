@@ -125,6 +125,7 @@ pub fn render() -> Result<(), JsValue> {
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
+    player.delta = 0.016;
 
     let delta = player.delta * (player.delta * 1000. * 3.3);
     //console::log_1( &JsValue::from_str( &format!( "delta {}", player.delta) ));
