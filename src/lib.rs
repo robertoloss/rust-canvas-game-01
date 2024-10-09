@@ -126,9 +126,11 @@ pub fn render() -> Result<(), JsValue> {
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
 
-    let delta = 0.016 * (0.016 * 1000. * 3.3);
-    //console::log_1( &JsValue::from_str( &format!( "delta {}", player.delta) ));
-
+    let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
+    console::log_1( &JsValue::from_str( &format!( "delta {}", player.delta) ));
+    if delta == 0. {
+        return Ok(())
+    }
     player.velocity.x = if player.moves.right { 
         4.0  
     } else if player.moves.left { 
@@ -157,8 +159,8 @@ pub fn render() -> Result<(), JsValue> {
         player.velocity.x = 0.;
     }
 
-    player.position.x += player.velocity.x * delta;
-    player.position.y += player.velocity.y * delta;
+    player.position.x += player.velocity.x / delta;
+    player.position.y += player.velocity.y / delta;
 
     if player.position.x > tile_size * (num_of_tiles as f64) {
         player.map_origin.x += num_of_tiles;
@@ -209,8 +211,10 @@ pub fn render() -> Result<(), JsValue> {
             ctx.set_font("12px Arial, sans-serif");
             ctx.set_fill_style(&JsValue::from_str("yellow"));
             let _ = ctx.fill_text(&player.delta.to_string(), 30., 30.);
-            ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
-            ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
+            if delta != 0. {
+                ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
+                ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
+            }
         },
         Err(e) => eprintln!("Error getting context: {:?}", e)
     }
