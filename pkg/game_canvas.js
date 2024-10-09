@@ -334,12 +334,18 @@ function __wbg_get_imports() {
     imports.wbg.__wbg_setimageSmoothingEnabled_6e90dfbb519b2846 = function(arg0, arg1) {
         getObject(arg0).imageSmoothingEnabled = arg1 !== 0;
     };
+    imports.wbg.__wbg_setfont_931e1f36bec6a342 = function(arg0, arg1, arg2) {
+        getObject(arg0).font = getStringFromWasm0(arg1, arg2);
+    };
     imports.wbg.__wbg_clearRect_384c24b287b30369 = function(arg0, arg1, arg2, arg3, arg4) {
         getObject(arg0).clearRect(arg1, arg2, arg3, arg4);
     };
     imports.wbg.__wbg_fillRect_a5a5da573f0412b5 = function(arg0, arg1, arg2, arg3, arg4) {
         getObject(arg0).fillRect(arg1, arg2, arg3, arg4);
     };
+    imports.wbg.__wbg_fillText_ae0445d1930428dd = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4) {
+        getObject(arg0).fillText(getStringFromWasm0(arg1, arg2), arg3, arg4);
+    }, arguments) };
     imports.wbg.__wbg_newnoargs_76313bd6ff35d0f2 = function(arg0, arg1) {
         const ret = new Function(getStringFromWasm0(arg0, arg1));
         return addHeapObject(ret);

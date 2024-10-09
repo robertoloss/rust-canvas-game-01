@@ -206,7 +206,9 @@ pub fn render() -> Result<(), JsValue> {
                      }
                 }
             }
-
+            ctx.set_font("12px sans-serif");
+            ctx.set_fill_style(&JsValue::from_str("yellow"));
+            let _ = ctx.fill_text(&delta.to_string(), 10., 10.);
             ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
             ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
         },
