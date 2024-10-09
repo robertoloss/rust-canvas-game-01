@@ -35,16 +35,26 @@ function handleKeyUp(event) {
 
 
 let lastTimestamp = performance.now();
+let fps = 0;
+let frameCount = 0;
+let fpsInterval = 1000; // Calculate FPS every second
+let lastFpsUpdate = performance.now();
 
 function gameloop(timestamp) {
-	if (lastTimestamp === 0) {
-        lastTimestamp = timestamp; // Initialize the lastTimestamp for the first time
-    }
 	let deltaTime = (timestamp - lastTimestamp) / 1000
 	lastTimestamp = timestamp;
+	frameCount++;
+
+	if (timestamp - lastFpsUpdate >= fpsInterval) {
+		fps = frameCount;
+		frameCount = 0;  // Reset frame count
+		lastFpsUpdate = timestamp;
+		console.log(fps)
+	}
+	
 	
 	try {
-			wasm.render(get_and_give_f64(deltaTime)); 
+			wasm.render(get_and_give_f64(fps)); 
 			//console.log("delta JS: ", Math.floor((deltaTime * 10000)) / 10000)
 	} catch (error) {
 			console.error('Error in game loop:', error);

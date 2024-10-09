@@ -125,9 +125,8 @@ pub fn render() -> Result<(), JsValue> {
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
-    player.delta = 0.016;
 
-    let delta = player.delta * (player.delta * 1000. * 3.3);
+    let delta = 0.016 * (0.016 * 1000. * 3.3);
     //console::log_1( &JsValue::from_str( &format!( "delta {}", player.delta) ));
 
     player.velocity.x = if player.moves.right { 
@@ -207,9 +206,9 @@ pub fn render() -> Result<(), JsValue> {
                      }
                 }
             }
-            //ctx.set_font("12px Arial, sans-serif");
-            //ctx.set_fill_style(&JsValue::from_str("yellow"));
-            //let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
+            ctx.set_font("12px Arial, sans-serif");
+            ctx.set_fill_style(&JsValue::from_str("yellow"));
+            let _ = ctx.fill_text(&player.delta.to_string(), 30., 30.);
             ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
             ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
         },
