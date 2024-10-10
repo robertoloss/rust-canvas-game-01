@@ -113,10 +113,13 @@ fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player) ->
     collisions_map
 }
 #[wasm_bindgen]
-pub fn get_and_give_f64(num: f64) {
+pub fn get_and_give_f64(num: Option<f64>) {
     //console::log_1(&JsValue::from_str(&format!("{}", num)));
     let mut player = PLAYER.lock().unwrap();
-    player.delta = num;
+    match num {
+        Some(n) => player.delta = n,
+        None => player.delta = 60.
+    }
 }
 
 #[wasm_bindgen]
@@ -140,12 +143,12 @@ pub fn render() -> Result<(), JsValue> {
     
     if player.moves.jump {
         player.moves.jump = false;
-        player.velocity.y = -10.1 / delta; //-10.1
+        player.velocity.y = -10.1 ; //-10.1
     }
     if player.moves.stop_jump {
         player.moves.stop_jump = false;
         if player.velocity.y < -3. {
-            player.velocity.y += 3. / delta //3.
+            player.velocity.y += 3.//3.
         }
     }
     if player.velocity.y < 100.0 {

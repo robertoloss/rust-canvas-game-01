@@ -196,11 +196,14 @@ export function initialize() {
     wasm.initialize();
 }
 
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
 /**
-* @param {number} num
+* @param {number | undefined} [num]
 */
 export function get_and_give_f64(num) {
-    wasm.get_and_give_f64(num);
+    wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
 }
 
 /**
@@ -217,10 +220,6 @@ export function render() {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
-
-function isLikeNone(x) {
-    return x === undefined || x === null;
 }
 
 function handleError(f, args) {
