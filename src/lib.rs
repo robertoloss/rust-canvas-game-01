@@ -140,7 +140,7 @@ pub fn render() -> Result<(), JsValue> {
     
     if player.moves.jump {
         player.moves.jump = false;
-        player.velocity.y = -10.1 * delta; //-10.1
+        player.velocity.y = -10.1 / delta; //-10.1
     }
     if player.moves.stop_jump {
         player.moves.stop_jump = false;
@@ -208,9 +208,10 @@ pub fn render() -> Result<(), JsValue> {
                      }
                 }
             }
-            ctx.set_font("12px Arial, sans-serif");
+            ctx.set_font("14px Arial, sans-serif");
             ctx.set_fill_style(&JsValue::from_str("yellow"));
-            let _ = ctx.fill_text(&player.delta.to_string(), 30., 30.);
+            let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
+            let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
             if delta != 0. {
                 ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
                 ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
