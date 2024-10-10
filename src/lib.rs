@@ -145,11 +145,11 @@ pub fn render() -> Result<(), JsValue> {
     if player.moves.stop_jump {
         player.moves.stop_jump = false;
         if player.velocity.y < -3. {
-            player.velocity.y += 3. * delta //3.
+            player.velocity.y += 3. / delta //3.
         }
     }
     if player.velocity.y < 100.0 {
-        player.velocity.y += player.gravity * delta
+        player.velocity.y += player.gravity / delta
     }
     if player.wants_to_cling && player.can_cling != collisions::LeftRight::None {
         player.is_clinging = true
