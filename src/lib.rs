@@ -1,10 +1,9 @@
 mod map;
 mod collisions;
 mod player;
-use js_sys::Float64Array;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
-use web_sys::{console, CanvasRenderingContext2d, HtmlCanvasElement };
+use web_sys::{console, CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement };
 use std::{collections::HashMap, sync::Mutex};
 use map::*;
 use collisions::*;
@@ -121,6 +120,13 @@ pub fn get_and_give_f64(num: Option<f64>) {
         None => player.delta = 60.
     }
 }
+#[wasm_bindgen]
+pub fn set_tile_image(img: Option<HtmlImageElement>) {
+    //console::log_1(&JsValue::from_str(&format!("{}", num)));
+    let mut player = PLAYER.lock().unwrap();
+    player.tile_image = ThreadSafeImage(img.map(|i| i.into()));
+}
+
 
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
@@ -130,7 +136,7 @@ pub fn render() -> Result<(), JsValue> {
     let num_of_tiles = player.screen_tiles;
 
     let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
-    console::log_1( &JsValue::from_str( &format!( "delta {}", player.delta) ));
+    //console::log_1( &JsValue::from_str( &format!( "delta {}", player.delta) ));
     if delta == 0. {
         return Ok(())
     }
@@ -189,38 +195,48 @@ pub fn render() -> Result<(), JsValue> {
 
     manage_player_collision_with_tile(&mut(*player), &collision_map);
 
-    let game_map = get_map();
-    match get_context(&(*player)) {
-        Ok((context, canvas)) => {
-            let ctx = &context;
-            ctx.set_image_smoothing_enabled(false);
-            ctx.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
-            ctx.set_fill_style(&JsValue::from_str("black"));
-            ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
+    if let Some(js_val) = &player.tile_image.0 {
+        let image: HtmlImageElement = js_val.clone().into();
+        let game_map = get_map();
+        match get_context(&(*player)) {
+            Ok((context, canvas)) => {
+                let ctx = &context;
+                ctx.set_image_smoothing_enabled(false);
+                ctx.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
+                ctx.set_fill_style(&JsValue::from_str("black"));
+                ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
 
-            for y in player.map_origin.y..player.map_origin.y + num_of_tiles {
-                for x in player.map_origin.x..player.map_origin.x + num_of_tiles {
-                     if  game_map[y][x] == 0 {
-                        ctx.set_fill_style(&JsValue::from_str("gray"));
-                        ctx.fill_rect(
-                            (x % num_of_tiles) as f64 * tile_size, 
-                            (y % num_of_tiles) as f64 * tile_size, 
-                            tile_size, 
-                            tile_size
-                        );
-                     }
+                for y in player.map_origin.y..player.map_origin.y + num_of_tiles {
+                    for x in player.map_origin.x..player.map_origin.x + num_of_tiles {
+                         if  game_map[y][x] == 0 {
+                             ctx.draw_image_with_html_image_element_and_dw_and_dh(
+                                &image,
+                                (x % num_of_tiles) as f64 * tile_size, 
+                                (y % num_of_tiles) as f64 * tile_size, 
+                                tile_size,
+                                tile_size,
+                            )?;
+                            //ctx.set_fill_style(&JsValue::from_str("gray"));
+                            //ctx.fill_rect(
+                            //    (x % num_of_tiles) as f64 * tile_size, 
+                            //    (y % num_of_tiles) as f64 * tile_size, 
+                            //    tile_size, 
+                            //    tile_size
+                            //);
+                         }
+                    }
                 }
-            }
-            ctx.set_font("14px Arial, sans-serif");
-            ctx.set_fill_style(&JsValue::from_str("yellow"));
-            let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
-            let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
-            if delta != 0. {
-                ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
-                ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
-            }
-        },
-        Err(e) => eprintln!("Error getting context: {:?}", e)
+                ctx.set_font("14px Arial, sans-serif");
+                ctx.set_fill_style(&JsValue::from_str("yellow"));
+                let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
+                let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
+                if delta != 0. {
+                    ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
+                    ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
+                }
+            },
+            Err(e) => eprintln!("Error getting context: {:?}", e)
+        }
     }
     Ok(())
 }

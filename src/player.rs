@@ -1,4 +1,11 @@
+use web_sys::HtmlImageElement;
+
 use crate::{LeftRight, Vec2usize};
+
+#[derive(Debug, Default)]
+pub struct ThreadSafeImage(pub Option<wasm_bindgen::JsValue>);
+unsafe impl Send for ThreadSafeImage {}
+unsafe impl Sync for ThreadSafeImage {}
 
 #[derive(Debug)]
 pub struct Vec2 {
@@ -28,6 +35,7 @@ pub struct Player {
     pub wants_to_cling: bool,
     pub is_clinging: bool,
     pub delta: f64,
+    pub tile_image: ThreadSafeImage 
 }
 impl Default for Player {
     fn default() -> Self {
@@ -61,6 +69,7 @@ impl Default for Player {
             wants_to_cling: false,
             delta: 0.0,
             is_clinging: false,
+            tile_image: ThreadSafeImage(None)
         }
     }
 }

@@ -1,22 +1,22 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
-* @param {number} key_code
-*/
+ * @param {number} key_code
+ */
 export function movement(key_code: number): void;
 /**
-* @param {number} key_code
-*/
+ * @param {number} key_code
+ */
 export function stop_movement(key_code: number): void;
-/**
-*/
 export function initialize(): void;
 /**
-* @param {number | undefined} [num]
-*/
+ * @param {number | undefined} [num]
+ */
 export function get_and_give_f64(num?: number): void;
 /**
-*/
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_tile_image(img?: HTMLImageElement): void;
 export function render(): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -25,6 +25,7 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly initialize: () => void;
   readonly get_and_give_f64: (a: number, b: number) => void;
+  readonly set_tile_image: (a: number) => void;
   readonly render: (a: number) => void;
   readonly movement: (a: number) => void;
   readonly stop_movement: (a: number) => void;

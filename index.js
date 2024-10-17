@@ -1,4 +1,4 @@
-import init, { get_and_give_f64 } from "./pkg/game_canvas.js";
+import init, { get_and_give_f64, set_tile_image } from "./pkg/game_canvas.js";
 
 let wasm;
 
@@ -7,6 +7,22 @@ async function start() {
 	document.addEventListener('keydown', handleKeyDown);
 	document.addEventListener('keyup', handleKeyUp);
 	wasm.initialize()
+
+	const img = new Image();
+	const loadImage = new Promise((resolve, reject) => {
+			img.onload = () => resolve(img);
+			img.onerror = reject;
+	});
+	
+	img.src = './assets/Tile1.png';
+	try {
+		await loadImage;
+		set_tile_image(img)
+	} catch(error) {
+		console.error("Oops!", error)
+	}
+
+	console.log(img)
 	requestAnimationFrame(gameloop);
 }
 
@@ -41,7 +57,6 @@ let fpsInterval = 1000; // Calculate FPS every second
 let lastFpsUpdate = performance.now();
 
 function gameloop(timestamp) {
-	let deltaTime = (timestamp - lastTimestamp) / 1000
 	lastTimestamp = timestamp;
 	frameCount++;
 
@@ -49,13 +64,10 @@ function gameloop(timestamp) {
 		fps = frameCount;
 		frameCount = 0;  // Reset frame count
 		lastFpsUpdate = timestamp;
-		console.log(fps)
 	}
-	
-	
+	get_and_give_f64(fps)
 	try {
-			wasm.render(get_and_give_f64(fps)); 
-			//console.log("delta JS: ", Math.floor((deltaTime * 10000)) / 10000)
+			wasm.render(); 
 	} catch (error) {
 			console.error('Error in game loop:', error);
 	} 
