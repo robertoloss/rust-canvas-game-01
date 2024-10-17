@@ -1,4 +1,4 @@
-import init, { get_and_give_f64, set_tile_image } from "./pkg/game_canvas.js";
+import init, { get_and_give_f64, set_player_image, set_tile_image } from "./pkg/game_canvas.js";
 
 let wasm;
 
@@ -13,11 +13,20 @@ async function start() {
 			img.onload = () => resolve(img);
 			img.onerror = reject;
 	});
+	const img2 = new Image();
+	const loadImage2 = new Promise((resolve, reject) => {
+			img2.onload = () => resolve(img2);
+			img2.onerror = reject;
+	});
 	
 	img.src = './assets/Tile1.png';
+	img2.src = './assets/Player_new.png';
+
 	try {
 		await loadImage;
 		set_tile_image(img)
+		await loadImage2;
+		set_player_image(img2)
 	} catch(error) {
 		console.error("Oops!", error)
 	}

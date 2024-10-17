@@ -35,7 +35,8 @@ pub struct Player {
     pub wants_to_cling: bool,
     pub is_clinging: bool,
     pub delta: f64,
-    pub tile_image: ThreadSafeImage 
+    pub tile_image: ThreadSafeImage,
+    pub player_image: ThreadSafeImage
 }
 impl Default for Player {
     fn default() -> Self {
@@ -69,7 +70,8 @@ impl Default for Player {
             wants_to_cling: false,
             delta: 0.0,
             is_clinging: false,
-            tile_image: ThreadSafeImage(None)
+            tile_image: ThreadSafeImage(None),
+            player_image: ThreadSafeImage(None)
         }
     }
 }

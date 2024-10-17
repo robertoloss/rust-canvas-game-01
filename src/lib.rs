@@ -122,11 +122,14 @@ pub fn get_and_give_f64(num: Option<f64>) {
 }
 #[wasm_bindgen]
 pub fn set_tile_image(img: Option<HtmlImageElement>) {
-    //console::log_1(&JsValue::from_str(&format!("{}", num)));
     let mut player = PLAYER.lock().unwrap();
     player.tile_image = ThreadSafeImage(img.map(|i| i.into()));
 }
-
+#[wasm_bindgen]
+pub fn set_player_image(img: Option<HtmlImageElement>) {
+    let mut player = PLAYER.lock().unwrap();
+    player.player_image = ThreadSafeImage(img.map(|i| i.into()));
+}
 
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
@@ -226,13 +229,23 @@ pub fn render() -> Result<(), JsValue> {
                          }
                     }
                 }
-                ctx.set_font("14px Arial, sans-serif");
-                ctx.set_fill_style(&JsValue::from_str("yellow"));
-                let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
-                let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
-                if delta != 0. {
-                    ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
-                    ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
+                if let Some(js_val) = &player.player_image.0 {
+                    let image: HtmlImageElement = js_val.clone().into();
+                    ctx.set_font("14px Arial, sans-serif");
+                    ctx.set_fill_style(&JsValue::from_str("yellow"));
+                    let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
+                    let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
+                    if delta != 0. {
+                        ctx.draw_image_with_html_image_element_and_dw_and_dh(
+                            &image,
+                            player.position.x,
+                            player.position.y,
+                            tile_size,
+                            tile_size,
+                        )?;
+                        //ctx.set_fill_style(&JsValue::from_str("#b52c1d"));
+                        //ctx.fill_rect(player.position.x, player.position.y, tile_size, tile_size);
+                    }
                 }
             },
             Err(e) => eprintln!("Error getting context: {:?}", e)
