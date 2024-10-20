@@ -174,9 +174,9 @@ pub fn render() -> Result<(), JsValue> {
         return Ok(())
     }
     player.velocity.x = if player.moves.right { 
-        4.0  
+        3.2  
     } else if player.moves.left { 
-        -4.0 
+        -3.2 
     } else { 0. };
     //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
 
