@@ -94,19 +94,19 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
     let tile_size_off = player.tile_size_plus_off;
     //tiles around the player
     let top_right = (
-        ((player.position.x + player.velocity.x + tile_size) / tile_size).floor() as usize,
+        ((player.position.x + player.velocity.x + tile_size - player.hitbox.right) / tile_size).floor() as usize,
         ((player.position.y + player.velocity.y) / tile_size).floor() as usize
     );
     let bottom_right = (
-        ((player.position.x + player.velocity.x + tile_size) / tile_size).floor() as usize,
+        ((player.position.x + player.velocity.x + tile_size - player.hitbox.right) / tile_size).floor() as usize,
         ((player.position.y + player.velocity.y + tile_size) / tile_size).floor() as usize
     );
     let top_left = (
-        ((player.position.x + player.velocity.x) / tile_size).floor() as usize,
+        ((player.position.x + player.velocity.x + player.hitbox.left) / tile_size).floor() as usize,
         ((player.position.y + player.velocity.y) / tile_size).floor() as usize
     );
     let bottom_left = (
-        ((player.position.x + player.velocity.x) / tile_size).floor() as usize,
+        ((player.position.x + player.velocity.x + player.hitbox.left) / tile_size).floor() as usize,
         ((player.position.y + player.velocity.y + tile_size) / tile_size).floor() as usize
     );
 
@@ -116,19 +116,19 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
     // off_tile_x, off_tile_y, off_tile_x_intersection, off_tile_y_intersection, off_player_x, off_player_y
     d_cases.insert(
         String::from("up-left"), 
-        (top_left, top_right, bottom_left, tile_size, tile_size, tile_size, tile_size, 0., 0.)
+        (top_left, top_right, bottom_left, tile_size - player.hitbox.left, tile_size, tile_size, tile_size, 0., 0.)
     );
     d_cases.insert(
         String::from("up-right"), 
-        (top_right, top_left, bottom_right, -tile_size_off, tile_size, 0., tile_size, tile_size, 0.)
+        (top_right, top_left, bottom_right, -tile_size + player.hitbox.right, tile_size, 0., tile_size, tile_size, 0.)
     );
     d_cases.insert(
         String::from("down-left"), 
-        (bottom_left, bottom_right, top_left, tile_size, -tile_size_off, tile_size, 0., 0., tile_size)
+        (bottom_left, bottom_right, top_left, tile_size - player.hitbox.left, -tile_size_off, tile_size, 0., 0., tile_size)
     );
     d_cases.insert(
         String::from("down-right"), 
-        (bottom_right, bottom_left, top_right, -tile_size_off, -tile_size_off, 0., 0., tile_size, tile_size)
+        (bottom_right, bottom_left, top_right, -tile_size +player.hitbox.right, -tile_size_off, 0., 0., tile_size, tile_size)
     );
 
     if player.velocity.y <= 0. {

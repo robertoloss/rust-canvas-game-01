@@ -13,6 +13,13 @@ pub struct Vec2 {
     pub y: f64,
 }
 #[derive(Debug)]
+pub struct Direction {
+    pub up: f64,
+    pub down: f64,
+    pub left: f64,
+    pub right: f64
+}
+#[derive(Debug)]
 pub struct Moves {
     pub left: bool,
     pub right: bool,
@@ -24,6 +31,7 @@ pub struct Moves {
 #[derive(Debug)]
 pub struct Player {
     pub position: Vec2,
+    pub hitbox: Direction,
     pub velocity: Vec2,
     pub gravity: f64,
     pub moves: Moves,
@@ -47,6 +55,12 @@ impl Default for Player {
             position: Vec2 {
                 x: 350.0,
                 y: 650.0
+            },
+            hitbox: Direction {
+                up: 0.,
+                down: 0.,
+                left: 6. * 3.0, // pixel * sprite-pixel
+                right: 6. * 2.0,
             },
             velocity: Vec2 {
                 x: 0.0,

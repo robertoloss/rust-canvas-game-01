@@ -233,32 +233,24 @@ pub fn render() -> Result<(), JsValue> {
                 //ctx.set_fill_style(&JsValue::from_str("yellow"));
                 //let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
                 //let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
-                if player.facing_right {
-                    if let Some(js_val) = &player.player_image.0 {
-                        let image: HtmlImageElement = js_val.clone().into();
-                        if delta != 0. {
-                            ctx.draw_image_with_html_image_element_and_dw_and_dh(
-                                &image,
-                                player.position.x,
-                                player.position.y,
-                                tile_size,
-                                tile_size,
-                            )?;
-                        }
-                    }
-                } else {
-                    if let Some(js_val) = &player.player_image_left.0 {
-                        let image: HtmlImageElement = js_val.clone().into();
-                        if delta != 0. {
-                            ctx.draw_image_with_html_image_element_and_dw_and_dh(
-                                &image,
-                                player.position.x,
-                                player.position.y,
-                                tile_size,
-                                tile_size,
-                            )?;
-                        }
-                    }
+
+                let mut _image: &ThreadSafeImage = &ThreadSafeImage(None); 
+
+                match player.facing_right {
+                    true => _image = &player.player_image,
+                    false => _image = &player.player_image_left
+                }
+
+                let player_sprite = _image.0.clone().unwrap().into();
+
+                if delta != 0. {
+                    ctx.draw_image_with_html_image_element_and_dw_and_dh(
+                        &player_sprite,
+                        player.position.x,
+                        player.position.y,
+                        tile_size,
+                        tile_size,
+                    )?;
                 }
             },
             Err(e) => eprintln!("Error getting context: {:?}", e)

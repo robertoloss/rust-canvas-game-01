@@ -8,39 +8,37 @@ async function start() {
 	document.addEventListener('keyup', handleKeyUp);
 	wasm.initialize()
 
-	const img = new Image();
-	const loadImage = new Promise((resolve, reject) => {
-			img.onload = () => resolve(img);
-			img.onerror = reject;
-	});
-	const img2 = new Image();
-	const loadImage2 = new Promise((resolve, reject) => {
-			img2.onload = () => resolve(img2);
-			img2.onerror = reject;
-	});
-	const img3 = new Image();
-	const loadImage3 = new Promise((resolve, reject) => {
-			img3.onload = () => resolve(img3);
-			img3.onerror = reject;
-	});
-	
-	img.src = './assets/Tile 8x8 v1.4-1.png.png';
-	img2.src = './assets/Player 8x8 v1.0-1.png.png';
-	img3.src = './assets/Player 8x8 v1.0_L-1.png.png';
-
-	try {
-		await loadImage;
-		set_tile_image(img)
-
-		await loadImage2;
-		set_player_image(img2)
-
-		await loadImage3;
-		set_player_image_left(img3)
-
-	} catch(error) {
-		console.error("Oops!", error)
+	const images = [
+		{ 
+			src: './assets/Tile 8x8 v1.4-1.png.png' ,
+			action: set_tile_image
+		},
+		{ 
+			src: './assets/Player 8x8 v2.0_tr-1.png.png',
+			action: set_player_image
+		},
+		{ 
+			src: './assets/Player 8x8 v2.0_tr_L-1.png.png',
+			action: set_player_image_left
+		},
+	]
+	async function processImages() {
+		for (const image of images) {
+			const img = new Image();
+			const loadImage = new Promise((resolve, reject) => {
+					img.onload = () => resolve(img);
+					img.onerror = reject;
+			});
+			img.src = image.src
+			try {
+				await loadImage;
+				image.action(img)
+			} catch(error) {
+				console.error("Oops!", error, img)
+			}
+		}
 	}
+	processImages()
 
 	const mobileJump = document.getElementById('mobile-jump')
 	const mobileCling = document.getElementById('mobile-cling')
