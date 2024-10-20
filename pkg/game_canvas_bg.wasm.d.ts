@@ -5,6 +5,7 @@ export function initialize(): void;
 export function get_and_give_f64(a: number, b: number): void;
 export function set_tile_image(a: number): void;
 export function set_player_image(a: number): void;
+export function set_player_image_left(a: number): void;
 export function render(a: number): void;
 export function movement(a: number): void;
 export function stop_movement(a: number): void;

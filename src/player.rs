@@ -27,6 +27,7 @@ pub struct Player {
     pub velocity: Vec2,
     pub gravity: f64,
     pub moves: Moves,
+    pub facing_right: bool,
     pub map_origin: Vec2usize,
     pub tile_size: f64,
     pub tile_size_plus_off: f64,
@@ -36,7 +37,8 @@ pub struct Player {
     pub is_clinging: bool,
     pub delta: f64,
     pub tile_image: ThreadSafeImage,
-    pub player_image: ThreadSafeImage
+    pub player_image: ThreadSafeImage,
+    pub player_image_left: ThreadSafeImage,
 }
 impl Default for Player {
     fn default() -> Self {
@@ -59,6 +61,7 @@ impl Default for Player {
                 jump: false,
                 stop_jump: false,
             },
+            facing_right: true,
             map_origin: Vec2usize {
                 x: 0,
                 y: 0
@@ -71,7 +74,8 @@ impl Default for Player {
             delta: 0.0,
             is_clinging: false,
             tile_image: ThreadSafeImage(None),
-            player_image: ThreadSafeImage(None)
+            player_image: ThreadSafeImage(None),
+            player_image_left: ThreadSafeImage(None),
         }
     }
 }

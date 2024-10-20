@@ -21,6 +21,10 @@ export function set_tile_image(img?: HTMLImageElement): void;
  * @param {HTMLImageElement | undefined} [img]
  */
 export function set_player_image(img?: HTMLImageElement): void;
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_player_image_left(img?: HTMLImageElement): void;
 export function render(): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -31,6 +35,7 @@ export interface InitOutput {
   readonly get_and_give_f64: (a: number, b: number) => void;
   readonly set_tile_image: (a: number) => void;
   readonly set_player_image: (a: number) => void;
+  readonly set_player_image_left: (a: number) => void;
   readonly render: (a: number) => void;
   readonly movement: (a: number) => void;
   readonly stop_movement: (a: number) => void;
