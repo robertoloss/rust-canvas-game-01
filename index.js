@@ -1,4 +1,4 @@
-import init, { get_and_give_f64, set_player_image, set_player_image_left, set_tile_image } from "./pkg/game_canvas.js";
+import init, { get_and_give_f64, set_player_image, set_player_image_cling, set_player_image_cling_left, set_player_image_left, set_tile_image } from "./pkg/game_canvas.js";
 
 let wasm;
 
@@ -20,6 +20,14 @@ async function start() {
 		{ 
 			src: './assets/Player 8x8 v2.0_tr_L-1.png.png',
 			action: set_player_image_left
+		},
+		{ 
+			src: './assets/player_2_0_cling_R-1.png.png',
+			action: set_player_image_cling
+		},
+		{ 
+			src: './assets/player_2_0_cling_L-1.png.png',
+			action: set_player_image_cling_left
 		},
 	]
 	async function processImages() {

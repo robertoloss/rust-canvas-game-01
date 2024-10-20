@@ -47,6 +47,8 @@ pub struct Player {
     pub tile_image: ThreadSafeImage,
     pub player_image: ThreadSafeImage,
     pub player_image_left: ThreadSafeImage,
+    pub player_image_cling: ThreadSafeImage,
+    pub player_image_cling_left: ThreadSafeImage,
 }
 impl Default for Player {
     fn default() -> Self {
@@ -90,6 +92,8 @@ impl Default for Player {
             tile_image: ThreadSafeImage(None),
             player_image: ThreadSafeImage(None),
             player_image_left: ThreadSafeImage(None),
+            player_image_cling: ThreadSafeImage(None),
+            player_image_cling_left: ThreadSafeImage(None),
         }
     }
 }

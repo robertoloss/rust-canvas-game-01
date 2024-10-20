@@ -21,17 +21,30 @@ pub fn movement(key_code: i32) {
         0 => {
             player.moves.left = true;
             player.moves.right = false;
-            player.facing_right = false;
+            if !player.is_clinging {
+                player.facing_right = false;
+            }
         },
         1 => {
             player.moves.right = true;
             player.moves.left = false;
-            player.facing_right = true;
+            if !player.is_clinging {
+                player.facing_right = true;
+            }
         },
         2 => {
             player.moves.jump = true;
             player.wants_to_cling = false;
-            player.is_clinging = false;
+            if player.is_clinging {
+                player.is_clinging = false;
+                if player.moves.right || player.moves.left {
+                    player.facing_right = if player.moves.right {
+                        true
+                    } else {
+                        false
+                    }
+                }
+            }
         },
         3 => {
             player.wants_to_cling = true;
@@ -137,6 +150,16 @@ pub fn set_player_image_left(img: Option<HtmlImageElement>) {
     let mut player = PLAYER.lock().unwrap();
     player.player_image_left = ThreadSafeImage(img.map(|i| i.into()));
 }
+#[wasm_bindgen]
+pub fn set_player_image_cling(img: Option<HtmlImageElement>) {
+    let mut player = PLAYER.lock().unwrap();
+    player.player_image_cling = ThreadSafeImage(img.map(|i| i.into()));
+}
+#[wasm_bindgen]
+pub fn set_player_image_cling_left(img: Option<HtmlImageElement>) {
+    let mut player = PLAYER.lock().unwrap();
+    player.player_image_cling_left = ThreadSafeImage(img.map(|i| i.into()));
+}
 
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
@@ -156,6 +179,15 @@ pub fn render() -> Result<(), JsValue> {
         -4.0 
     } else { 0. };
     //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
+
+    if !player.is_clinging {
+        if player.velocity.x > 0. {
+            player.facing_right = true
+        }
+        if player.velocity.x < 0. {
+            player.facing_right = false
+        }
+    }
     
     if player.moves.jump {
         player.moves.jump = false;
@@ -237,8 +269,16 @@ pub fn render() -> Result<(), JsValue> {
                 let mut _image: &ThreadSafeImage = &ThreadSafeImage(None); 
 
                 match player.facing_right {
-                    true => _image = &player.player_image,
-                    false => _image = &player.player_image_left
+                    true => _image =  if player.is_clinging {
+                        &player.player_image_cling
+                    } else { 
+                        &player.player_image
+                    },
+                    false => _image = if player.is_clinging {
+                        &player.player_image_cling_left
+                    } else {
+                        &player.player_image_left
+                    }
                 }
 
                 let player_sprite = _image.0.clone().unwrap().into();

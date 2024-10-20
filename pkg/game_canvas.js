@@ -225,6 +225,20 @@ export function set_player_image_left(img) {
     wasm.set_player_image_left(isLikeNone(img) ? 0 : addHeapObject(img));
 }
 
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_player_image_cling(img) {
+    wasm.set_player_image_cling(isLikeNone(img) ? 0 : addHeapObject(img));
+}
+
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_player_image_cling_left(img) {
+    wasm.set_player_image_cling_left(isLikeNone(img) ? 0 : addHeapObject(img));
+}
+
 export function render() {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
