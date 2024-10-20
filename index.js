@@ -19,8 +19,8 @@ async function start() {
 			img2.onerror = reject;
 	});
 	
-	img.src = './assets/Tile1.png';
-	img2.src = './assets/Player_new.png';
+	img.src = './assets/Tile 8x8 v1.4-1.png.png';
+	img2.src = './assets/Player 8x8 v1.0-1.png.png';
 
 	try {
 		await loadImage;

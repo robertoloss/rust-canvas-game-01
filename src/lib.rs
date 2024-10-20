@@ -231,10 +231,10 @@ pub fn render() -> Result<(), JsValue> {
                 }
                 if let Some(js_val) = &player.player_image.0 {
                     let image: HtmlImageElement = js_val.clone().into();
-                    ctx.set_font("14px Arial, sans-serif");
-                    ctx.set_fill_style(&JsValue::from_str("yellow"));
-                    let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
-                    let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
+                    //ctx.set_font("14px Arial, sans-serif");
+                    //ctx.set_fill_style(&JsValue::from_str("yellow"));
+                    //let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
+                    //let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
                     if delta != 0. {
                         ctx.draw_image_with_html_image_element_and_dw_and_dh(
                             &image,
