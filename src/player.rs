@@ -1,3 +1,5 @@
+use std::u32;
+
 use web_sys::HtmlImageElement;
 
 use crate::{LeftRight, Vec2usize};
@@ -14,8 +16,6 @@ pub struct Vec2 {
 }
 #[derive(Debug)]
 pub struct Direction {
-    pub up: f64,
-    pub down: f64,
     pub left: f64,
     pub right: f64
 }
@@ -23,10 +23,15 @@ pub struct Direction {
 pub struct Moves {
     pub left: bool,
     pub right: bool,
-    pub up: bool,
-    pub down: bool,
     pub jump: bool,
     pub stop_jump: bool,
+}
+#[derive(Debug)]
+pub struct SpriteSheet {
+    pub sheet: ThreadSafeImage,
+    pub pointer_y: f64,
+    pub counter: u32,
+    pub counter_limit: u32,
 }
 #[derive(Debug)]
 pub struct Player {
@@ -38,7 +43,6 @@ pub struct Player {
     pub facing_right: bool,
     pub map_origin: Vec2usize,
     pub tile_size: f64,
-    pub tile_size_plus_off: f64,
     pub screen_tiles: usize,
     pub can_cling: LeftRight,
     pub wants_to_cling: bool,
@@ -49,6 +53,8 @@ pub struct Player {
     pub player_image_left: ThreadSafeImage,
     pub player_image_cling: ThreadSafeImage,
     pub player_image_cling_left: ThreadSafeImage,
+    pub runRight: SpriteSheet,
+    pub runLeft: SpriteSheet
 }
 impl Default for Player {
     fn default() -> Self {
@@ -59,8 +65,6 @@ impl Default for Player {
                 y: 650.0
             },
             hitbox: Direction {
-                up: 0.,
-                down: 0.,
                 left: 6. * 3.0, // pixel * sprite-pixel
                 right: 6. * 2.0,
             },
@@ -72,8 +76,6 @@ impl Default for Player {
             moves: Moves {
                 left: false,
                 right: false,
-                up: false,
-                down: false,
                 jump: false,
                 stop_jump: false,
             },
@@ -83,7 +85,6 @@ impl Default for Player {
                 y: 0
             },
             tile_size,
-            tile_size_plus_off: tile_size + 0.0,
             screen_tiles: 16,
             can_cling: LeftRight::None,
             wants_to_cling: false,
@@ -94,6 +95,19 @@ impl Default for Player {
             player_image_left: ThreadSafeImage(None),
             player_image_cling: ThreadSafeImage(None),
             player_image_cling_left: ThreadSafeImage(None),
+            runRight: SpriteSheet {
+                sheet: ThreadSafeImage(None),
+                pointer_y: 0.,
+                counter: 0,
+                counter_limit: 16,
+           },
+           runLeft: SpriteSheet {
+                sheet: ThreadSafeImage(None),
+                pointer_y: 0.,
+                counter: 0,
+                counter_limit: 16,
+            }
+
         }
     }
 }

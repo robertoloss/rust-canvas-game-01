@@ -283,15 +283,13 @@ pub fn render() -> Result<(), JsValue> {
 
                 let player_sprite = _image.0.clone().unwrap().into();
 
-                if delta != 0. {
-                    ctx.draw_image_with_html_image_element_and_dw_and_dh(
-                        &player_sprite,
-                        player.position.x,
-                        player.position.y,
-                        tile_size,
-                        tile_size,
-                    )?;
-                }
+                ctx.draw_image_with_html_image_element_and_dw_and_dh(
+                    &player_sprite,
+                    player.position.x,
+                    player.position.y,
+                    tile_size,
+                    tile_size,
+                )?;
             },
             Err(e) => eprintln!("Error getting context: {:?}", e)
         }
