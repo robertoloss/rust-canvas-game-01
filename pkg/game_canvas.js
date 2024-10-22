@@ -239,6 +239,20 @@ export function set_player_image_cling_left(img) {
     wasm.set_player_image_cling_left(isLikeNone(img) ? 0 : addHeapObject(img));
 }
 
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_player_sheet_run_right(img) {
+    wasm.set_player_sheet_run_right(isLikeNone(img) ? 0 : addHeapObject(img));
+}
+
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_player_sheet_run_left(img) {
+    wasm.set_player_sheet_run_left(isLikeNone(img) ? 0 : addHeapObject(img));
+}
+
 export function render() {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
@@ -342,6 +356,9 @@ function __wbg_get_imports() {
     };
     imports.wbg.__wbg_drawImage_9617f48807fea037 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4, arg5) {
         getObject(arg0).drawImage(getObject(arg1), arg2, arg3, arg4, arg5);
+    }, arguments) };
+    imports.wbg.__wbg_drawImage_6846b79ae0acb104 = function() { return handleError(function (arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
+        getObject(arg0).drawImage(getObject(arg1), arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
     }, arguments) };
     imports.wbg.__wbg_clearRect_b31e8293856d6504 = function(arg0, arg1, arg2, arg3, arg4) {
         getObject(arg0).clearRect(arg1, arg2, arg3, arg4);

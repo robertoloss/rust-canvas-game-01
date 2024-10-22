@@ -33,6 +33,14 @@ export function set_player_image_cling(img?: HTMLImageElement): void;
  * @param {HTMLImageElement | undefined} [img]
  */
 export function set_player_image_cling_left(img?: HTMLImageElement): void;
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_player_sheet_run_right(img?: HTMLImageElement): void;
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_player_sheet_run_left(img?: HTMLImageElement): void;
 export function render(): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -47,6 +55,8 @@ export interface InitOutput {
   readonly set_player_image_left: (a: number) => void;
   readonly set_player_image_cling: (a: number) => void;
   readonly set_player_image_cling_left: (a: number) => void;
+  readonly set_player_sheet_run_right: (a: number) => void;
+  readonly set_player_sheet_run_left: (a: number) => void;
   readonly render: (a: number) => void;
   readonly stop_movement: (a: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;

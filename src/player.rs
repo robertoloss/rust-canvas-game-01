@@ -30,8 +30,8 @@ pub struct Moves {
 pub struct SpriteSheet {
     pub sheet: ThreadSafeImage,
     pub pointer_y: f64,
-    pub counter: u32,
     pub counter_limit: u32,
+    pub pointer_y_limit: f64,
 }
 #[derive(Debug)]
 pub struct Player {
@@ -53,8 +53,9 @@ pub struct Player {
     pub player_image_left: ThreadSafeImage,
     pub player_image_cling: ThreadSafeImage,
     pub player_image_cling_left: ThreadSafeImage,
-    pub runRight: SpriteSheet,
-    pub runLeft: SpriteSheet
+    pub run_right: SpriteSheet,
+    pub run_left: SpriteSheet,
+    pub sprite_counter: u32,
 }
 impl Default for Player {
     fn default() -> Self {
@@ -95,17 +96,18 @@ impl Default for Player {
             player_image_left: ThreadSafeImage(None),
             player_image_cling: ThreadSafeImage(None),
             player_image_cling_left: ThreadSafeImage(None),
-            runRight: SpriteSheet {
+            sprite_counter: 0,
+            run_right: SpriteSheet {
                 sheet: ThreadSafeImage(None),
                 pointer_y: 0.,
-                counter: 0,
-                counter_limit: 16,
-           },
-           runLeft: SpriteSheet {
+                counter_limit: 4,
+                pointer_y_limit: 8. * 48.,
+            },
+            run_left: SpriteSheet {
                 sheet: ThreadSafeImage(None),
                 pointer_y: 0.,
-                counter: 0,
-                counter_limit: 16,
+                counter_limit: 4,
+                pointer_y_limit: 8. * tile_size,
             }
 
         }

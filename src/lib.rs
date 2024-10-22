@@ -160,6 +160,16 @@ pub fn set_player_image_cling_left(img: Option<HtmlImageElement>) {
     let mut player = PLAYER.lock().unwrap();
     player.player_image_cling_left = ThreadSafeImage(img.map(|i| i.into()));
 }
+#[wasm_bindgen]
+pub fn set_player_sheet_run_right(img: Option<HtmlImageElement>) {
+    let mut player = PLAYER.lock().unwrap();
+    player.run_right.sheet = ThreadSafeImage(img.map(|i| i.into()));
+}
+#[wasm_bindgen]
+pub fn set_player_sheet_run_left(img: Option<HtmlImageElement>) {
+    let mut player = PLAYER.lock().unwrap();
+    player.run_left.sheet = ThreadSafeImage(img.map(|i| i.into()));
+}
 
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
@@ -237,6 +247,7 @@ pub fn render() -> Result<(), JsValue> {
 
     manage_player_collision_with_tile(&mut(*player), &collision_map);
 
+
     if let Some(js_val) = &player.tile_image.0 {
         let image: HtmlImageElement = js_val.clone().into();
         let game_map = get_map();
@@ -267,28 +278,57 @@ pub fn render() -> Result<(), JsValue> {
                 //let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
 
                 let mut _image: &ThreadSafeImage = &ThreadSafeImage(None); 
+                player.sprite_counter += 1;
 
                 match player.facing_right {
                     true => _image =  if player.is_clinging {
                         &player.player_image_cling
-                    } else { 
+                    } else if player.velocity.x == 0. { 
                         &player.player_image
+                    } else {
+                        &player.run_right.sheet
                     },
                     false => _image = if player.is_clinging {
                         &player.player_image_cling_left
-                    } else {
+                    } else if player.velocity.x == 0. {
                         &player.player_image_left
+                    } else {
+                        &player.run_left.sheet
                     }
                 }
 
-                let player_sprite = _image.0.clone().unwrap().into();
+                let mut pointer_y = 0.;
+                //console::log_1(&JsValue::from_str(&format!("{}", player.sprite_counter)));
 
-                ctx.draw_image_with_html_image_element_and_dw_and_dh(
+                let player_sprite = _image.0.clone().unwrap().into();
+                let is_run_right_sheet = std::ptr::eq(_image, &player.run_right.sheet);
+                let is_run_left_sheet = std::ptr::eq(_image, &player.run_left.sheet);
+
+                if is_run_right_sheet {
+                    if player.sprite_counter >= player.run_right.counter_limit {
+                        player.sprite_counter = 0;
+                        player.run_right.pointer_y += tile_size;
+                        if player.run_right.pointer_y >= player.run_right.pointer_y_limit {
+                            player.run_right.pointer_y = 0.
+                        }
+                    }
+                    pointer_y = player.run_right.pointer_y;
+                } else if is_run_left_sheet {
+                    if player.sprite_counter >= player.run_left.counter_limit {
+                        player.sprite_counter = 0;
+                        player.run_left.pointer_y += tile_size;
+                        if player.run_left.pointer_y >= player.run_left.pointer_y_limit {
+                            player.run_left.pointer_y = 0.
+                        }
+                    }
+                    pointer_y = player.run_left.pointer_y;
+                }
+
+
+                ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                     &player_sprite,
-                    player.position.x,
-                    player.position.y,
-                    tile_size,
-                    tile_size,
+                    0., pointer_y, tile_size, tile_size,
+                    player.position.x, player.position.y, tile_size, tile_size,
                 )?;
             },
             Err(e) => eprintln!("Error getting context: {:?}", e)
