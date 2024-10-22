@@ -283,14 +283,14 @@ pub fn render() -> Result<(), JsValue> {
                 match player.facing_right {
                     true => _image =  if player.is_clinging {
                         &player.player_image_cling
-                    } else if player.velocity.x == 0. { 
+                    } else if player.velocity.x == 0. || player.velocity.y != 0. {//> 1. || player.velocity.y < -1. { 
                         &player.player_image
                     } else {
                         &player.run_right.sheet
                     },
                     false => _image = if player.is_clinging {
                         &player.player_image_cling_left
-                    } else if player.velocity.x == 0. {
+                    } else if player.velocity.x == 0. || player.velocity.y != 0. {
                         &player.player_image_left
                     } else {
                         &player.run_left.sheet
