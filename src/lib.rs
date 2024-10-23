@@ -184,9 +184,9 @@ pub fn render() -> Result<(), JsValue> {
         return Ok(())
     }
     player.velocity.x = if player.moves.right { 
-        3.2  
+        player.horizontal_velocity 
     } else if player.moves.left { 
-        -3.2 
+        -player.horizontal_velocity
     } else { 0. };
     //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
 
@@ -201,7 +201,7 @@ pub fn render() -> Result<(), JsValue> {
     
     if player.moves.jump {
         player.moves.jump = false;
-        player.velocity.y = -10.1 ; //-10.1
+        player.velocity.y = player.jump_velocity; //-10.1
     }
     if player.moves.stop_jump {
         player.moves.stop_jump = false;
@@ -209,7 +209,7 @@ pub fn render() -> Result<(), JsValue> {
             player.velocity.y += 3.//3.
         }
     }
-    if player.velocity.y < 100.0 {
+    if player.velocity.y < player.max_fall_velocity {
         player.velocity.y += player.gravity / delta
     }
     if player.wants_to_cling && player.can_cling != collisions::LeftRight::None {

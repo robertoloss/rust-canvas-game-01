@@ -39,6 +39,9 @@ pub struct Player {
     pub hitbox: Direction,
     pub velocity: Vec2,
     pub gravity: f64,
+    pub jump_velocity: f64,
+    pub max_fall_velocity: f64,
+    pub horizontal_velocity: f64,
     pub moves: Moves,
     pub facing_right: bool,
     pub map_origin: Vec2usize,
@@ -73,7 +76,10 @@ impl Default for Player {
                 x: 0.0,
                 y: 0.0
             },
-            gravity: 0.5,
+            gravity: 0.3, //0.5,
+            jump_velocity: -8.2, //-10.1,
+            horizontal_velocity: 2.3,
+            max_fall_velocity: 50.,
             moves: Moves {
                 left: false,
                 right: false,

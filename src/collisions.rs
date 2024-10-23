@@ -69,7 +69,9 @@ pub fn manage_collision(
             } else {
                 player.velocity.x = 0.;
                 player.position.x = t.position.x + off_tile_x;
-                player.can_cling = left_right.clone();
+                if let UpDown::Up = up_down {
+                    player.can_cling = left_right.clone();
+                }
             }
         }
     } else {
@@ -82,7 +84,9 @@ pub fn manage_collision(
             //console::log_1(&JsValue::from_str("top opposite_y_to_corner_tile ---"));
             player.velocity.x = 0.;
             player.position.x = t.position.x + off_tile_x;
-            player.can_cling = left_right.clone();
+            if let UpDown::Down = up_down {
+                player.can_cling = left_right.clone();
+            } 
         } else {
             player.can_cling = LeftRight::None;
         }
@@ -111,15 +115,17 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
 
     if player.velocity.x == 0. && player.velocity.y == 0. { return }
 
+    //off_tile_x = how much to the x will be the player repositioned
+
     let mut d_cases = HashMap::new();
-    // off_tile_x, off_tile_y, off_tile_x_intersection, off_tile_y_intersection, off_player_x, off_player_y
+    // (....3 tiles...., off_tile_x, off_tile_y, off_tile_x_intersection, off_tile_y_intersection, off_player_x, off_player_y)
     d_cases.insert(
         String::from("up-left"), 
         (top_left, top_right, bottom_left, tile_size - player.hitbox.left, tile_size, tile_size, tile_size, player.hitbox.left, 0.)
     );
     d_cases.insert(
         String::from("up-right"), 
-        (top_right, top_left, bottom_right, -tile_size + player.hitbox.right, tile_size, 0., tile_size - player.hitbox.right, tile_size, 0.)
+        (top_right, top_left, bottom_right, -tile_size + player.hitbox.right, tile_size, 0., tile_size, tile_size -player.hitbox.right, 0.)
     );
     d_cases.insert(
         String::from("down-left"), 
