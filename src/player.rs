@@ -59,6 +59,7 @@ pub struct Player {
     pub run_right: SpriteSheet,
     pub run_left: SpriteSheet,
     pub sprite_counter: u32,
+    pub is_on_the_ground: bool,
 }
 impl Default for Player {
     fn default() -> Self {
@@ -69,7 +70,7 @@ impl Default for Player {
                 y: 650.0
             },
             hitbox: Direction {
-                left: 6. * 3.0, // pixel * sprite-pixel
+                left: 6. * 2.0, // pixel * sprite-pixel
                 right: 6. * 2.0,
             },
             velocity: Vec2 {
@@ -80,6 +81,7 @@ impl Default for Player {
             jump_velocity: -8.2, //-10.1,
             horizontal_velocity: 2.3,
             max_fall_velocity: 50.,
+            is_on_the_ground: true,
             moves: Moves {
                 left: false,
                 right: false,

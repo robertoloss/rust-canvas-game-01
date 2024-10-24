@@ -276,6 +276,9 @@ pub fn render() -> Result<(), JsValue> {
                 //ctx.set_fill_style(&JsValue::from_str("yellow"));
                 //let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
                 //let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
+                if player.is_clinging || (player.velocity.x == 0. || player.velocity.y != 0.) {
+                    player.sprite_counter = 0;
+                }
 
                 let mut _image: &ThreadSafeImage = &ThreadSafeImage(None); 
                 player.sprite_counter += 1;
