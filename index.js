@@ -8,6 +8,7 @@ import init, {
 	set_player_sheet_run_right, 
 	set_tile_image,
 	set_lava_sheet,
+	set_death_sheet,
 } from "./pkg/game_canvas.js";
 
 let wasm;
@@ -50,6 +51,10 @@ async function start() {
 		{
 			src: './assets/Lava_1_0.png',
 			action: set_lava_sheet
+		},
+		{
+			src: './assets/Death_1.png',
+			action: set_death_sheet 
 		},
 	]
 	async function processImages() {

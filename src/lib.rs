@@ -228,6 +228,8 @@ pub fn render() -> Result<(), JsValue> {
     for tile in lethal_tiles.iter() {
         if real_tile_collision(&tile, &player) && player.velocity.y > 0. {
             console::log_1(&JsValue::from_str(&String::from("DEATH")));
+            let death_sheet: HtmlImageElement = player.death_sheet.sheet.0.clone().unwrap().into();
+
             player.position = player.position_spawn.clone();
             continue;
         }

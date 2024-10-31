@@ -14,6 +14,7 @@ export function set_player_image_cling(a: number): void;
 export function set_player_image_cling_left(a: number): void;
 export function set_player_sheet_run_right(a: number): void;
 export function set_player_sheet_run_left(a: number): void;
+export function set_death_sheet(a: number): void;
 export function __wbindgen_malloc(a: number, b: number): number;
 export function __wbindgen_realloc(a: number, b: number, c: number, d: number): number;
 export function __wbindgen_add_to_stack_pointer(a: number): number;

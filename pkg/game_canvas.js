@@ -274,6 +274,13 @@ export function set_player_sheet_run_left(img) {
     wasm.set_player_sheet_run_left(isLikeNone(img) ? 0 : addHeapObject(img));
 }
 
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_death_sheet(img) {
+    wasm.set_death_sheet(isLikeNone(img) ? 0 : addHeapObject(img));
+}
+
 function handleError(f, args) {
     try {
         return f.apply(this, args);

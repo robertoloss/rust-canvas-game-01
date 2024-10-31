@@ -46,6 +46,10 @@ export function set_player_sheet_run_right(img?: HTMLImageElement): void;
  * @param {HTMLImageElement | undefined} [img]
  */
 export function set_player_sheet_run_left(img?: HTMLImageElement): void;
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_death_sheet(img?: HTMLImageElement): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
@@ -64,6 +68,7 @@ export interface InitOutput {
   readonly set_player_image_cling_left: (a: number) => void;
   readonly set_player_sheet_run_right: (a: number) => void;
   readonly set_player_sheet_run_left: (a: number) => void;
+  readonly set_death_sheet: (a: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;

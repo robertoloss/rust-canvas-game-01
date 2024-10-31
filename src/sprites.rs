@@ -44,3 +44,8 @@ pub fn set_player_sheet_run_left(img: Option<HtmlImageElement>) {
     let mut player = PLAYER.lock().unwrap();
     player.run_left.sheet = ThreadSafeImage(img.map(|i| i.into()));
 }
+#[wasm_bindgen]
+pub fn set_death_sheet(img: Option<HtmlImageElement>) {
+    let mut player = PLAYER.lock().unwrap();
+    player.death_sheet.sheet = ThreadSafeImage(img.map(|i| i.into()));
+}
