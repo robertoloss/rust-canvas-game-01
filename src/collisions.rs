@@ -16,6 +16,14 @@ pub enum LeftRight {
     Right,
     None
 }
+pub fn real_tile_collision(tile: &Tile, player: &Player) -> bool {
+    let tile_size = player.tile_size;
+    if tile.position.x > player.position.x + tile_size + player.velocity.x { return false };
+    if tile.position.x + tile_size < player.position.x + player.velocity.x { return false };
+    if tile.position.y > player.position.y + tile_size + player.velocity.y { return false };
+    if tile.position.y + tile_size < player.position.y + player.velocity.y { return false };
+    true
+}
 pub fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usize), Tile>) -> Option<&map::Tile> {
     collision_map.get(&tuple)
 }
@@ -85,7 +93,7 @@ pub fn manage_collision(
             player.velocity.x = 0.;
             player.position.x = t.position.x + off_tile_x;
             if let UpDown::Down = up_down {
-                player.can_cling = left_right.clone();
+            player.can_cling = left_right.clone();
             } 
         } else {
             player.can_cling = LeftRight::None;

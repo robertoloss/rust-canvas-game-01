@@ -1,12 +1,12 @@
 use crate::player::Vec2;
 
-#[derive(Debug)]
+#[derive(Clone,Debug)]
 pub struct Vec2usize {
     pub x: usize,
     pub y: usize
 }
 
-//#[derive(Debug)]
+#[derive(Clone)]
 pub struct Tile {
     pub tile_pos: Vec2usize,
     pub position: Vec2,

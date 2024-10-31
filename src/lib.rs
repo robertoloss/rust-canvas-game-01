@@ -5,7 +5,7 @@ mod sprites;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::{console, CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement };
-use std::{collections::HashMap, sync::Mutex};
+use std::{collections::HashMap, fmt::format, sync::Mutex};
 use map::*;
 use collisions::*;
 use player::*;
@@ -15,6 +15,7 @@ use sprites::*;
 lazy_static! {
     static ref PLAYER: Mutex<Player> = Mutex::new(Player::default());
     static ref MAP_COLLISIONS: Mutex<HashMap<(usize,usize), Tile>> = Mutex::new(HashMap::new());
+    static ref LETHAL_TILES: Mutex<Vec<Tile>> = Mutex::new(vec![]);
 }
 #[wasm_bindgen]
 pub fn movement(key_code: i32) {
@@ -78,8 +79,10 @@ pub fn stop_movement(key_code: i32) {
 #[wasm_bindgen]
 pub fn initialize() {
     let mut map_collisions = MAP_COLLISIONS.lock().unwrap();
+    let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
     let player = PLAYER.lock().unwrap();
-    *map_collisions = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player));
+    *map_collisions = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).0;
+    *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).1;
 }
 
 fn get_context(player: &Player) -> Result<(CanvasRenderingContext2d,HtmlCanvasElement), JsValue> {
@@ -97,18 +100,19 @@ fn get_context(player: &Player) -> Result<(CanvasRenderingContext2d,HtmlCanvasEl
     Ok((context,canvas))
 }
 
-fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player) -> HashMap<(usize,usize), Tile> {
+fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player) -> (HashMap<(usize,usize), Tile>,Vec<Tile>) {
     let mut collisions_map = HashMap::new(); 
+    let mut lethal_tiles: Vec<Tile> = vec![];
     let game_map = get_map();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
     
     if game_map.len() == 0 {
-        return collisions_map
+        return (collisions_map,lethal_tiles)
     }
     for y in origin_y..origin_y + num_of_tiles {
         for x in origin_x..origin_x + num_of_tiles {
-            if game_map[y][x] == 0 {
+            if game_map[y][x] == 0 || game_map[y][x] == 9 {
                 let tile = Tile {
                     tile_pos: Vec2usize {
                         x: (x % num_of_tiles),
@@ -121,12 +125,15 @@ fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player) ->
                 };
                 collisions_map.insert(
                     ( (x % num_of_tiles) , (y % num_of_tiles) ), 
-                    tile
+                    tile.clone()
                 );
+                if game_map[y][x] == 9 {
+                    lethal_tiles.push(tile)
+                }
             }
         }
     }
-    collisions_map
+    (collisions_map,lethal_tiles)
 }
 #[wasm_bindgen]
 pub fn get_and_give_f64(num: Option<f64>) {
@@ -142,6 +149,8 @@ pub fn get_and_give_f64(num: Option<f64>) {
 pub fn render() -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
+    let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
+
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
 
@@ -193,26 +202,38 @@ pub fn render() -> Result<(), JsValue> {
     if player.position.x > tile_size * (num_of_tiles as f64) {
         player.map_origin.x += num_of_tiles;
         player.position.x = 0.;
-        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player));
+        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).0;
+        *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).1;
     }
     if player.position.x < -tile_size {
         player.map_origin.x -= num_of_tiles;
         player.position.x = ((num_of_tiles - 1) as f64) * tile_size;
-        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player));
+        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).0;
+        *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).1;
     }
     if player.position.y > tile_size * (num_of_tiles as f64) {
         player.map_origin.y += num_of_tiles;
         player.position.y = 0.;
-        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player));
+        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).0;
+        *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).1;
     }
     if player.position.y < -tile_size {
         player.map_origin.y -= num_of_tiles;
         player.position.y = ((num_of_tiles as f64) - 1.0) * tile_size;
-        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player));
+        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).0;
+        *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).1;
     }
     //console::log_1(&JsValue::from_str(&format!("map_origin: {},{}", player.map_origin.x, player.map_origin.y)));
 
+    for tile in lethal_tiles.iter() {
+        if real_tile_collision(&tile, &player) && player.velocity.y > 0. {
+            console::log_1(&JsValue::from_str(&String::from("DEATH")));
+            player.position = player.position_spawn.clone();
+            continue;
+        }
+    }
     manage_player_collision_with_tile(&mut(*player), &collision_map);
+
 
 
     let image: HtmlImageElement = player.tile_image.0.clone().unwrap().into();

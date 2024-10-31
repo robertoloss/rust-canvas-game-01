@@ -1,7 +1,4 @@
 use std::u32;
-
-use web_sys::HtmlImageElement;
-
 use crate::{LeftRight, Vec2usize};
 
 #[derive(Debug, Default)]
@@ -9,7 +6,7 @@ pub struct ThreadSafeImage(pub Option<wasm_bindgen::JsValue>);
 unsafe impl Send for ThreadSafeImage {}
 unsafe impl Sync for ThreadSafeImage {}
 
-#[derive(Debug)]
+#[derive(Clone,Debug)]
 pub struct Vec2 {
     pub x: f64,
     pub y: f64,
@@ -38,6 +35,7 @@ pub struct SpriteSheet {
 #[derive(Debug)]
 pub struct Player {
     pub position: Vec2,
+    pub position_spawn: Vec2,
     pub hitbox: Direction,
     pub velocity: Vec2,
     pub gravity: f64,
@@ -67,11 +65,13 @@ pub struct Player {
 impl Default for Player {
     fn default() -> Self {
         let tile_size = 48.0;
+        let initial_spawn = Vec2 {
+            x: tile_size * 8.,
+            y: tile_size * 14.,
+        };
         Player {
-            position: Vec2 {
-                x: 350.0,
-                y: 650.0
-            },
+            position: initial_spawn.clone(),
+            position_spawn: initial_spawn,
             hitbox: Direction {
                 left: 6. * 2.0, // pixel * sprite-pixel
                 right: 6. * 2.0,
