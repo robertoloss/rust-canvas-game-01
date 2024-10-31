@@ -1,6 +1,7 @@
 mod map;
 mod collisions;
 mod player;
+mod sprites;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::{console, CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement };
@@ -8,6 +9,7 @@ use std::{collections::HashMap, sync::Mutex};
 use map::*;
 use collisions::*;
 use player::*;
+use sprites::*;
 
 
 lazy_static! {
@@ -134,41 +136,6 @@ pub fn get_and_give_f64(num: Option<f64>) {
         Some(n) => player.delta = n,
         None => player.delta = 60.
     }
-}
-#[wasm_bindgen]
-pub fn set_tile_image(img: Option<HtmlImageElement>) {
-    let mut player = PLAYER.lock().unwrap();
-    player.tile_image = ThreadSafeImage(img.map(|i| i.into()));
-}
-#[wasm_bindgen]
-pub fn set_player_image(img: Option<HtmlImageElement>) {
-    let mut player = PLAYER.lock().unwrap();
-    player.player_image = ThreadSafeImage(img.map(|i| i.into()));
-}
-#[wasm_bindgen]
-pub fn set_player_image_left(img: Option<HtmlImageElement>) {
-    let mut player = PLAYER.lock().unwrap();
-    player.player_image_left = ThreadSafeImage(img.map(|i| i.into()));
-}
-#[wasm_bindgen]
-pub fn set_player_image_cling(img: Option<HtmlImageElement>) {
-    let mut player = PLAYER.lock().unwrap();
-    player.player_image_cling = ThreadSafeImage(img.map(|i| i.into()));
-}
-#[wasm_bindgen]
-pub fn set_player_image_cling_left(img: Option<HtmlImageElement>) {
-    let mut player = PLAYER.lock().unwrap();
-    player.player_image_cling_left = ThreadSafeImage(img.map(|i| i.into()));
-}
-#[wasm_bindgen]
-pub fn set_player_sheet_run_right(img: Option<HtmlImageElement>) {
-    let mut player = PLAYER.lock().unwrap();
-    player.run_right.sheet = ThreadSafeImage(img.map(|i| i.into()));
-}
-#[wasm_bindgen]
-pub fn set_player_sheet_run_left(img: Option<HtmlImageElement>) {
-    let mut player = PLAYER.lock().unwrap();
-    player.run_left.sheet = ThreadSafeImage(img.map(|i| i.into()));
 }
 
 #[wasm_bindgen]
