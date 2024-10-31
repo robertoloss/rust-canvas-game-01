@@ -1,4 +1,14 @@
-import init, { get_and_give_f64, set_player_image, set_player_image_cling, set_player_image_cling_left, set_player_image_left, set_player_sheet_run_left, set_player_sheet_run_right, set_tile_image } from "./pkg/game_canvas.js";
+import init, { 
+	get_and_give_f64, 
+	set_player_image, 
+	set_player_image_cling, 
+	set_player_image_cling_left, 
+	set_player_image_left, 
+	set_player_sheet_run_left, 
+	set_player_sheet_run_right, 
+	set_tile_image,
+	set_lava_sheet,
+} from "./pkg/game_canvas.js";
 
 let wasm;
 
@@ -36,6 +46,10 @@ async function start() {
 		{
 			src: './assets/run_L.png',
 			action: set_player_sheet_run_left
+		},
+		{
+			src: './assets/Lava_1_0.png',
+			action: set_lava_sheet
 		},
 	]
 	async function processImages() {

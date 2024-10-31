@@ -30,6 +30,8 @@ pub struct Moves {
 pub struct SpriteSheet {
     pub sheet: ThreadSafeImage,
     pub pointer_y: f64,
+    pub tile_position_pointer_y: f64,
+    pub counter: u32,
     pub counter_limit: u32,
     pub pointer_y_limit: f64,
 }
@@ -104,7 +106,9 @@ impl Default for Player {
             lava_sheet: SpriteSheet {
                 sheet: ThreadSafeImage(None),
                 pointer_y: 0.,
-                counter_limit: 4,
+                tile_position_pointer_y: 0.,
+                counter: 0,
+                counter_limit: 8,
                 pointer_y_limit: 6. * tile_size,
             },
             player_image: ThreadSafeImage(None),
@@ -115,12 +119,16 @@ impl Default for Player {
             run_right: SpriteSheet {
                 sheet: ThreadSafeImage(None),
                 pointer_y: 0.,
+                tile_position_pointer_y: 0.,
+                counter: 0,
                 counter_limit: 4,
                 pointer_y_limit: 8. * 48.,
             },
             run_left: SpriteSheet {
                 sheet: ThreadSafeImage(None),
                 pointer_y: 0.,
+                tile_position_pointer_y: 0.,
+                counter: 0,
                 counter_limit: 4,
                 pointer_y_limit: 8. * tile_size,
             }

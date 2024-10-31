@@ -21,6 +21,10 @@ export function set_tile_image(img?: HTMLImageElement): void;
 /**
  * @param {HTMLImageElement | undefined} [img]
  */
+export function set_lava_sheet(img?: HTMLImageElement): void;
+/**
+ * @param {HTMLImageElement | undefined} [img]
+ */
 export function set_player_image(img?: HTMLImageElement): void;
 /**
  * @param {HTMLImageElement | undefined} [img]
@@ -53,6 +57,7 @@ export interface InitOutput {
   readonly render: (a: number) => void;
   readonly stop_movement: (a: number) => void;
   readonly set_tile_image: (a: number) => void;
+  readonly set_lava_sheet: (a: number) => void;
   readonly set_player_image: (a: number) => void;
   readonly set_player_image_left: (a: number) => void;
   readonly set_player_image_cling: (a: number) => void;

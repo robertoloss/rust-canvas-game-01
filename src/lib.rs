@@ -215,94 +215,113 @@ pub fn render() -> Result<(), JsValue> {
     manage_player_collision_with_tile(&mut(*player), &collision_map);
 
 
-    if let Some(js_val) = &player.tile_image.0 {
-        let image: HtmlImageElement = js_val.clone().into();
-        let game_map = get_map();
-        match get_context(&(*player)) {
-            Ok((context, canvas)) => {
-                let ctx = &context;
-                ctx.set_image_smoothing_enabled(false);
-                ctx.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
-                ctx.set_fill_style(&JsValue::from_str("black"));
-                ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
+    let image: HtmlImageElement = player.tile_image.0.clone().unwrap().into();
+    let lava_sheet: HtmlImageElement = player.lava_sheet.sheet.0.clone().unwrap().into();
+    let game_map = get_map();
+    match get_context(&(*player)) {
+        Ok((context, canvas)) => {
+            let ctx = &context;
+            ctx.set_image_smoothing_enabled(false);
+            ctx.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
+            ctx.set_fill_style(&JsValue::from_str("black"));
+            ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
 
-                for y in player.map_origin.y..player.map_origin.y + num_of_tiles {
-                    for x in player.map_origin.x..player.map_origin.x + num_of_tiles {
-                         if  game_map[y][x] == 0 {
-                             ctx.draw_image_with_html_image_element_and_dw_and_dh(
-                                &image,
-                                (x % num_of_tiles) as f64 * tile_size, 
-                                (y % num_of_tiles) as f64 * tile_size, 
-                                tile_size,
-                                tile_size,
-                            )?;
-                         }
-                    }
+            for y in player.map_origin.y..player.map_origin.y + num_of_tiles {
+                for x in player.map_origin.x..player.map_origin.x + num_of_tiles {
+                     match game_map[y][x] {
+                         0 => ctx.draw_image_with_html_image_element_and_dw_and_dh(
+                            &image,
+                            (x % num_of_tiles) as f64 * tile_size, 
+                            (y % num_of_tiles) as f64 * tile_size, 
+                            tile_size,
+                            tile_size,
+                        )?,
+                        9 => ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
+                            &lava_sheet,
+                            0., 
+                            player.lava_sheet.tile_position_pointer_y * tile_size, 
+                            tile_size, 
+                            tile_size,
+                            (x % num_of_tiles) as f64 * tile_size, 
+                            (y % num_of_tiles) as f64 * tile_size, 
+                            tile_size, 
+                            tile_size,
+            )?,
+                        _ => {}
+                     } 
                 }
-                //ctx.set_font("14px Arial, sans-serif");
-                //ctx.set_fill_style(&JsValue::from_str("yellow"));
-                //let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
-                //let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
-                if player.is_clinging || (player.velocity.x == 0. || player.velocity.y != 0.) {
+            }
+            player.lava_sheet.counter += 1;
+            if player.lava_sheet.counter > player.lava_sheet.counter_limit {
+                player.lava_sheet.counter = 0;
+                player.lava_sheet.tile_position_pointer_y += 1.;
+                if player.lava_sheet.tile_position_pointer_y * player.tile_size >= player.lava_sheet.pointer_y_limit {
+                    player.lava_sheet.tile_position_pointer_y = 0.
+                }
+            }
+
+            
+            //ctx.set_font("14px Arial, sans-serif");
+            //ctx.set_fill_style(&JsValue::from_str("yellow"));
+            //let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
+            //let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
+            if player.is_clinging || (player.velocity.x == 0. || player.velocity.y != 0.) {
+                player.sprite_counter = 0;
+            }
+
+            let mut _image: &ThreadSafeImage = &ThreadSafeImage(None); 
+            player.sprite_counter += 1;
+
+            match player.facing_right {
+                true => _image =  if player.is_clinging {
+                    &player.player_image_cling
+                } else if player.velocity.x == 0. || player.velocity.y != 0. {//> 1. || player.velocity.y < -1. { 
+                    &player.player_image
+                } else {
+                    &player.run_right.sheet
+                },
+                false => _image = if player.is_clinging {
+                    &player.player_image_cling_left
+                } else if player.velocity.x == 0. || player.velocity.y != 0. {
+                    &player.player_image_left
+                } else {
+                    &player.run_left.sheet
+                }
+            }
+
+            let mut pointer_y = 0.;
+            //console::log_1(&JsValue::from_str(&format!("{}", player.sprite_counter)));
+
+            let player_sprite = _image.0.clone().unwrap().into();
+            let is_run_right_sheet = std::ptr::eq(_image, &player.run_right.sheet);
+            let is_run_left_sheet = std::ptr::eq(_image, &player.run_left.sheet);
+
+            if is_run_right_sheet {
+                if player.sprite_counter >= player.run_right.counter_limit {
                     player.sprite_counter = 0;
-                }
-
-                let mut _image: &ThreadSafeImage = &ThreadSafeImage(None); 
-                player.sprite_counter += 1;
-
-                match player.facing_right {
-                    true => _image =  if player.is_clinging {
-                        &player.player_image_cling
-                    } else if player.velocity.x == 0. || player.velocity.y != 0. {//> 1. || player.velocity.y < -1. { 
-                        &player.player_image
-                    } else {
-                        &player.run_right.sheet
-                    },
-                    false => _image = if player.is_clinging {
-                        &player.player_image_cling_left
-                    } else if player.velocity.x == 0. || player.velocity.y != 0. {
-                        &player.player_image_left
-                    } else {
-                        &player.run_left.sheet
+                    player.run_right.pointer_y += tile_size;
+                    if player.run_right.pointer_y >= player.run_right.pointer_y_limit {
+                        player.run_right.pointer_y = 0.
                     }
                 }
-
-                let mut pointer_y = 0.;
-                //console::log_1(&JsValue::from_str(&format!("{}", player.sprite_counter)));
-
-                let player_sprite = _image.0.clone().unwrap().into();
-                let is_run_right_sheet = std::ptr::eq(_image, &player.run_right.sheet);
-                let is_run_left_sheet = std::ptr::eq(_image, &player.run_left.sheet);
-
-                if is_run_right_sheet {
-                    if player.sprite_counter >= player.run_right.counter_limit {
-                        player.sprite_counter = 0;
-                        player.run_right.pointer_y += tile_size;
-                        if player.run_right.pointer_y >= player.run_right.pointer_y_limit {
-                            player.run_right.pointer_y = 0.
-                        }
+                pointer_y = player.run_right.pointer_y;
+            } else if is_run_left_sheet {
+                if player.sprite_counter >= player.run_left.counter_limit {
+                    player.sprite_counter = 0;
+                    player.run_left.pointer_y += tile_size;
+                    if player.run_left.pointer_y >= player.run_left.pointer_y_limit {
+                        player.run_left.pointer_y = 0.
                     }
-                    pointer_y = player.run_right.pointer_y;
-                } else if is_run_left_sheet {
-                    if player.sprite_counter >= player.run_left.counter_limit {
-                        player.sprite_counter = 0;
-                        player.run_left.pointer_y += tile_size;
-                        if player.run_left.pointer_y >= player.run_left.pointer_y_limit {
-                            player.run_left.pointer_y = 0.
-                        }
-                    }
-                    pointer_y = player.run_left.pointer_y;
                 }
-
-
-                ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
-                    &player_sprite,
-                    0., pointer_y, tile_size, tile_size,
-                    player.position.x, player.position.y, tile_size, tile_size,
-                )?;
-            },
-            Err(e) => eprintln!("Error getting context: {:?}", e)
-        }
+                pointer_y = player.run_left.pointer_y;
+            }
+            ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
+                &player_sprite,
+                0., pointer_y, tile_size, tile_size,
+                player.position.x, player.position.y, tile_size, tile_size,
+            )?;
+        },
+        Err(e) => eprintln!("Error getting context: {:?}", e)
     }
     Ok(())
 }
