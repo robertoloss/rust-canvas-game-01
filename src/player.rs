@@ -83,10 +83,10 @@ impl Default for Player {
                 x: 0.0,
                 y: 0.0
             },
-            gravity: 0.3, //0.5,
-            jump_velocity: -8.2, //-10.1,
-            horizontal_velocity: 2.3,
-            max_fall_velocity: 50.,
+            gravity: 0.2, //0.5,
+            jump_velocity: -6.4, //-10.1,
+            horizontal_velocity: 2.,
+            max_fall_velocity: 35.,
             is_on_the_ground: true,
             moves: Moves {
                 left: false,
@@ -112,7 +112,7 @@ impl Default for Player {
                 tile_position_pointer_y: 0.,
                 counter: 0,
                 counter_limit: 8,
-                pointer_y_limit: 7. * tile_size,
+                pointer_y_limit: 8. * tile_size,
             },
             death_sheet: SpriteSheet {
                 sheet: ThreadSafeImage(None),
@@ -120,7 +120,7 @@ impl Default for Player {
                 tile_position_pointer_y: 0.,
                 counter: 0,
                 counter_limit: 1,
-                pointer_y_limit: 24. * tile_size,
+                pointer_y_limit: 20. * tile_size,
             },
             player_image: ThreadSafeImage(None),
             player_image_left: ThreadSafeImage(None),

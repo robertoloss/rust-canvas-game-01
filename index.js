@@ -49,11 +49,11 @@ async function start() {
 			action: set_player_sheet_run_left
 		},
 		{
-			src: './assets/Lava_1_2.png',
+			src: './assets/Lava_1_3.png',
 			action: set_lava_sheet
 		},
 		{
-			src: './assets/Death_1.png',
+			src: './assets/Death_1_2.png',
 			action: set_death_sheet 
 		},
 	]
