@@ -35,6 +35,7 @@ pub struct SpriteSheet {
 #[derive(Debug)]
 pub struct Player {
     pub position: Vec2,
+    pub is_dead: bool,
     pub position_spawn: Vec2,
     pub hitbox: Direction,
     pub velocity: Vec2,
@@ -72,6 +73,7 @@ impl Default for Player {
         };
         Player {
             position: initial_spawn.clone(),
+            is_dead: false,
             position_spawn: initial_spawn,
             hitbox: Direction {
                 left: 6. * 2.0, // pixel * sprite-pixel
@@ -110,14 +112,14 @@ impl Default for Player {
                 tile_position_pointer_y: 0.,
                 counter: 0,
                 counter_limit: 8,
-                pointer_y_limit: 6. * tile_size,
+                pointer_y_limit: 7. * tile_size,
             },
             death_sheet: SpriteSheet {
                 sheet: ThreadSafeImage(None),
                 pointer_y: 0.,
                 tile_position_pointer_y: 0.,
                 counter: 0,
-                counter_limit: 8,
+                counter_limit: 1,
                 pointer_y_limit: 24. * tile_size,
             },
             player_image: ThreadSafeImage(None),

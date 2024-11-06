@@ -18,10 +18,10 @@ pub enum LeftRight {
 }
 pub fn real_tile_collision(tile: &Tile, player: &Player) -> bool {
     let tile_size = player.tile_size;
-    if tile.position.x > player.position.x + tile_size + player.velocity.x { return false };
-    if tile.position.x + tile_size < player.position.x + player.velocity.x { return false };
-    if tile.position.y > player.position.y + tile_size + player.velocity.y { return false };
-    if tile.position.y + tile_size < player.position.y + player.velocity.y { return false };
+    if tile.position.x > player.position.x + tile_size  { return false };
+    if tile.position.x + tile_size < player.position.x  { return false };
+    if tile.position.y > player.position.y + (tile_size / 2.)  { return false };
+    if tile.position.y + tile_size < player.position.y  { return false };
     true
 }
 pub fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usize), Tile>) -> Option<&map::Tile> {

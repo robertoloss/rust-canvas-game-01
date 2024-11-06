@@ -112,24 +112,24 @@ fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player) ->
     }
     for y in origin_y..origin_y + num_of_tiles {
         for x in origin_x..origin_x + num_of_tiles {
-            if game_map[y][x] == 0 || game_map[y][x] == 9 {
-                let tile = Tile {
-                    tile_pos: Vec2usize {
-                        x: (x % num_of_tiles),
-                        y: (y % num_of_tiles)
-                    },
-                    position: Vec2 {
-                        x: (x % num_of_tiles) as f64 * tile_size,
-                        y: (y % num_of_tiles) as f64 * tile_size
-                    }
-                };
+            let tile = Tile {
+                tile_pos: Vec2usize {
+                    x: (x % num_of_tiles),
+                    y: (y % num_of_tiles)
+                },
+                position: Vec2 {
+                    x: (x % num_of_tiles) as f64 * tile_size,
+                    y: (y % num_of_tiles) as f64 * tile_size
+                }
+            };
+            if game_map[y][x] == 0 {
                 collisions_map.insert(
                     ( (x % num_of_tiles) , (y % num_of_tiles) ), 
                     tile.clone()
                 );
-                if game_map[y][x] == 9 {
-                    lethal_tiles.push(tile)
-                }
+            }
+            if game_map[y][x] == 9 {
+                lethal_tiles.push(tile)
             }
         }
     }
@@ -159,45 +159,50 @@ pub fn render() -> Result<(), JsValue> {
     if delta == 0. {
         return Ok(())
     }
-    player.velocity.x = if player.moves.right { 
-        player.horizontal_velocity 
-    } else if player.moves.left { 
-        -player.horizontal_velocity
-    } else { 0. };
-    //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
 
-    if !player.is_clinging {
-        if player.velocity.x > 0. {
-            player.facing_right = true
-        }
-        if player.velocity.x < 0. {
-            player.facing_right = false
-        }
-    }
-    
-    if player.moves.jump {
-        player.moves.jump = false;
-        player.velocity.y = player.jump_velocity; //-10.1
-    }
-    if player.moves.stop_jump {
-        player.moves.stop_jump = false;
-        if player.velocity.y < -3. {
-            player.velocity.y += 3.//3.
-        }
-    }
-    if player.velocity.y < player.max_fall_velocity {
-        player.velocity.y += player.gravity / delta
-    }
-    if player.wants_to_cling && player.can_cling != collisions::LeftRight::None {
-        player.is_clinging = true
-    }
-    if player.is_clinging {
-        player.velocity.y = 0.;
-        player.velocity.x = 0.;
-    }
 
-    player.position.x += player.velocity.x / delta;
-    player.position.y += player.velocity.y / delta;
+
+    if !player.is_dead {
+        player.velocity.x = if player.moves.right { 
+            player.horizontal_velocity 
+        } else if player.moves.left { 
+            -player.horizontal_velocity
+        } else { 0. };
+        //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
+
+        if !player.is_clinging {
+            if player.velocity.x > 0. {
+                player.facing_right = true
+            }
+            if player.velocity.x < 0. {
+                player.facing_right = false
+            }
+        }
+        
+        if player.moves.jump {
+            player.moves.jump = false;
+            player.velocity.y = player.jump_velocity; //-10.1
+        }
+        if player.moves.stop_jump {
+            player.moves.stop_jump = false;
+            if player.velocity.y < -3. {
+                player.velocity.y += 3.//3.
+            }
+        }
+        if player.velocity.y < player.max_fall_velocity {
+            player.velocity.y += player.gravity / delta
+        }
+        if player.wants_to_cling && player.can_cling != collisions::LeftRight::None {
+            player.is_clinging = true
+        }
+        if player.is_clinging {
+            player.velocity.y = 0.;
+            player.velocity.x = 0.;
+        }
+
+        player.position.x += player.velocity.x / delta;
+        player.position.y += player.velocity.y / delta;
+    }
 
     if player.position.x > tile_size * (num_of_tiles as f64) {
         player.map_origin.x += num_of_tiles;
@@ -226,12 +231,9 @@ pub fn render() -> Result<(), JsValue> {
     //console::log_1(&JsValue::from_str(&format!("map_origin: {},{}", player.map_origin.x, player.map_origin.y)));
 
     for tile in lethal_tiles.iter() {
-        if real_tile_collision(&tile, &player) && player.velocity.y > 0. {
+        if real_tile_collision(&tile, &player) {
             console::log_1(&JsValue::from_str(&String::from("DEATH")));
-            let death_sheet: HtmlImageElement = player.death_sheet.sheet.0.clone().unwrap().into();
-
-            player.position = player.position_spawn.clone();
-            continue;
+            player.is_dead = true;
         }
     }
     manage_player_collision_with_tile(&mut(*player), &collision_map);
@@ -283,6 +285,34 @@ pub fn render() -> Result<(), JsValue> {
                 }
             }
 
+            if player.is_dead {
+                let death_sheet: HtmlImageElement = player.death_sheet.sheet.0.clone().unwrap().into();
+                ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
+                    &death_sheet,
+                    0., player.death_sheet.tile_position_pointer_y * tile_size, 
+                    tile_size, 
+                    tile_size,
+                    player.position.x, 
+                    player.position.y, 
+                    tile_size, 
+                    tile_size,
+                )?;
+                player.death_sheet.counter += 1;
+                if player.death_sheet.counter > player.death_sheet.counter_limit {
+                    player.death_sheet.counter = 0;
+                    player.death_sheet.tile_position_pointer_y += 1.;
+                    if player.death_sheet.tile_position_pointer_y * player.tile_size >= player.death_sheet.pointer_y_limit {
+                        //player.death_sheet.tile_position_pointer_y = 0.;
+                        player.position = player.position_spawn.clone();
+                        player.is_dead = false;
+                        player.death_sheet.tile_position_pointer_y = 0.;
+                        return Ok(())
+                    }
+                }
+
+
+                return  Ok(())
+            }
             
             //ctx.set_font("14px Arial, sans-serif");
             //ctx.set_fill_style(&JsValue::from_str("yellow"));

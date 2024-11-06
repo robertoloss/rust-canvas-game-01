@@ -49,7 +49,7 @@ async function start() {
 			action: set_player_sheet_run_left
 		},
 		{
-			src: './assets/Lava_1_0.png',
+			src: './assets/Lava_1_2.png',
 			action: set_lava_sheet
 		},
 		{
