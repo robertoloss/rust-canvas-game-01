@@ -108,7 +108,7 @@ impl Default for Player {
             delta: 0.0,
             is_clinging: false,
             images: HashMap::from([
-                (String::from("tile_sheet"), ThreadSafeImage(None)),
+                (String::from("tile"), ThreadSafeImage(None)),
                 (String::from("player"), ThreadSafeImage(None)),
                 (String::from("player_left"), ThreadSafeImage(None)),
                 (String::from("player_cling"), ThreadSafeImage(None)),
@@ -131,7 +131,7 @@ impl Default for Player {
                     counter_limit: 1,
                     pointer_y_limit: 20. * tile_size,
                 }),
-                (String::from("run_right"), SpriteSheet {
+                (String::from("player_run_right"), SpriteSheet {
                     sheet: ThreadSafeImage(None),
                     pointer_y: 0.,
                     tile_position_pointer_y: 0.,
@@ -139,7 +139,7 @@ impl Default for Player {
                     counter_limit: 4,
                     pointer_y_limit: 8. * tile_size,
                 }),
-                (String::from("run_left"), SpriteSheet {
+                (String::from("player_run_left"), SpriteSheet {
                     sheet: ThreadSafeImage(None),
                     pointer_y: 0.,
                     tile_position_pointer_y: 0.,

@@ -219,6 +219,17 @@ export function render() {
 }
 
 /**
+ * @param {string} name
+ * @param {boolean} sheet
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_image(name, sheet, img) {
+    const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.set_image(ptr0, len0, sheet, isLikeNone(img) ? 0 : addHeapObject(img));
+}
+
+/**
  * @param {HTMLImageElement | undefined} [img]
  */
 export function set_tile_image(img) {

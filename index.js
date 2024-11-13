@@ -9,6 +9,7 @@ import init, {
 	set_tile_image,
 	set_lava_sheet,
 	set_death_sheet,
+	set_image,
 } from "./pkg/game_canvas.js";
 
 let wasm;
@@ -24,46 +25,55 @@ async function start() {
 			src: './assets/Tile 8x8 v1.4-1.png.png' ,
 			action: set_tile_image,
 			name: 'tile',
+			isSheet: false,
 		},
 		{ 
 			src: './assets/Player 8x8 v2.0_tr-1.png.png',
 			action: set_player_image,
 			name: 'player',
+			isSheet: false,
 		},
 		{ 
 			src: './assets/Player 8x8 v2.0_tr_L-1.png.png',
 			action: set_player_image_left,
 			name: 'player_left',
+			isSheet: false,
 		},
 		{ 
 			src: './assets/player_2_0_cling_R-1.png.png',
 			action: set_player_image_cling,
 			name: 'player_cling',
+			isSheet: false,
 		},
 		{ 
 			src: './assets/player_2_0_cling_L-1.png.png',
 			action: set_player_image_cling_left,
 			name: 'player_cling_left',
+			isSheet: false,
 		},
 		{
 			src: './assets/run_R.png',
 			action: set_player_sheet_run_right,
 			name: 'player_run_right',
+			isSheet: true,
 		},
 		{
 			src: './assets/run_L.png',
 			action: set_player_sheet_run_left,
 			name: 'player_run_left',
+			isSheet: true,
 		},
 		{
 			src: './assets/Lava_1_3.png',
 			action: set_lava_sheet,
 			name: 'lava',
+			isSheet: true,
 		},
 		{
 			src: './assets/Death_1.png',
 			action: set_death_sheet, 
 			name: 'death',
+			isSheet: true,
 		},
 	]
 	async function processImages() {
@@ -76,7 +86,7 @@ async function start() {
 					img.src = image.src;
 				});
 				try {
-					image.action(img)
+					set_image(image.name, image.isSheet, img)
 				} catch(error) {
 					console.error("Oops: Rust side error!", error, image.name)
 				}

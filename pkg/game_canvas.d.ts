@@ -15,6 +15,12 @@ export function initialize(): void;
 export function get_and_give_f64(num?: number): void;
 export function render(): void;
 /**
+ * @param {string} name
+ * @param {boolean} sheet
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_image(name: string, sheet: boolean, img?: HTMLImageElement): void;
+/**
  * @param {HTMLImageElement | undefined} [img]
  */
 export function set_tile_image(img?: HTMLImageElement): void;
@@ -60,6 +66,7 @@ export interface InitOutput {
   readonly get_and_give_f64: (a: number, b: number) => void;
   readonly render: (a: number) => void;
   readonly stop_movement: (a: number) => void;
+  readonly set_image: (a: number, b: number, c: number, d: number) => void;
   readonly set_tile_image: (a: number) => void;
   readonly set_lava_sheet: (a: number) => void;
   readonly set_player_image: (a: number) => void;

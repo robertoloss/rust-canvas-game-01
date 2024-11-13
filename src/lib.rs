@@ -144,6 +144,13 @@ pub fn get_and_give_f64(num: Option<f64>) {
     }
 }
 
+fn all_images_present(images: &HashMap<String, ThreadSafeImage>) -> bool {
+    images.values().all(|image| image.0.is_some())
+}
+fn all_sprite_sheets_present(sheets: &HashMap<String, SpriteSheet>) -> bool {
+    sheets.values().all(|sheet| sheet.sheet.0.is_some())
+}
+
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
@@ -237,12 +244,19 @@ pub fn render() -> Result<(), JsValue> {
     }
     manage_player_collision_with_tile(&mut(*player), &collision_map);
 
+    if !all_images_present(&player.images) {
+        return Ok(())
+    }
+    if !all_sprite_sheets_present(&player.sprite_sheets) {
+        return Ok(())
+    }
+    //if !player.tile_image.0.clone().is_some() { return Ok(()) } 
+    //if !player.lava_sheet.sheet.0.clone().is_some() { return Ok(()) } 
 
-    if !player.tile_image.0.clone().is_some() { return Ok(()) } 
-    if !player.lava_sheet.sheet.0.clone().is_some() { return Ok(()) } 
-
-    let image: HtmlImageElement = player.tile_image.0.clone().unwrap().into();
-    let lava_sheet: HtmlImageElement = player.lava_sheet.sheet.0.clone().unwrap().into();
+    let image: HtmlImageElement = player.images.get("tile").unwrap().0.clone().unwrap().into();
+    let lava_sheet: HtmlImageElement = player.sprite_sheets.get("lava").unwrap().sheet.0.clone().unwrap().into();
+    // player.tile_image.0.clone().unwrap().into();
+    // let lava_sheet: HtmlImageElement = player.lava_sheet.sheet.0.clone().unwrap().into();
     let game_map = get_map();
     match get_context(&(*player)) {
         Ok((context, canvas)) => {
@@ -287,7 +301,15 @@ pub fn render() -> Result<(), JsValue> {
             }
 
             if player.is_dead {
-                let death_sheet: HtmlImageElement = player.death_sheet.sheet.0.clone().unwrap().into();
+                let death_sheet: HtmlImageElement = player.sprite_sheets
+                    .get("death")
+                    .unwrap()
+                    .sheet
+                    .0
+                    .clone()
+                    .unwrap()
+                    .into();
+
                 ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                     &death_sheet,
                     0., player.death_sheet.tile_position_pointer_y * tile_size, 
@@ -328,18 +350,18 @@ pub fn render() -> Result<(), JsValue> {
 
             match player.facing_right {
                 true => _image =  if player.is_clinging {
-                    &player.player_image_cling
-                } else if player.velocity.x == 0. || player.velocity.y != 0. {//> 1. || player.velocity.y < -1. { 
-                    &player.player_image
+                    &player.images.get("player_cling").unwrap()
+                } else if player.velocity.x == 0. || player.velocity.y != 0. { 
+                    &player.images.get("player").unwrap()
                 } else {
-                    &player.run_right.sheet
+                   &player.sprite_sheets.get("player_run_right").unwrap().sheet
                 },
                 false => _image = if player.is_clinging {
-                    &player.player_image_cling_left
+                    &player.images.get("player_cling_left").unwrap()
                 } else if player.velocity.x == 0. || player.velocity.y != 0. {
-                    &player.player_image_left
+                    &player.images.get("player_left").unwrap()
                 } else {
-                    &player.run_left.sheet
+                   &player.sprite_sheets.get("player_run_left").unwrap().sheet
                 }
             }
 
@@ -347,8 +369,12 @@ pub fn render() -> Result<(), JsValue> {
             //console::log_1(&JsValue::from_str(&format!("{}", player.sprite_counter)));
 
             let player_sprite = _image.0.clone().unwrap().into();
-            let is_run_right_sheet = std::ptr::eq(_image, &player.run_right.sheet);
-            let is_run_left_sheet = std::ptr::eq(_image, &player.run_left.sheet);
+            let is_run_right_sheet = std::ptr::eq(_image, 
+                   &player.sprite_sheets.get("player_run_right").unwrap().sheet
+);
+            let is_run_left_sheet = std::ptr::eq(_image, 
+                   &player.sprite_sheets.get("player_run_left").unwrap().sheet
+);
 
             if is_run_right_sheet {
                 if player.sprite_counter >= player.run_right.counter_limit {
