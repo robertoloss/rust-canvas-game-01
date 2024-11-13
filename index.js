@@ -1,14 +1,5 @@
 import init, { 
 	get_and_give_f64, 
-	set_player_image, 
-	set_player_image_cling, 
-	set_player_image_cling_left, 
-	set_player_image_left, 
-	set_player_sheet_run_left, 
-	set_player_sheet_run_right, 
-	set_tile_image,
-	set_lava_sheet,
-	set_death_sheet,
 	set_image,
 } from "./pkg/game_canvas.js";
 
@@ -23,55 +14,46 @@ async function start() {
 	const images = [
 		{ 
 			src: './assets/Tile 8x8 v1.4-1.png.png' ,
-			action: set_tile_image,
 			name: 'tile',
 			isSheet: false,
 		},
 		{ 
 			src: './assets/Player 8x8 v2.0_tr-1.png.png',
-			action: set_player_image,
 			name: 'player',
 			isSheet: false,
 		},
 		{ 
 			src: './assets/Player 8x8 v2.0_tr_L-1.png.png',
-			action: set_player_image_left,
 			name: 'player_left',
 			isSheet: false,
 		},
 		{ 
 			src: './assets/player_2_0_cling_R-1.png.png',
-			action: set_player_image_cling,
 			name: 'player_cling',
 			isSheet: false,
 		},
 		{ 
 			src: './assets/player_2_0_cling_L-1.png.png',
-			action: set_player_image_cling_left,
 			name: 'player_cling_left',
 			isSheet: false,
 		},
 		{
 			src: './assets/run_R.png',
-			action: set_player_sheet_run_right,
 			name: 'player_run_right',
 			isSheet: true,
 		},
 		{
 			src: './assets/run_L.png',
-			action: set_player_sheet_run_left,
 			name: 'player_run_left',
 			isSheet: true,
 		},
 		{
 			src: './assets/Lava_1_3.png',
-			action: set_lava_sheet,
 			name: 'lava',
 			isSheet: true,
 		},
 		{
 			src: './assets/Death_1.png',
-			action: set_death_sheet, 
 			name: 'death',
 			isSheet: true,
 		},

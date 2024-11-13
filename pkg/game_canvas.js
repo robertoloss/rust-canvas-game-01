@@ -229,69 +229,6 @@ export function set_image(name, sheet, img) {
     wasm.set_image(ptr0, len0, sheet, isLikeNone(img) ? 0 : addHeapObject(img));
 }
 
-/**
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_tile_image(img) {
-    wasm.set_tile_image(isLikeNone(img) ? 0 : addHeapObject(img));
-}
-
-/**
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_lava_sheet(img) {
-    wasm.set_lava_sheet(isLikeNone(img) ? 0 : addHeapObject(img));
-}
-
-/**
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_player_image(img) {
-    wasm.set_player_image(isLikeNone(img) ? 0 : addHeapObject(img));
-}
-
-/**
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_player_image_left(img) {
-    wasm.set_player_image_left(isLikeNone(img) ? 0 : addHeapObject(img));
-}
-
-/**
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_player_image_cling(img) {
-    wasm.set_player_image_cling(isLikeNone(img) ? 0 : addHeapObject(img));
-}
-
-/**
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_player_image_cling_left(img) {
-    wasm.set_player_image_cling_left(isLikeNone(img) ? 0 : addHeapObject(img));
-}
-
-/**
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_player_sheet_run_right(img) {
-    wasm.set_player_sheet_run_right(isLikeNone(img) ? 0 : addHeapObject(img));
-}
-
-/**
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_player_sheet_run_left(img) {
-    wasm.set_player_sheet_run_left(isLikeNone(img) ? 0 : addHeapObject(img));
-}
-
-/**
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_death_sheet(img) {
-    wasm.set_death_sheet(isLikeNone(img) ? 0 : addHeapObject(img));
-}
-
 function handleError(f, args) {
     try {
         return f.apply(this, args);
