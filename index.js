@@ -77,6 +77,7 @@ async function start() {
 		}
 	}
 	processImages()
+	console.log("new")
 
 	const mobileJump = document.getElementById('mobile-jump')
 	const mobileCling = document.getElementById('mobile-cling')
