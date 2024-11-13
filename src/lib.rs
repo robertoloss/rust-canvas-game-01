@@ -9,14 +9,13 @@ use std::{collections::HashMap, fmt::format, sync::Mutex};
 use map::*;
 use collisions::*;
 use player::*;
-use sprites::*;
-
 
 lazy_static! {
     static ref PLAYER: Mutex<Player> = Mutex::new(Player::default());
     static ref MAP_COLLISIONS: Mutex<HashMap<(usize,usize), Tile>> = Mutex::new(HashMap::new());
     static ref LETHAL_TILES: Mutex<Vec<Tile>> = Mutex::new(vec![]);
 }
+
 #[wasm_bindgen]
 pub fn movement(key_code: i32) {
     let mut player = PLAYER.lock().unwrap();
@@ -239,6 +238,8 @@ pub fn render() -> Result<(), JsValue> {
     manage_player_collision_with_tile(&mut(*player), &collision_map);
 
 
+    if !player.tile_image.0.clone().is_some() { return Ok(()) } 
+    if !player.lava_sheet.sheet.0.clone().is_some() { return Ok(()) } 
 
     let image: HtmlImageElement = player.tile_image.0.clone().unwrap().into();
     let lava_sheet: HtmlImageElement = player.lava_sheet.sheet.0.clone().unwrap().into();

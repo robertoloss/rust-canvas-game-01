@@ -22,39 +22,48 @@ async function start() {
 	const images = [
 		{ 
 			src: './assets/Tile 8x8 v1.4-1.png.png' ,
-			action: set_tile_image
+			action: set_tile_image,
+			name: 'tile',
 		},
 		{ 
 			src: './assets/Player 8x8 v2.0_tr-1.png.png',
-			action: set_player_image
+			action: set_player_image,
+			name: 'player',
 		},
 		{ 
 			src: './assets/Player 8x8 v2.0_tr_L-1.png.png',
-			action: set_player_image_left
+			action: set_player_image_left,
+			name: 'player_left',
 		},
 		{ 
 			src: './assets/player_2_0_cling_R-1.png.png',
-			action: set_player_image_cling
+			action: set_player_image_cling,
+			name: 'player_cling',
 		},
 		{ 
 			src: './assets/player_2_0_cling_L-1.png.png',
-			action: set_player_image_cling_left
+			action: set_player_image_cling_left,
+			name: 'player_cling_left',
 		},
 		{
 			src: './assets/run_R.png',
-			action: set_player_sheet_run_right
+			action: set_player_sheet_run_right,
+			name: 'player_run_right',
 		},
 		{
 			src: './assets/run_L.png',
-			action: set_player_sheet_run_left
+			action: set_player_sheet_run_left,
+			name: 'player_run_left',
 		},
 		{
 			src: './assets/Lava_1_3.png',
-			action: set_lava_sheet
+			action: set_lava_sheet,
+			name: 'lava',
 		},
 		{
 			src: './assets/Death_1.png',
-			action: set_death_sheet 
+			action: set_death_sheet, 
+			name: 'death',
 		},
 	]
 	async function processImages() {
@@ -69,15 +78,15 @@ async function start() {
 				try {
 					image.action(img)
 				} catch(error) {
-					console.error("Oops!", error, img)
+					console.error("Oops: Rust side error!", error, image.name)
 				}
 			} catch(error) {
-				console.error("Oops!", error)
+				console.error("Oops! Image not loaded!", error, image.name)
 			}
 		}
 	}
 	processImages()
-	console.log("new")
+	console.log("test")
 
 	const mobileJump = document.getElementById('mobile-jump')
 	const mobileCling = document.getElementById('mobile-cling')
