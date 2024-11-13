@@ -4,7 +4,6 @@ use crate::ThreadSafeImage;
 use wasm_bindgen::prelude::*;
 
 
-
 #[wasm_bindgen]
 pub fn set_tile_image(img: Option<HtmlImageElement>) {
     let mut player = PLAYER.lock().unwrap();

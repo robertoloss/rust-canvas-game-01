@@ -1,4 +1,4 @@
-use std::u32;
+use std::{collections::HashMap, u32};
 use crate::{LeftRight, Vec2usize};
 
 #[derive(Debug, Default)]
@@ -52,6 +52,8 @@ pub struct Player {
     pub wants_to_cling: bool,
     pub is_clinging: bool,
     pub delta: f64,
+    pub images: HashMap<String, ThreadSafeImage>,
+    pub sprite_sheets: HashMap<String, SpriteSheet>,
     pub tile_image: ThreadSafeImage,
     pub lava_sheet: SpriteSheet,
     pub death_sheet: SpriteSheet,
@@ -105,6 +107,47 @@ impl Default for Player {
             wants_to_cling: false,
             delta: 0.0,
             is_clinging: false,
+            images: HashMap::from([
+                (String::from("tile_sheet"), ThreadSafeImage(None)),
+                (String::from("player"), ThreadSafeImage(None)),
+                (String::from("player_left"), ThreadSafeImage(None)),
+                (String::from("player_cling"), ThreadSafeImage(None)),
+                (String::from("player_cling_left"), ThreadSafeImage(None)),
+            ]),
+            sprite_sheets: HashMap::from([
+                (String::from("lava"), SpriteSheet {
+                    sheet: ThreadSafeImage(None),
+                    pointer_y: 0.,
+                    tile_position_pointer_y: 0.,
+                    counter: 0,
+                    counter_limit: 8,
+                    pointer_y_limit: 8. * tile_size,
+                }),
+                (String::from("death"), SpriteSheet {
+                    sheet: ThreadSafeImage(None),
+                    pointer_y: 0.,
+                    tile_position_pointer_y: 0.,
+                    counter: 0,
+                    counter_limit: 1,
+                    pointer_y_limit: 20. * tile_size,
+                }),
+                (String::from("run_right"), SpriteSheet {
+                    sheet: ThreadSafeImage(None),
+                    pointer_y: 0.,
+                    tile_position_pointer_y: 0.,
+                    counter: 0,
+                    counter_limit: 4,
+                    pointer_y_limit: 8. * tile_size,
+                }),
+                (String::from("run_left"), SpriteSheet {
+                    sheet: ThreadSafeImage(None),
+                    pointer_y: 0.,
+                    tile_position_pointer_y: 0.,
+                    counter: 0,
+                    counter_limit: 4,
+                    pointer_y_limit: 8. * tile_size,
+                }),
+            ]),
             tile_image: ThreadSafeImage(None),
             lava_sheet: SpriteSheet {
                 sheet: ThreadSafeImage(None),
