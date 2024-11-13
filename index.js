@@ -60,16 +60,19 @@ async function start() {
 	async function processImages() {
 		for (const image of images) {
 			const img = new Image();
-			const loadImage = new Promise((resolve, reject) => {
-					img.onload = () => resolve(img);
-					img.onerror = reject;
-			});
-			img.src = image.src
 			try {
-				await loadImage;
-				image.action(img)
+				await new Promise((resolve, reject) => {
+					img.onload = () => resolve(img);
+					img.onerror = () => reject(new Error(error));
+					img.src = image.src;
+				});
+				try {
+					image.action(img)
+				} catch(error) {
+					console.error("Oops!", error, img)
+				}
 			} catch(error) {
-				console.error("Oops!", error, img)
+				console.error("Oops!", error)
 			}
 		}
 	}
