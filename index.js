@@ -53,7 +53,7 @@ async function start() {
 			action: set_lava_sheet
 		},
 		{
-			src: './assets/Death_1_2.png',
+			src: './assets/Death_1.png',
 			action: set_death_sheet 
 		},
 	]
