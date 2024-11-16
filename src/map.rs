@@ -1,4 +1,4 @@
-use crate::player::Vec2;
+use crate::player::types::Vec2;
 
 #[derive(Clone,Debug)]
 pub struct Vec2usize {

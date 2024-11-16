@@ -5,10 +5,10 @@ mod sprites;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::{console, CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement };
-use std::{collections::HashMap, fmt::format, sync::Mutex};
+use std::{collections::HashMap, sync::Mutex};
 use map::*;
 use collisions::*;
-use player::*;
+pub use crate::player::types::*;
 
 lazy_static! {
     static ref PLAYER: Mutex<Player> = Mutex::new(Player::default());
