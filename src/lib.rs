@@ -250,13 +250,9 @@ pub fn render() -> Result<(), JsValue> {
     if !all_sprite_sheets_present(&player.sprite_sheets) {
         return Ok(())
     }
-    //if !player.tile_image.0.clone().is_some() { return Ok(()) } 
-    //if !player.lava_sheet.sheet.0.clone().is_some() { return Ok(()) } 
 
     let image: HtmlImageElement = player.images.get("tile").unwrap().0.clone().unwrap().into();
     let lava_sheet: HtmlImageElement = player.sprite_sheets.get("lava").unwrap().sheet.0.clone().unwrap().into();
-    // player.tile_image.0.clone().unwrap().into();
-    // let lava_sheet: HtmlImageElement = player.lava_sheet.sheet.0.clone().unwrap().into();
     let game_map = get_map();
     match get_context(&(*player)) {
         Ok((context, canvas)) => {
@@ -279,7 +275,7 @@ pub fn render() -> Result<(), JsValue> {
                         9 => ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                             &lava_sheet,
                             0., 
-                            player.lava_sheet.tile_position_pointer_y * tile_size, 
+                            player.sprite_sheets.get("lava").unwrap().tile_position_pointer_y * tile_size,
                             tile_size, 
                             tile_size,
                             (x % num_of_tiles) as f64 * tile_size, 
@@ -291,12 +287,12 @@ pub fn render() -> Result<(), JsValue> {
                      } 
                 }
             }
-            player.lava_sheet.counter += 1;
-            if player.lava_sheet.counter > player.lava_sheet.counter_limit {
-                player.lava_sheet.counter = 0;
-                player.lava_sheet.tile_position_pointer_y += 1.;
-                if player.lava_sheet.tile_position_pointer_y * player.tile_size >= player.lava_sheet.pointer_y_limit {
-                    player.lava_sheet.tile_position_pointer_y = 0.
+            player.sprite_sheets.get_mut("lava").unwrap().counter += 1;
+            if player.sprite_sheets.get("lava").unwrap().counter > player.sprite_sheets.get("lava").unwrap().counter_limit {
+                player.sprite_sheets.get_mut("lava").unwrap().counter = 0;
+                player.sprite_sheets.get_mut("lava").unwrap().tile_position_pointer_y += 1.;
+                if player.sprite_sheets.get("lava").unwrap().tile_position_pointer_y * player.tile_size >= player.sprite_sheets.get("lava").unwrap().pointer_y_limit {
+                    player.sprite_sheets.get_mut("lava").unwrap().tile_position_pointer_y = 0.
                 }
             }
 
@@ -312,7 +308,7 @@ pub fn render() -> Result<(), JsValue> {
 
                 ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                     &death_sheet,
-                    0., player.death_sheet.tile_position_pointer_y * tile_size, 
+                    0., player.sprite_sheets.get("death").unwrap().tile_position_pointer_y * tile_size, 
                     tile_size, 
                     tile_size,
                     player.position.x, 
@@ -320,15 +316,15 @@ pub fn render() -> Result<(), JsValue> {
                     tile_size, 
                     tile_size,
                 )?;
-                player.death_sheet.counter += 1;
-                if player.death_sheet.counter > player.death_sheet.counter_limit {
-                    player.death_sheet.counter = 0;
-                    player.death_sheet.tile_position_pointer_y += 1.;
-                    if player.death_sheet.tile_position_pointer_y * player.tile_size >= player.death_sheet.pointer_y_limit {
+                player.sprite_sheets.get_mut("death").unwrap().counter += 1;
+                if player.sprite_sheets.get_mut("death").unwrap().counter > player.sprite_sheets.get("death").unwrap().counter_limit {
+                    player.sprite_sheets.get_mut("death").unwrap().counter = 0;
+                    player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y += 1.;
+                    if player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y * player.tile_size >= player.sprite_sheets.get("death").unwrap().pointer_y_limit {
                         //player.death_sheet.tile_position_pointer_y = 0.;
                         player.position = player.position_spawn.clone();
                         player.is_dead = false;
-                        player.death_sheet.tile_position_pointer_y = 0.;
+                        player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y = 0.;
                         return Ok(())
                     }
                 }
@@ -377,23 +373,23 @@ pub fn render() -> Result<(), JsValue> {
 );
 
             if is_run_right_sheet {
-                if player.sprite_counter >= player.run_right.counter_limit {
+                if player.sprite_counter >= player.sprite_sheets.get("player_run_right").unwrap().counter_limit {
                     player.sprite_counter = 0;
-                    player.run_right.pointer_y += tile_size;
-                    if player.run_right.pointer_y >= player.run_right.pointer_y_limit {
-                        player.run_right.pointer_y = 0.
+                    player.sprite_sheets.get_mut("player_run_right").unwrap().pointer_y += tile_size;
+                    if player.sprite_sheets.get("player_run_right").unwrap().pointer_y >= player.sprite_sheets.get("player_run_right").unwrap().pointer_y_limit {
+                        player.sprite_sheets.get_mut("player_run_right").unwrap().pointer_y = 0.
                     }
                 }
-                pointer_y = player.run_right.pointer_y;
+                pointer_y = player.sprite_sheets.get("player_run_right").unwrap().pointer_y;
             } else if is_run_left_sheet {
-                if player.sprite_counter >= player.run_left.counter_limit {
+                if player.sprite_counter >= player.sprite_sheets.get("player_run_left").unwrap().counter_limit {
                     player.sprite_counter = 0;
-                    player.run_left.pointer_y += tile_size;
-                    if player.run_left.pointer_y >= player.run_left.pointer_y_limit {
-                        player.run_left.pointer_y = 0.
+                    player.sprite_sheets.get_mut("player_run_left").unwrap().pointer_y += tile_size;
+                    if player.sprite_sheets.get("player_run_left").unwrap().pointer_y >= player.sprite_sheets.get("player_run_right").unwrap().pointer_y_limit {
+                        player.sprite_sheets.get_mut("player_run_left").unwrap().pointer_y = 0.
                     }
                 }
-                pointer_y = player.run_left.pointer_y;
+                pointer_y = player.sprite_sheets.get("player_run_left").unwrap().pointer_y;
             }
             ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                 &player_sprite,

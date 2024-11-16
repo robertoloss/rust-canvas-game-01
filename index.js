@@ -2,6 +2,8 @@ import init, {
 	get_and_give_f64, 
 	set_image,
 } from "./pkg/game_canvas.js";
+import { images } from "./images/images.js";
+import { processImages } from "./images/processImages.js";
 
 let wasm;
 
@@ -11,79 +13,14 @@ async function start() {
 	document.addEventListener('keyup', handleKeyUp);
 	wasm.initialize()
 
-	const images = [
-		{ 
-			src: './assets/Tile 8x8 v1.4-1.png.png' ,
-			name: 'tile',
-			isSheet: false,
-		},
-		{ 
-			src: './assets/Player 8x8 v2.0_tr-1.png.png',
-			name: 'player',
-			isSheet: false,
-		},
-		{ 
-			src: './assets/Player 8x8 v2.0_tr_L-1.png.png',
-			name: 'player_left',
-			isSheet: false,
-		},
-		{ 
-			src: './assets/player_2_0_cling_R-1.png.png',
-			name: 'player_cling',
-			isSheet: false,
-		},
-		{ 
-			src: './assets/player_2_0_cling_L-1.png.png',
-			name: 'player_cling_left',
-			isSheet: false,
-		},
-		{
-			src: './assets/run_R.png',
-			name: 'player_run_right',
-			isSheet: true,
-		},
-		{
-			src: './assets/run_L.png',
-			name: 'player_run_left',
-			isSheet: true,
-		},
-		{
-			src: './assets/Lava_1_3.png',
-			name: 'lava',
-			isSheet: true,
-		},
-		{
-			src: './assets/Death_1.png',
-			name: 'death',
-			isSheet: true,
-		},
-	]
-	async function processImages() {
-		for (const image of images) {
-			const img = new Image();
-			try {
-				await new Promise((resolve, reject) => {
-					img.onload = () => resolve(img);
-					img.onerror = () => reject(new Error(error));
-					img.src = image.src;
-				});
-				try {
-					set_image(image.name, image.isSheet, img)
-				} catch(error) {
-					console.error("Oops: Rust side error!", error, image.name)
-				}
-			} catch(error) {
-				console.error("Oops! Image not loaded!", error, image.name)
-			}
-		}
-	}
-	processImages()
+	processImages(images, set_image)
 	console.log("test")
 
 	const mobileJump = document.getElementById('mobile-jump')
 	const mobileCling = document.getElementById('mobile-cling')
 	const mobileLeft = document.getElementById('mobile-left')
 	const mobileRight = document.getElementById('mobile-right')
+
 	const listeners = [
 		{ element: mobileLeft, wasmNumber: 0 },
 		{ element: mobileRight, wasmNumber: 1 },
@@ -128,8 +65,6 @@ async function start() {
 
 	requestAnimationFrame(gameloop);
 }
-
-
 
 
 let lastTimestamp = performance.now();

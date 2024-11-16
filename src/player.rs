@@ -54,15 +54,6 @@ pub struct Player {
     pub delta: f64,
     pub images: HashMap<String, ThreadSafeImage>,
     pub sprite_sheets: HashMap<String, SpriteSheet>,
-    pub tile_image: ThreadSafeImage,
-    pub lava_sheet: SpriteSheet,
-    pub death_sheet: SpriteSheet,
-    pub player_image: ThreadSafeImage,
-    pub player_image_left: ThreadSafeImage,
-    pub player_image_cling: ThreadSafeImage,
-    pub player_image_cling_left: ThreadSafeImage,
-    pub run_right: SpriteSheet,
-    pub run_left: SpriteSheet,
     pub sprite_counter: u32,
     pub is_on_the_ground: bool,
 }
@@ -86,6 +77,7 @@ impl Default for Player {
                 y: 0.0
             },
             gravity: 0.2, //0.5,
+            sprite_counter: 0,
             jump_velocity: -6.4, //-10.1,
             horizontal_velocity: 2.,
             max_fall_velocity: 35.,
@@ -148,45 +140,6 @@ impl Default for Player {
                     pointer_y_limit: 8. * tile_size,
                 }),
             ]),
-            tile_image: ThreadSafeImage(None),
-            lava_sheet: SpriteSheet {
-                sheet: ThreadSafeImage(None),
-                pointer_y: 0.,
-                tile_position_pointer_y: 0.,
-                counter: 0,
-                counter_limit: 8,
-                pointer_y_limit: 8. * tile_size,
-            },
-            death_sheet: SpriteSheet {
-                sheet: ThreadSafeImage(None),
-                pointer_y: 0.,
-                tile_position_pointer_y: 0.,
-                counter: 0,
-                counter_limit: 1,
-                pointer_y_limit: 20. * tile_size,
-            },
-            player_image: ThreadSafeImage(None),
-            player_image_left: ThreadSafeImage(None),
-            player_image_cling: ThreadSafeImage(None),
-            player_image_cling_left: ThreadSafeImage(None),
-            sprite_counter: 0,
-            run_right: SpriteSheet {
-                sheet: ThreadSafeImage(None),
-                pointer_y: 0.,
-                tile_position_pointer_y: 0.,
-                counter: 0,
-                counter_limit: 4,
-                pointer_y_limit: 8. * 48.,
-            },
-            run_left: SpriteSheet {
-                sheet: ThreadSafeImage(None),
-                pointer_y: 0.,
-                tile_position_pointer_y: 0.,
-                counter: 0,
-                counter_limit: 4,
-                pointer_y_limit: 8. * tile_size,
-            }
-
         }
     }
 }
