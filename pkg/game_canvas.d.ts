@@ -9,10 +9,6 @@ export function movement(key_code: number): void;
  */
 export function stop_movement(key_code: number): void;
 export function initialize(): void;
-/**
- * @param {number | undefined} [num]
- */
-export function get_and_give_f64(num?: number): void;
 export function render(): void;
 /**
  * @param {string} name
@@ -20,17 +16,21 @@ export function render(): void;
  * @param {HTMLImageElement | undefined} [img]
  */
 export function set_image(name: string, sheet: boolean, img?: HTMLImageElement): void;
+/**
+ * @param {number | undefined} [num]
+ */
+export function get_and_give_f64(num?: number): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly movement: (a: number) => void;
-  readonly initialize: () => void;
-  readonly get_and_give_f64: (a: number, b: number) => void;
-  readonly render: (a: number) => void;
   readonly stop_movement: (a: number) => void;
+  readonly initialize: () => void;
+  readonly render: (a: number) => void;
   readonly set_image: (a: number, b: number, c: number, d: number) => void;
+  readonly get_and_give_f64: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;

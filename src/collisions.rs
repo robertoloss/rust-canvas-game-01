@@ -3,7 +3,6 @@
 //use web_sys::console;
 use crate::Player;
 use std::collections::HashMap;
-use crate::map;
 use crate::Tile;
 
 pub enum UpDown {
@@ -24,7 +23,7 @@ pub fn real_tile_collision(tile: &Tile, player: &Player) -> bool {
     if tile.position.y + tile_size < player.position.y  { return false };
     true
 }
-pub fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usize), Tile>) -> Option<&map::Tile> {
+pub fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usize), Tile>) -> Option<&Tile> {
     collision_map.get(&tuple)
 }
 pub fn manage_collision(
