@@ -264,6 +264,7 @@ pub fn render() -> Result<(), JsValue> {
 
             for y in player.map_origin.y..player.map_origin.y + num_of_tiles {
                 for x in player.map_origin.x..player.map_origin.x + num_of_tiles {
+                    let lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
                      match game_map[y][x] {
                          0 => ctx.draw_image_with_html_image_element_and_dw_and_dh(
                             &image,
@@ -275,7 +276,7 @@ pub fn render() -> Result<(), JsValue> {
                         9 => ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                             &lava_sheet,
                             0., 
-                            player.sprite_sheets.get("lava").unwrap().tile_position_pointer_y * tile_size,
+                            lava_sprite_sheet.tile_position_pointer_y * tile_size,
                             tile_size, 
                             tile_size,
                             (x % num_of_tiles) as f64 * tile_size, 
@@ -287,12 +288,13 @@ pub fn render() -> Result<(), JsValue> {
                      } 
                 }
             }
-            player.sprite_sheets.get_mut("lava").unwrap().counter += 1;
-            if player.sprite_sheets.get("lava").unwrap().counter > player.sprite_sheets.get("lava").unwrap().counter_limit {
-                player.sprite_sheets.get_mut("lava").unwrap().counter = 0;
-                player.sprite_sheets.get_mut("lava").unwrap().tile_position_pointer_y += 1.;
-                if player.sprite_sheets.get("lava").unwrap().tile_position_pointer_y * player.tile_size >= player.sprite_sheets.get("lava").unwrap().pointer_y_limit {
-                    player.sprite_sheets.get_mut("lava").unwrap().tile_position_pointer_y = 0.
+            let lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
+            lava_sprite_sheet.counter += 1;
+            if lava_sprite_sheet.counter > lava_sprite_sheet.counter_limit {
+                lava_sprite_sheet.counter = 0;
+                lava_sprite_sheet.tile_position_pointer_y += 1.;
+                if lava_sprite_sheet.tile_position_pointer_y * tile_size >= lava_sprite_sheet.pointer_y_limit {
+                    lava_sprite_sheet.tile_position_pointer_y = 0.
                 }
             }
 
