@@ -36,7 +36,6 @@ pub fn render() -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
-
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
     let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
@@ -54,18 +53,17 @@ pub fn render() -> Result<(), JsValue> {
             tile_size
         )
     }
-
     for tile in lethal_tiles.iter() {
         if real_tile_collision(&tile, &player) {
             console::log_1(&JsValue::from_str(&String::from("DEATH")));
             player.is_dead = true;
         }
     }
-
     manage_player_collision_with_tile(&mut(*player), &collision_map);
 
     if !all_images_present(&player.images) { return Ok(()) }
     if !all_sprite_sheets_present(&player.sprite_sheets) { return Ok(()) }
+
     let res = main_draw(
         &mut player,
         tile_size,
