@@ -23,7 +23,10 @@ pub fn real_tile_collision(tile: &Tile, player: &Player) -> bool {
     if tile.position.y + tile_size < player.position.y  { return false };
     true
 }
-pub fn tile_collision(tuple: (usize, usize), collision_map: &HashMap<(usize, usize), Tile>) -> Option<&Tile> {
+pub fn tile_collision(
+    tuple: (usize, usize), 
+    collision_map: &HashMap<(usize, usize), Tile>
+) -> Option<&Tile> {
     collision_map.get(&tuple)
 }
 pub fn manage_collision(
@@ -44,12 +47,20 @@ pub fn manage_collision(
         off_player_x,
         off_player_y
     ) = ntuple;
+    
+    let mut check_airborne = || {
+        if let UpDown::Down = up_down {
+            player.moves.airborne = false;
+            player.moves.stop_jump = false;
+        }
+    };
 
     if let Some(t) = tile_collision(corner_tile, &collision_map) {
         //console::log_1(&JsValue::from_str(""));
         if let Some(t) = tile_collision(next_to_corner_tile, &collision_map) {
             player.velocity.y = 0.;
-            player.position.y = t.position.y + off_tile_y
+            player.position.y = t.position.y + off_tile_y;
+            check_airborne()
         }
         if let Some(t) = tile_collision(opposite_y_to_corner_tile, &collision_map) {
             player.velocity.x = 0.;
@@ -59,7 +70,6 @@ pub fn manage_collision(
             player.can_cling = LeftRight::None
         }
         if tile_collision(next_to_corner_tile, &collision_map).is_none() && tile_collision(opposite_y_to_corner_tile, &collision_map).is_none() {
-            //console::log_1(&JsValue::from_str("calc inter"));
             let m = player.velocity.y / player.velocity.x;
             let intersection_y = m * (
                 (t.position.x + off_tile_x_intersection) - (player.position.x + off_player_x )
@@ -73,6 +83,7 @@ pub fn manage_collision(
             if from_below_above {
                 player.velocity.y = 0.;
                 player.position.y = t.position.y + off_tile_y;
+                check_airborne()
             } else {
                 player.velocity.x = 0.;
                 player.position.x = t.position.x + off_tile_x;
@@ -85,7 +96,8 @@ pub fn manage_collision(
         if let Some(t) = tile_collision(next_to_corner_tile, &collision_map) {
             //console::log_1(&JsValue::from_str("top right ---"));
             player.velocity.y = 0.;
-            player.position.y = t.position.y + off_tile_y
+            player.position.y = t.position.y + off_tile_y;
+            check_airborne()
         }
         if let Some(t) = tile_collision(opposite_y_to_corner_tile, &collision_map) {
             //console::log_1(&JsValue::from_str("top opposite_y_to_corner_tile ---"));
@@ -145,7 +157,13 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
 
     if player.velocity.y <= 0. {
         if player.velocity.x < 0. {
-            manage_collision(*d_cases.get("up-left").unwrap(), collision_map, player,UpDown::Up, LeftRight::Left)
+            manage_collision(
+                *d_cases.get("up-left").unwrap(), 
+                collision_map, 
+                player,
+                UpDown::Up, 
+                LeftRight::Left
+            )
         } else {
             manage_collision(*d_cases.get("up-right").unwrap(), collision_map, player,UpDown::Up, LeftRight::Right);
         }

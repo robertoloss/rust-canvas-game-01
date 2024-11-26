@@ -21,6 +21,8 @@ pub fn movement(key_code: i32) {
         },
         2 => {
             player.moves.jump = true;
+            player.moves.stop_jump = false;
+            player.moves.airborne = true;
             player.wants_to_cling = false;
             if player.is_clinging {
                 player.is_clinging = false;

@@ -21,6 +21,7 @@ pub struct Moves {
     pub left: bool,
     pub right: bool,
     pub jump: bool,
+    pub airborne: bool,
     pub stop_jump: bool,
 }
 #[derive(Debug)]

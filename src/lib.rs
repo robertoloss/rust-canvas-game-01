@@ -5,7 +5,7 @@ mod player;
 mod draw;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
-use web_sys::{console, CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement };
+use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
 use std::{collections::HashMap, sync::Mutex};
 use collisions::*;
 use crate::player::types::*;
@@ -55,7 +55,6 @@ pub fn render() -> Result<(), JsValue> {
     }
     for tile in lethal_tiles.iter() {
         if real_tile_collision(&tile, &player) {
-            console::log_1(&JsValue::from_str(&String::from("DEATH")));
             player.is_dead = true;
         }
     }

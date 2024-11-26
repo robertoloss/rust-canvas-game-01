@@ -176,37 +176,6 @@ function getDataViewMemory0() {
     }
     return cachedDataViewMemory0;
 }
-/**
- * @param {number} key_code
- */
-export function movement(key_code) {
-    wasm.movement(key_code);
-}
-
-/**
- * @param {number} key_code
- */
-export function stop_movement(key_code) {
-    wasm.stop_movement(key_code);
-}
-
-export function initialize() {
-    wasm.initialize();
-}
-
-export function render() {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.render(retptr);
-        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
-        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-    }
-}
 
 function isLikeNone(x) {
     return x === undefined || x === null;
@@ -227,6 +196,38 @@ export function set_image(name, sheet, img) {
  */
 export function get_and_give_f64(num) {
     wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
+}
+
+export function initialize() {
+    wasm.initialize();
+}
+
+export function render() {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        wasm.render(retptr);
+        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+        if (r1) {
+            throw takeObject(r0);
+        }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+    }
+}
+
+/**
+ * @param {number} key_code
+ */
+export function movement(key_code) {
+    wasm.movement(key_code);
+}
+
+/**
+ * @param {number} key_code
+ */
+export function stop_movement(key_code) {
+    wasm.stop_movement(key_code);
 }
 
 function handleError(f, args) {
@@ -299,9 +300,6 @@ function __wbg_get_imports() {
     imports.wbg.__wbg_getElementById_734c4eac4fec5911 = function(arg0, arg1, arg2) {
         const ret = getObject(arg0).getElementById(getStringFromWasm0(arg1, arg2));
         return isLikeNone(ret) ? 0 : addHeapObject(ret);
-    };
-    imports.wbg.__wbg_log_f740dc2253ea759b = function(arg0) {
-        console.log(getObject(arg0));
     };
     imports.wbg.__wbg_instanceof_CanvasRenderingContext2d_775df7bd32f07559 = function(arg0) {
         let result;

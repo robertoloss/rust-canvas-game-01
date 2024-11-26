@@ -2,11 +2,23 @@ use crate::Player;
 use crate::collisions;
 
 pub fn player_move(player: &mut Player, delta: f64) {
-    player.velocity.x = if player.moves.right { 
-    player.horizontal_velocity 
-    } else if player.moves.left { 
-        -player.horizontal_velocity
-    } else { 0. };
+    let brake = if player.moves.airborne { 0.06 } else { 0.5 };
+    let acceleration = 0.3;
+    if player.moves.right {
+        if player.velocity.x < player.horizontal_velocity {
+            player.velocity.x += acceleration 
+        }
+    } else if player.moves.left{
+        if player.velocity.x > -player.horizontal_velocity {
+            player.velocity.x -= acceleration
+        }
+    } else if player.velocity.x >= brake {
+        player.velocity.x -= brake
+    } else if player.velocity.x <= -brake {
+        player.velocity.x += brake
+    } else {
+        player.velocity.x = 0.
+    }
     //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
     if !player.is_clinging {
         if player.velocity.x > 0. {
@@ -21,10 +33,9 @@ pub fn player_move(player: &mut Player, delta: f64) {
         player.velocity.y = player.jump_velocity; //-10.1
     }
     if player.moves.stop_jump {
-        player.moves.stop_jump = false;
-        if player.velocity.y < -3. {
-            player.velocity.y += 3.//3.
-        }
+        if player.velocity.y <= 0.0 {
+            player.velocity.y += 0.3//3.
+        } 
     }
     if player.velocity.y < player.max_fall_velocity {
         player.velocity.y += player.gravity / delta
