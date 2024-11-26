@@ -1,6 +1,7 @@
 use crate::{Player,Tile};
 use std::collections::HashMap;
 use crate::collisions::types::{LeftRight,UpDown};
+use crate::collisions::get_manage_collision_params::*;
 
 pub fn tile_collision(
     tuple: (usize, usize), 
@@ -10,7 +11,7 @@ pub fn tile_collision(
 }
 
 pub fn manage_collision(
-    ntuple: ((usize, usize), (usize, usize), (usize, usize), f64, f64, f64, f64), 
+    ntuple: ((usize, usize), (usize, usize), (usize, usize)), 
     collision_map: &HashMap<(usize, usize), Tile>,
     player: &mut Player,
     up_down: UpDown,
@@ -20,25 +21,15 @@ pub fn manage_collision(
         corner_tile,
         next_to_corner_tile,
         opposite_y_to_corner_tile,
+    ) = ntuple;
+    let (
+        off_tile_x,
+        off_tile_y,
         off_tile_x_intersection,
         off_tile_y_intersection,
         off_player_x,
         off_player_y
-    ) = ntuple;
-
-    let tile_size = player.tile_size;
-
-    let off_tile_x = if let LeftRight::Left = left_right { 
-        tile_size - player.hitbox.left
-    } else { 
-        -tile_size + player.hitbox.right
-    };
-
-    let off_tile_y = if let UpDown::Up = up_down {
-        tile_size
-    } else {
-        -tile_size
-    };
+    ) = get_manage_collision_parameter(up_down.clone(), left_right.clone(), player);
     
     let mut check_airborne = || {
         if let UpDown::Down = up_down {
@@ -46,7 +37,6 @@ pub fn manage_collision(
             player.moves.stop_jump = false;
         }
     };
-
     if let Some(t) = tile_collision(corner_tile, &collision_map) {
         //console::log_1(&JsValue::from_str(""));
         if let Some(t) = tile_collision(next_to_corner_tile, &collision_map) {
