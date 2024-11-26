@@ -25,45 +25,43 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
     );
 
     if player.velocity.x == 0. && player.velocity.y == 0. { return }
-
     //off_tile_x = how much to the x will be the player repositioned
-
-    let mut d_cases = HashMap::new();
     // (....3 tiles...., off_tile_x, off_tile_y, off_tile_x_intersection, off_tile_y_intersection, off_player_x, off_player_y)
-    d_cases.insert(
-        String::from("up-left"), 
-        (top_left, top_right, bottom_left, tile_size - player.hitbox.left, tile_size, tile_size, tile_size, player.hitbox.left, 0.)
-    );
-    d_cases.insert(
-        String::from("up-right"), 
-        (top_right, top_left, bottom_right, -tile_size + player.hitbox.right, tile_size, 0., tile_size, tile_size -player.hitbox.right, 0.)
-    );
-    d_cases.insert(
-        String::from("down-left"), 
-        (bottom_left, bottom_right, top_left, tile_size - player.hitbox.left, -tile_size, tile_size, 0., player.hitbox.left, tile_size)
-    );
-    d_cases.insert(
-        String::from("down-right"), 
-        (bottom_right, bottom_left, top_right, -tile_size +player.hitbox.right, -tile_size, 0., 0., tile_size - player.hitbox.right, tile_size)
-    );
-
     if player.velocity.y <= 0. {
         if player.velocity.x < 0. {
             manage_collision(
-                *d_cases.get("up-left").unwrap(), 
+                (top_left, top_right, bottom_left, tile_size, tile_size, player.hitbox.left, 0.),
                 collision_map, 
                 player,
                 UpDown::Up, 
                 LeftRight::Left
             )
         } else {
-            manage_collision(*d_cases.get("up-right").unwrap(), collision_map, player,UpDown::Up, LeftRight::Right);
+            manage_collision(
+                (top_right, top_left, bottom_right, 0., tile_size, tile_size -player.hitbox.right, 0.),
+                collision_map, 
+                player,
+                UpDown::Up, 
+                LeftRight::Right
+            );
         }
     } else if player.velocity.y > 0. {
         if player.velocity.x < 0. {
-            manage_collision(*d_cases.get("down-left").unwrap(), collision_map, player,UpDown::Down,LeftRight::Left);
+            manage_collision(
+                (bottom_left, bottom_right, top_left, tile_size, 0., player.hitbox.left, tile_size),
+                collision_map, 
+                player,
+                UpDown::Down,
+                LeftRight::Left
+            );
         } else {
-            manage_collision(*d_cases.get("down-right").unwrap(), collision_map, player, UpDown::Down,LeftRight::Right);
+            manage_collision(
+                (bottom_right, bottom_left, top_right, 0., 0., tile_size - player.hitbox.right, tile_size),
+                collision_map, 
+                player, 
+                UpDown::Down,
+                LeftRight::Right
+            );
         }
     }
 }

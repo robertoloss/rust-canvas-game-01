@@ -10,7 +10,7 @@ pub fn tile_collision(
 }
 
 pub fn manage_collision(
-    ntuple: ((usize, usize), (usize, usize), (usize, usize), f64, f64, f64, f64, f64, f64), 
+    ntuple: ((usize, usize), (usize, usize), (usize, usize), f64, f64, f64, f64), 
     collision_map: &HashMap<(usize, usize), Tile>,
     player: &mut Player,
     up_down: UpDown,
@@ -20,13 +20,25 @@ pub fn manage_collision(
         corner_tile,
         next_to_corner_tile,
         opposite_y_to_corner_tile,
-        off_tile_x,
-        off_tile_y,
         off_tile_x_intersection,
         off_tile_y_intersection,
         off_player_x,
         off_player_y
     ) = ntuple;
+
+    let tile_size = player.tile_size;
+
+    let off_tile_x = if let LeftRight::Left = left_right { 
+        tile_size - player.hitbox.left
+    } else { 
+        -tile_size + player.hitbox.right
+    };
+
+    let off_tile_y = if let UpDown::Up = up_down {
+        tile_size
+    } else {
+        -tile_size
+    };
     
     let mut check_airborne = || {
         if let UpDown::Down = up_down {
