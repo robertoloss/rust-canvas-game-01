@@ -1,5 +1,6 @@
 use std::collections::HashMap;
-use crate::{LeftRight, Vec2usize};
+use crate::Vec2usize;
+use crate::collisions::types::LeftRight;
 use crate::player::types::*;
 
 impl Default for Player {
@@ -26,7 +27,7 @@ impl Default for Player {
             jump_velocity: -5.7, //-6.4, //-10.1,
             horizontal_velocity: 2.,
             max_fall_velocity: 35.,
-            is_on_the_ground: true,
+            //is_on_the_ground: true,
             moves: Moves {
                 left: false,
                 right: false,

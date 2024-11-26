@@ -7,7 +7,6 @@ use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
 use std::{collections::HashMap, sync::Mutex};
-use collisions::*;
 use crate::player::types::*;
 use crate::utils::utils::*;
 use crate::player::player_move::*;
@@ -15,6 +14,8 @@ use crate::map::map::*;
 use crate::map::map_move::*;
 use crate::map::generate_map_collisions::*;
 use crate::draw::main_draw::*;
+use crate::collisions::normal_tile_collision::*;
+use crate::collisions::manage_player_collision_with_tile::manage_player_collision_with_tile;
 
 lazy_static! {
     static ref PLAYER: Mutex<Player> = Mutex::new(Player::default());
@@ -54,7 +55,7 @@ pub fn render() -> Result<(), JsValue> {
         )
     }
     for tile in lethal_tiles.iter() {
-        if real_tile_collision(&tile, &player) {
+        if normal_tile_collision(&tile, &player) {
             player.is_dead = true;
         }
     }

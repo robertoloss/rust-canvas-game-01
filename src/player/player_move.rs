@@ -1,5 +1,5 @@
 use crate::Player;
-use crate::collisions;
+use crate::collisions::types::LeftRight;
 
 pub fn player_move(player: &mut Player, delta: f64) {
     let brake = if player.moves.airborne { 0.06 } else { 0.5 };
@@ -40,7 +40,7 @@ pub fn player_move(player: &mut Player, delta: f64) {
     if player.velocity.y < player.max_fall_velocity {
         player.velocity.y += player.gravity / delta
     }
-    if player.wants_to_cling && player.can_cling != collisions::LeftRight::None {
+    if player.wants_to_cling && player.can_cling != LeftRight::None {
         player.is_clinging = true
     }
     if player.is_clinging {

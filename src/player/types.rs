@@ -1,5 +1,6 @@
 use std::{collections::HashMap, u32};
-use crate::{LeftRight, Vec2usize};
+use crate::Vec2usize;
+use crate::collisions::types::LeftRight;
 
 #[derive(Debug, Default)]
 pub struct ThreadSafeImage(pub Option<wasm_bindgen::JsValue>);
@@ -56,5 +57,5 @@ pub struct Player {
     pub images: HashMap<String, ThreadSafeImage>,
     pub sprite_sheets: HashMap<String, SpriteSheet>,
     pub sprite_counter: u32,
-    pub is_on_the_ground: bool,
+    //pub is_on_the_ground: bool,
 }

@@ -198,6 +198,20 @@ export function get_and_give_f64(num) {
     wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
 }
 
+/**
+ * @param {number} key_code
+ */
+export function movement(key_code) {
+    wasm.movement(key_code);
+}
+
+/**
+ * @param {number} key_code
+ */
+export function stop_movement(key_code) {
+    wasm.stop_movement(key_code);
+}
+
 export function initialize() {
     wasm.initialize();
 }
@@ -214,20 +228,6 @@ export function render() {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-}
-
-/**
- * @param {number} key_code
- */
-export function movement(key_code) {
-    wasm.movement(key_code);
-}
-
-/**
- * @param {number} key_code
- */
-export function stop_movement(key_code) {
-    wasm.stop_movement(key_code);
 }
 
 function handleError(f, args) {

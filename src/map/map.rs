@@ -7,6 +7,7 @@ pub struct Vec2usize {
 }
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct Tile {
     pub tile_pos: Vec2usize,
     pub position: Vec2,
