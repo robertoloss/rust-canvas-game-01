@@ -1,5 +1,5 @@
 use std::{collections::HashMap, u32};
-use crate::{Tile, Vec2usize};
+use crate::Vec2usize;
 use crate::collisions::types::LeftRight;
 
 #[derive(Clone)]
@@ -38,7 +38,6 @@ pub struct SpriteSheet {
 }
 #[derive(Debug)]
 pub struct Player {
-    pub collision_map: Option<HashMap<(usize,usize), Tile>>,
     pub position: Vec2,
     pub is_dead: bool,
     pub position_spawn: Vec2,

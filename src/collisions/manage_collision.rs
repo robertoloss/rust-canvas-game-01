@@ -11,6 +11,7 @@ pub fn tile_collision(
 }
 
 pub fn manage_collision(
+    collision_map: &mut HashMap<(usize, usize), Tile>,
     ntuple: ((usize, usize), (usize, usize), (usize, usize)), 
     player: &mut Player,
     up_down: UpDown,
@@ -36,16 +37,16 @@ pub fn manage_collision(
             player.moves.stop_jump = false;
         }
     };
-    let corner_tile_hit = tile_collision(corner_tile, player.collision_map.as_mut().unwrap()).is_some();
+    let corner_tile_hit = tile_collision(corner_tile, collision_map).is_some();
     if corner_tile_hit {
         //console::log_1(&JsValue::from_str(""));
-        if let Some(t) = tile_collision(next_to_corner_tile, player.collision_map.as_mut().unwrap()) {
+        if let Some(t) = tile_collision(next_to_corner_tile, collision_map) {
             player.velocity.y = 0.;
             player.position.y = t.position.y + off_tile_y;
             check_airborne();
             t.touched_by_player = true;
         }
-        if let Some(t) = tile_collision(opposite_y_to_corner_tile, player.collision_map.as_mut().unwrap()) {
+        if let Some(t) = tile_collision(opposite_y_to_corner_tile, collision_map) {
             player.velocity.x = 0.;
             player.position.x = t.position.x + off_tile_x;
             player.can_cling = left_right.clone();
@@ -53,8 +54,8 @@ pub fn manage_collision(
         } else {
             player.can_cling = LeftRight::None
         }
-        if tile_collision(next_to_corner_tile, player.collision_map.as_mut().unwrap()).is_none() && tile_collision(opposite_y_to_corner_tile, player.collision_map.as_mut().unwrap()).is_none() {
-                let t = tile_collision(corner_tile, player.collision_map.as_mut().unwrap()).unwrap();
+        if tile_collision(next_to_corner_tile, collision_map).is_none() && tile_collision(opposite_y_to_corner_tile, collision_map).is_none() {
+                let t = tile_collision(corner_tile, collision_map).unwrap();
             let m = player.velocity.y / player.velocity.x;
             let intersection_y = m * (
                 (t.position.x + off_tile_x_intersection) - (player.position.x + off_player_x )
@@ -80,14 +81,14 @@ pub fn manage_collision(
             }
         }
     } else {
-        if let Some(t) = tile_collision(next_to_corner_tile, player.collision_map.as_mut().unwrap()) {
+        if let Some(t) = tile_collision(next_to_corner_tile, collision_map) {
             //console::log_1(&JsValue::from_str("top right ---"));
             player.velocity.y = 0.;
             player.position.y = t.position.y + off_tile_y;
             check_airborne();
             t.touched_by_player = true;
         }
-        if let Some(t) = tile_collision(opposite_y_to_corner_tile, player.collision_map.as_mut().unwrap()) {
+        if let Some(t) = tile_collision(opposite_y_to_corner_tile, collision_map) {
             //console::log_1(&JsValue::from_str("top opposite_y_to_corner_tile ---"));
             player.velocity.x = 0.;
             player.position.x = t.position.x + off_tile_x;

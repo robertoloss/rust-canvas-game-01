@@ -11,7 +11,6 @@ impl Default for Player {
             y: tile_size * 14.,
         };
         Player {
-            collision_map: None,
             position: initial_spawn.clone(),
             is_dead: false,
             position_spawn: initial_spawn,

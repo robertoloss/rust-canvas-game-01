@@ -1,5 +1,4 @@
-use std::fmt::format;
-
+//use std::fmt::format;
 use web_sys::console;
 
 use crate::{ Player, HashMap, Tile, Vec2, get_map, Vec2usize };
@@ -48,7 +47,8 @@ pub fn generate_map_collisions(
                     ( (x % num_of_tiles) , (y % num_of_tiles) ), 
                     tile.clone()
                 );
-                console::log_1(&format!("{:?}", tile).into());
+                //console::log_1(&format!("{:?}", tile).into());
+                //console::log_1(&format!("{:?}", player.sprite_sheets.get("sand")).into())
             }
             if game_map[y][x] == 9 {
                 lethal_tiles.push(tile.clone())

@@ -19,23 +19,23 @@ use crate::collisions::manage_player_collision_with_tile::manage_player_collisio
 
 lazy_static! {
     static ref PLAYER: Mutex<Player> = Mutex::new(Player::default());
-    //static ref MAP_COLLISIONS: Mutex<HashMap<(usize,usize), Tile>> = Mutex::new(HashMap::new());
+    static ref MAP_COLLISIONS: Mutex<HashMap<(usize,usize), Tile>> = Mutex::new(HashMap::new());
     static ref LETHAL_TILES: Mutex<Vec<Tile>> = Mutex::new(vec![]);
 }
 
 #[wasm_bindgen]
 pub fn initialize() {
-    //let mut map_collisions = MAP_COLLISIONS.lock().unwrap();
+    let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
-    let mut player = PLAYER.lock().unwrap();
-    player.collision_map = Some(generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).0);
+    let player = PLAYER.lock().unwrap();
+    *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).0;
     *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).1;
 }
 
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
-    //let mut collision_map = MAP_COLLISIONS.lock().unwrap();
+    let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
@@ -50,7 +50,8 @@ pub fn render() -> Result<(), JsValue> {
             &mut player,
             &mut lethal_tiles,
             num_of_tiles,
-            tile_size
+            tile_size,
+            &mut collision_map,
         )
     }
     for tile in lethal_tiles.iter() {
@@ -58,12 +59,13 @@ pub fn render() -> Result<(), JsValue> {
             player.is_dead = true;
         }
     }
-    manage_player_collision_with_tile(&mut(*player)); 
+    manage_player_collision_with_tile(&mut(*player), &mut collision_map); 
 
     if !all_images_present(&player.images) { return Ok(()) }
     if !all_sprite_sheets_present(&player.sprite_sheets) { return Ok(()) }
 
     let res = main_draw(
+        &mut collision_map,
         &mut player,
         tile_size,
         num_of_tiles,

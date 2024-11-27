@@ -4,11 +4,11 @@ use crate::HtmlImageElement;
 use crate::get_context;
 use crate::Tile;
 use wasm_bindgen::JsValue;
-use web_sys::console;
 use crate::ThreadSafeImage;
 use crate::Player;
 
 pub fn main_draw(
+    collision_map: &mut HashMap<(usize, usize), Tile>,
     player: &mut Player,
     tile_size: f64,
     num_of_tiles: usize,
@@ -52,11 +52,11 @@ pub fn main_draw(
                             tile_size,
                         )?,
                         6 => {
-                            let collision_map = player.collision_map.as_mut().unwrap(); // Borrow separately
-                            if let Some(sand_tile) = collision_map.get_mut(&(x, y)) {
-                            //console::log_1(&format!("{:?}", sand_tile).into());
+                            let sand_tile_option = collision_map.get_mut(&(x, y));
+                            //console::log_1(&format!("DRAW {:?}", sand_tile).into());
+                            if sand_tile_option.is_some() {
+                                let sand_tile = sand_tile_option.unwrap();
                                 if let Some(sand_sprite_sheet) = &mut sand_tile.sheet {
-                                    console::log_1(&"Accessing collision_map".into());
                                     ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                                         &sand_sheet,
                                         0., 
@@ -79,7 +79,6 @@ pub fn main_draw(
                                         }
                                     }
                                 }
-                            } else {
                             }
                         },
                         _ => {}
