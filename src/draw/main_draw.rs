@@ -1,10 +1,10 @@
 use std::collections::HashMap;
+use crate::generate_map_collisions;
 use crate::get_map;
 use crate::HtmlImageElement;
 use crate::get_context;
 use crate::Tile;
 use wasm_bindgen::JsValue;
-use web_sys::console;
 use crate::ThreadSafeImage;
 use crate::Player;
 
@@ -130,6 +130,11 @@ pub fn main_draw(
                     if player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y * player.tile_size >= player.sprite_sheets.get("death").unwrap().pointer_y_limit {
                         //player.death_sheet.tile_position_pointer_y = 0.;
                         player.position = player.position_spawn.clone();
+                        *collision_map = generate_map_collisions(
+                            player.map_origin.x, 
+                            player.map_origin.y, 
+                            player
+                        ).0;
                         player.is_dead = false;
                         player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y = 0.;
                         return Ok(())
