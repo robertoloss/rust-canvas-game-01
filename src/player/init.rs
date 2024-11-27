@@ -11,6 +11,7 @@ impl Default for Player {
             y: tile_size * 14.,
         };
         Player {
+            collision_map: None,
             position: initial_spawn.clone(),
             is_dead: false,
             position_spawn: initial_spawn,
@@ -54,7 +55,8 @@ impl Default for Player {
                 (String::from("player_cling_left"), ThreadSafeImage(None)),
             ]),
             sprite_sheets: HashMap::from([
-                (String::from("lava"), SpriteSheet {
+                (String::from("lava"), 
+                 SpriteSheet {
                     sheet: ThreadSafeImage(None),
                     pointer_y: 0.,
                     tile_position_pointer_y: 0.,
@@ -62,7 +64,17 @@ impl Default for Player {
                     counter_limit: 8,
                     pointer_y_limit: 8. * tile_size,
                 }),
-                (String::from("death"), SpriteSheet {
+                (String::from("sand"), 
+                 SpriteSheet {
+                    sheet: ThreadSafeImage(None),
+                    pointer_y: 0.,
+                    tile_position_pointer_y: 0.,
+                    counter: 0,
+                    counter_limit: 6,
+                    pointer_y_limit: 6. * tile_size,
+                }),
+                (String::from("death"), 
+                 SpriteSheet {
                     sheet: ThreadSafeImage(None),
                     pointer_y: 0.,
                     tile_position_pointer_y: 0.,
@@ -70,7 +82,8 @@ impl Default for Player {
                     counter_limit: 1,
                     pointer_y_limit: 20. * tile_size,
                 }),
-                (String::from("player_run_right"), SpriteSheet {
+                (String::from("player_run_right"), 
+                 SpriteSheet {
                     sheet: ThreadSafeImage(None),
                     pointer_y: 0.,
                     tile_position_pointer_y: 0.,
@@ -78,7 +91,8 @@ impl Default for Player {
                     counter_limit: 4,
                     pointer_y_limit: 8. * tile_size,
                 }),
-                (String::from("player_run_left"), SpriteSheet {
+                (String::from("player_run_left"), 
+                 SpriteSheet {
                     sheet: ThreadSafeImage(None),
                     pointer_y: 0.,
                     tile_position_pointer_y: 0.,

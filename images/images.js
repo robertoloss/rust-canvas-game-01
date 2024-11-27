@@ -44,5 +44,10 @@ export const images = [
 			name: 'death',
 			isSheet: true,
 		},
+		{
+			src: './assets/Sandy_tile_1_0.png',
+			name: 'sand',
+			isSheet: true,
+		},
 	]
 

@@ -1,7 +1,10 @@
+use std::collections::HashMap;
 use crate::get_map;
 use crate::HtmlImageElement;
 use crate::get_context;
+use crate::Tile;
 use wasm_bindgen::JsValue;
+use web_sys::console;
 use crate::ThreadSafeImage;
 use crate::Player;
 
@@ -11,8 +14,12 @@ pub fn main_draw(
     num_of_tiles: usize,
 ) -> Result<(), JsValue> 
 {
-    let image: HtmlImageElement = player.images.get("tile").unwrap().0.clone().unwrap().into();
-    let lava_sheet: HtmlImageElement = player.sprite_sheets.get("lava").unwrap().sheet.0.clone().unwrap().into();
+    let tile: HtmlImageElement = player.images.get("tile")
+        .unwrap().0.clone().unwrap().into();
+    let lava_sheet: HtmlImageElement = player.sprite_sheets.get("lava")
+        .unwrap().sheet.0.clone().unwrap().into();
+    let sand_sheet: HtmlImageElement = player.sprite_sheets.get("sand")
+        .unwrap().sheet.0.clone().unwrap().into();
     let game_map = get_map();
     match get_context(&(*player)) {
         Ok((context, canvas)) => {
@@ -24,10 +31,10 @@ pub fn main_draw(
 
             for y in player.map_origin.y..player.map_origin.y + num_of_tiles {
                 for x in player.map_origin.x..player.map_origin.x + num_of_tiles {
-                    let lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
-                     match game_map[y][x] {
-                         0 => ctx.draw_image_with_html_image_element_and_dw_and_dh(
-                            &image,
+                    let lava_sprite_sheet = player.sprite_sheets.get("lava").unwrap();
+                    match game_map[y][x] {
+                        0 => ctx.draw_image_with_html_image_element_and_dw_and_dh(
+                            &tile,
                             (x % num_of_tiles) as f64 * tile_size, 
                             (y % num_of_tiles) as f64 * tile_size, 
                             tile_size,
@@ -43,7 +50,38 @@ pub fn main_draw(
                             (y % num_of_tiles) as f64 * tile_size, 
                             tile_size, 
                             tile_size,
-            )?,
+                        )?,
+                        6 => {
+                            let collision_map = player.collision_map.as_mut().unwrap(); // Borrow separately
+                            if let Some(sand_tile) = collision_map.get_mut(&(x, y)) {
+                            //console::log_1(&format!("{:?}", sand_tile).into());
+                                if let Some(sand_sprite_sheet) = &mut sand_tile.sheet {
+                                    console::log_1(&"Accessing collision_map".into());
+                                    ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
+                                        &sand_sheet,
+                                        0., 
+                                        sand_sprite_sheet.tile_position_pointer_y * tile_size,
+                                        tile_size, 
+                                        tile_size,
+                                        (x % num_of_tiles) as f64 * tile_size, 
+                                        (y % num_of_tiles) as f64 * tile_size, 
+                                        tile_size, 
+                                        tile_size,
+                                    )?;
+                                    if sand_tile.touched_by_player {
+                                        sand_sprite_sheet.counter += 1;
+                                        if sand_sprite_sheet.counter > sand_sprite_sheet.counter_limit {
+                                            sand_sprite_sheet.counter = 0;
+                                            sand_sprite_sheet.tile_position_pointer_y += 1.;
+                                            if sand_sprite_sheet.tile_position_pointer_y * tile_size >= sand_sprite_sheet.pointer_y_limit {
+                                                collision_map.remove(&(x,y));
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                            }
+                        },
                         _ => {}
                      } 
                 }

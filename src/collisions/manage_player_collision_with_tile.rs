@@ -1,10 +1,9 @@
-use crate::{Player,Tile};
-use std::collections::HashMap;
+use crate::Player;
 use crate::collisions::types::{LeftRight,UpDown};
 use crate::collisions::manage_collision::manage_collision;
 
 
-pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &HashMap<(usize, usize), Tile>) {
+pub fn manage_player_collision_with_tile(player: &mut Player) {
     let tile_size = player.tile_size;
     //tiles around the player
     let top_right = (
@@ -30,7 +29,6 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
         if player.velocity.x < 0. {
             manage_collision(
                 (top_left, top_right, bottom_left),
-                collision_map, 
                 player,
                 UpDown::Up, 
                 LeftRight::Left
@@ -38,7 +36,6 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
         } else {
             manage_collision(
                 (top_right, top_left, bottom_right),
-                collision_map, 
                 player,
                 UpDown::Up, 
                 LeftRight::Right
@@ -48,7 +45,6 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
         if player.velocity.x < 0. {
             manage_collision(
                 (bottom_left, bottom_right, top_left),
-                collision_map, 
                 player,
                 UpDown::Down,
                 LeftRight::Left
@@ -56,7 +52,6 @@ pub fn manage_player_collision_with_tile(player: &mut Player, collision_map: &Ha
         } else {
             manage_collision(
                 (bottom_right, bottom_left, top_right),
-                collision_map, 
                 player, 
                 UpDown::Down,
                 LeftRight::Right

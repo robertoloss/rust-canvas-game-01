@@ -1,6 +1,18 @@
+use std::fmt::format;
+
+use web_sys::console;
+
 use crate::{ Player, HashMap, Tile, Vec2, get_map, Vec2usize };
 
-pub fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player) -> (HashMap<(usize,usize), Tile>,Vec<Tile>) {
+pub fn generate_map_collisions(
+    origin_x: usize, 
+    origin_y: usize, 
+    player: &Player
+) -> (
+    HashMap<(usize,usize), 
+    Tile>,
+    Vec<Tile>
+) {
     let mut collisions_map = HashMap::new(); 
     let mut lethal_tiles: Vec<Tile> = vec![];
     let game_map = get_map();
@@ -12,7 +24,7 @@ pub fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player
     }
     for y in origin_y..origin_y + num_of_tiles {
         for x in origin_x..origin_x + num_of_tiles {
-            let tile = Tile {
+            let mut tile = Tile {
                 tile_pos: Vec2usize {
                     x: (x % num_of_tiles),
                     y: (y % num_of_tiles)
@@ -20,7 +32,9 @@ pub fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player
                 position: Vec2 {
                     x: (x % num_of_tiles) as f64 * tile_size,
                     y: (y % num_of_tiles) as f64 * tile_size
-                }
+                },
+                sheet: None,
+                touched_by_player: false
             };
             if game_map[y][x] == 0 {
                 collisions_map.insert(
@@ -28,8 +42,16 @@ pub fn generate_map_collisions(origin_x: usize, origin_y: usize, player: &Player
                     tile.clone()
                 );
             }
+            if game_map[y][x] == 6 {
+                tile.sheet = Some(player.sprite_sheets.get("sand").unwrap().clone());
+                collisions_map.insert(
+                    ( (x % num_of_tiles) , (y % num_of_tiles) ), 
+                    tile.clone()
+                );
+                console::log_1(&format!("{:?}", tile).into());
+            }
             if game_map[y][x] == 9 {
-                lethal_tiles.push(tile)
+                lethal_tiles.push(tile.clone())
             }
         }
     }
