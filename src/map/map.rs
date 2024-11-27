@@ -1,7 +1,7 @@
 use crate::player::types::Vec2;
 use crate::SpriteSheet;
 
-#[derive(Clone,Debug)]
+#[derive(Clone,Debug,serde::Serialize)]
 pub struct Vec2usize {
     pub x: usize,
     pub y: usize

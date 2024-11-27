@@ -1,4 +1,7 @@
 use std::collections::HashMap;
+
+use web_sys::console;
+
 use crate::generate_map_collisions;
 use crate::{Tile, Player};
 

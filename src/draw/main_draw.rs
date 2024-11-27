@@ -4,6 +4,7 @@ use crate::HtmlImageElement;
 use crate::get_context;
 use crate::Tile;
 use wasm_bindgen::JsValue;
+use web_sys::console;
 use crate::ThreadSafeImage;
 use crate::Player;
 
@@ -21,6 +22,7 @@ pub fn main_draw(
     let sand_sheet: HtmlImageElement = player.sprite_sheets.get("sand")
         .unwrap().sheet.0.clone().unwrap().into();
     let game_map = get_map();
+
     match get_context(&(*player)) {
         Ok((context, canvas)) => {
             let ctx = &context;
@@ -52,10 +54,13 @@ pub fn main_draw(
                             tile_size,
                         )?,
                         6 => {
-                            let sand_tile_option = collision_map.get_mut(&(x, y));
-                            //console::log_1(&format!("DRAW {:?}", sand_tile).into());
+                            let sand_tile_option = collision_map.get_mut(&(
+                                    x - player.map_origin.x, 
+                                    y - player.map_origin.y
+                                ));
                             if sand_tile_option.is_some() {
                                 let sand_tile = sand_tile_option.unwrap();
+                                //console::log_1(&format!("SAND {:?}", sand_tile).into());
                                 if let Some(sand_sprite_sheet) = &mut sand_tile.sheet {
                                     ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                                         &sand_sheet,
@@ -74,7 +79,10 @@ pub fn main_draw(
                                             sand_sprite_sheet.counter = 0;
                                             sand_sprite_sheet.tile_position_pointer_y += 1.;
                                             if sand_sprite_sheet.tile_position_pointer_y * tile_size >= sand_sprite_sheet.pointer_y_limit {
-                                                collision_map.remove(&(x,y));
+                                                collision_map.remove(&(
+                                                    x - player.map_origin.x, 
+                                                    y - player.map_origin.y
+                                                ));
                                             }
                                         }
                                     }

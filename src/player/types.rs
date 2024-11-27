@@ -8,7 +8,7 @@ pub struct ThreadSafeImage(pub Option<wasm_bindgen::JsValue>);
 unsafe impl Send for ThreadSafeImage {}
 unsafe impl Sync for ThreadSafeImage {}
 
-#[derive(Clone,Debug)]
+#[derive(Clone,Debug,serde::Serialize)]
 pub struct Vec2 {
     pub x: f64,
     pub y: f64,
@@ -26,8 +26,7 @@ pub struct Moves {
     pub airborne: bool,
     pub stop_jump: bool,
 }
-#[derive(Clone)]
-#[derive(Debug)]
+#[derive(Clone,Debug)]
 pub struct SpriteSheet {
     pub sheet: ThreadSafeImage,
     pub pointer_y: f64,
