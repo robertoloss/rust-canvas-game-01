@@ -1,7 +1,15 @@
-use crate::Player;
+use std::collections::HashMap;
+
+use web_sys::console;
+
+use crate::{Player, Tile};
 use crate::collisions::types::LeftRight;
 
-pub fn player_move(player: &mut Player, delta: f64) {
+pub fn player_move(
+    player: &mut Player, 
+    delta: f64,
+    collision_map: &mut HashMap<(usize,usize), Tile>
+) {
     let brake = if player.moves.airborne { 0.06 } else { 0.5 };
     let acceleration = 0.3;
     if player.moves.right {
@@ -44,8 +52,15 @@ pub fn player_move(player: &mut Player, delta: f64) {
         player.is_clinging = true
     }
     if player.is_clinging {
-        player.velocity.y = 0.;
-        player.velocity.x = 0.;
+        if let Some(tile) = player.clinging_tile_coord {
+            if collision_map.get(&tile).is_some() {
+                player.velocity.y = 0.;
+                player.velocity.x = 0.;
+            } else {
+                player.is_clinging = false;
+                player.can_cling = LeftRight::None;
+            }
+        }
     }
     player.position.x += player.velocity.x / delta;
     player.position.y += player.velocity.y / delta;

@@ -45,7 +45,11 @@ pub fn render() -> Result<(), JsValue> {
     }
 
     if !player.is_dead {
-        player_move(&mut player,delta);
+        player_move(
+            &mut player,
+            delta,
+            &mut collision_map
+        );
         map_move(
             &mut player,
             &mut lethal_tiles,

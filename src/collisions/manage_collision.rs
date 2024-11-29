@@ -10,6 +10,18 @@ pub fn tile_collision(
     collision_map.get_mut(&tuple)
 }
 
+fn player_can_cling(
+    left_right: &LeftRight, 
+    tile: &mut Tile,
+    player: &mut Player
+) {
+    player.can_cling = left_right.clone();
+    player.clinging_tile_coord = Some((
+        tile.tile_pos.x,
+        tile.tile_pos.y
+    ))
+}
+
 pub fn manage_collision(
     collision_map: &mut HashMap<(usize, usize), Tile>,
     ntuple: ((usize, usize), (usize, usize), (usize, usize)), 
@@ -76,7 +88,7 @@ pub fn manage_collision(
                 player.position.x = t.position.x + off_tile_x;
                 t.touched_by_player = true;
                 if let UpDown::Up = up_down {
-                    player.can_cling = left_right.clone();
+                    player_can_cling(&left_right, t, player);
                 }
             }
         }
@@ -94,7 +106,7 @@ pub fn manage_collision(
             player.position.x = t.position.x + off_tile_x;
             t.touched_by_player = true;
             if let UpDown::Down = up_down {
-            player.can_cling = left_right.clone();
+                player_can_cling(&left_right, t, player);
             } 
         } else {
             player.can_cling = LeftRight::None;

@@ -46,6 +46,7 @@ impl Default for Player {
             wants_to_cling: false,
             delta: 0.0,
             is_clinging: false,
+            clinging_tile_coord: None,
             images: HashMap::from([
                 (String::from("tile"), ThreadSafeImage(None)),
                 (String::from("player"), ThreadSafeImage(None)),
