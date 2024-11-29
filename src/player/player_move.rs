@@ -1,7 +1,4 @@
 use std::collections::HashMap;
-
-use web_sys::console;
-
 use crate::{Player, Tile};
 use crate::collisions::types::LeftRight;
 

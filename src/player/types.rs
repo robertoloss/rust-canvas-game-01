@@ -35,6 +35,13 @@ pub struct SpriteSheet {
     pub counter_limit: u32,
     pub pointer_y_limit: f64,
 }
+#[derive(Debug, PartialEq, Clone)]
+pub struct TileToRestore {
+    pub tile_coordinates: Vec2usize,
+    pub counter: usize,
+    pub counter_limit: usize,
+    pub remove_tile: bool
+}
 #[derive(Debug)]
 pub struct Player {
     pub position: Vec2,
@@ -59,5 +66,7 @@ pub struct Player {
     pub images: HashMap<String, ThreadSafeImage>,
     pub sprite_sheets: HashMap<String, SpriteSheet>,
     pub sprite_counter: u32,
+    pub tiles_to_restore: Vec<TileToRestore>,
+    pub time_to_restore: usize,
     //pub is_on_the_ground: bool,
 }

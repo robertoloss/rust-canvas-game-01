@@ -101,6 +101,8 @@ impl Default for Player {
                     pointer_y_limit: 8. * tile_size,
                 }),
             ]),
+            time_to_restore: 200,
+            tiles_to_restore: vec![],
         }
     }
 }

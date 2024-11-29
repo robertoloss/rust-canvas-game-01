@@ -4,6 +4,8 @@ use crate::get_map;
 use crate::HtmlImageElement;
 use crate::get_context;
 use crate::Tile;
+use crate::TileToRestore;
+use crate::Vec2usize;
 use wasm_bindgen::JsValue;
 use crate::ThreadSafeImage;
 use crate::Player;
@@ -83,6 +85,13 @@ pub fn main_draw(
                                                     x - player.map_origin.x, 
                                                     y - player.map_origin.y
                                                 ));
+                                                let tiles_to_restore = TileToRestore {
+                                                    tile_coordinates: Vec2usize { x, y },
+                                                    counter: 0,
+                                                    counter_limit: player.time_to_restore,
+                                                    remove_tile: false,
+                                                };
+                                                player.tiles_to_restore.push(tiles_to_restore)
                                             }
                                         }
                                     }
