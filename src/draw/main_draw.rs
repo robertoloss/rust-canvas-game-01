@@ -75,7 +75,17 @@ pub fn main_draw(
                                         tile_size, 
                                         tile_size,
                                     )?;
-                                    if sand_tile.touched_by_player {
+                                    if sand_tile.just_restored {
+                                        sand_sprite_sheet.counter +=1;
+                                        if sand_sprite_sheet.counter > sand_sprite_sheet.counter_limit {
+                                            sand_sprite_sheet.counter = 0;
+                                            sand_sprite_sheet.tile_position_pointer_y -= 1.;
+                                            if sand_sprite_sheet.tile_position_pointer_y == 0. {
+                                                sand_tile.just_restored = false;
+                                            }
+                                        }
+                                    }
+                                    if sand_tile.touched_by_player && !sand_tile.just_restored {
                                         sand_sprite_sheet.counter += 1;
                                         if sand_sprite_sheet.counter > sand_sprite_sheet.counter_limit {
                                             sand_sprite_sheet.counter = 0;

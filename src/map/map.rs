@@ -14,6 +14,7 @@ pub struct Tile {
     pub position: Vec2,
     pub sheet: Option<SpriteSheet>,
     pub touched_by_player: bool,
+    pub just_restored: bool,
 }
 
 pub fn get_map() -> Vec<Vec<u8>> {

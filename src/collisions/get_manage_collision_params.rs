@@ -1,7 +1,7 @@
 use crate::collisions::types::*;
 use crate::Player;
 
-pub fn get_manage_collision_parameter(
+pub fn get_manage_collision_parameters(
     up_down: UpDown, 
     left_right: LeftRight, 
     player: &Player

@@ -41,7 +41,7 @@ pub fn manage_collision(
         off_tile_y_intersection,
         off_player_x,
         off_player_y
-    ) = get_manage_collision_parameter(up_down.clone(), left_right.clone(), player);
+    ) = get_manage_collision_parameters(up_down.clone(), left_right.clone(), player);
     
     let mut check_airborne = || {
         if let UpDown::Down = up_down {

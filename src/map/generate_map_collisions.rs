@@ -33,7 +33,8 @@ pub fn generate_map_collisions(
                     y: (y % num_of_tiles) as f64 * tile_size
                 },
                 sheet: None,
-                touched_by_player: false
+                touched_by_player: false,
+                just_restored: false,
             };
             if game_map[y][x] == 0 {
                 collisions_map.insert(

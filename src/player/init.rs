@@ -70,7 +70,7 @@ impl Default for Player {
                     pointer_y: 0.,
                     tile_position_pointer_y: 0.,
                     counter: 0,
-                    counter_limit: 6,
+                    counter_limit: 4,
                     pointer_y_limit: 6. * tile_size,
                 }),
                 (String::from("death"), 

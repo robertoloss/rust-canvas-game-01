@@ -3,6 +3,7 @@ mod utils;
 mod collisions;
 mod player;
 mod draw;
+use map::restore_sand_tiles::restore_sand_tiles;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::console::{self, log_1};
@@ -65,45 +66,10 @@ pub fn render() -> Result<(), JsValue> {
         }
     }
 
-    let origin_x = player.map_origin.x.clone();
-    let origin_y = player.map_origin.y.clone();
-    let sheet = Some(player.sprite_sheets.get("sand").unwrap().clone()); 
-    let tiles_to_restore = &mut player.tiles_to_restore;
-    for i in (0..tiles_to_restore.len()).rev() {
-        let tile= &mut player.tiles_to_restore[i];
-        if tile.counter >= tile.counter_limit {
-            let new_tile = Tile {
-                tile_pos: Vec2usize {
-                    x: tile.tile_coordinates.x - origin_x,
-                    y: tile.tile_coordinates.y - origin_y,
-                },
-                position: Vec2 {
-                    x: (tile.tile_coordinates.x - origin_x) as f64 * tile_size,
-                    y: (tile.tile_coordinates.y - origin_y) as f64 * tile_size
-                },
-                sheet: sheet.clone(),
-                touched_by_player: false
-            };
-            collision_map.insert(
-                ( 
-                    tile.tile_coordinates.x - origin_x, 
-                    tile.tile_coordinates.y - origin_y
-                ), 
-                new_tile.clone()
-            );
-            tile.remove_tile = true;
-        } else {
-            tile.counter += 1;
-        }
-    }
-    let tiles_to_restore2 = &mut player.tiles_to_restore;
-    tiles_to_restore2.retain(|tile| {
-        if tile.remove_tile {
-            false
-        } else {
-            true
-        }
-    });
+    restore_sand_tiles(
+        &mut player,
+        &mut collision_map
+    );
 
     manage_player_collision_with_tile(&mut(*player), &mut collision_map); 
 
