@@ -10,6 +10,8 @@ use wasm_bindgen::JsValue;
 use crate::ThreadSafeImage;
 use crate::Player;
 
+use super::manage_sprite_sheet::manage_sprite_sheet;
+
 pub fn main_draw(
     collision_map: &mut HashMap<(usize, usize), Tile>,
     player: &mut Player,
@@ -76,14 +78,17 @@ pub fn main_draw(
                                         tile_size,
                                     )?;
                                     if sand_tile.just_restored {
-                                        sand_sprite_sheet.counter +=1;
-                                        if sand_sprite_sheet.counter > sand_sprite_sheet.counter_limit {
-                                            sand_sprite_sheet.counter = 0;
-                                            sand_sprite_sheet.tile_position_pointer_y -= 1.;
-                                            if sand_sprite_sheet.tile_position_pointer_y == 0. {
-                                                sand_tile.just_restored = false;
-                                            }
-                                        }
+                                        manage_sprite_sheet(sand_sprite_sheet, -1., 0., 
+                                            || { sand_tile.just_restored = false; }
+                                        );
+                                        //sand_sprite_sheet.counter +=1;
+                                        //if sand_sprite_sheet.counter > sand_sprite_sheet.counter_limit {
+                                        //    sand_sprite_sheet.counter = 0;
+                                        //    sand_sprite_sheet.tile_position_pointer_y -= 1.;
+                                        //    if sand_sprite_sheet.tile_position_pointer_y == 0. {
+                                        //        sand_tile.just_restored = false;
+                                        //    }
+                                        //}
                                     }
                                     if sand_tile.touched_by_player && !sand_tile.just_restored {
                                         sand_sprite_sheet.counter += 1;
@@ -149,6 +154,7 @@ pub fn main_draw(
                     if player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y * player.tile_size >= player.sprite_sheets.get("death").unwrap().pointer_y_limit {
                         //player.death_sheet.tile_position_pointer_y = 0.;
                         player.position = player.position_spawn.clone();
+                        player.tiles_to_restore = vec![];
                         *collision_map = generate_map_collisions(
                             player.map_origin.x, 
                             player.map_origin.y, 

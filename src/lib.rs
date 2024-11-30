@@ -6,7 +6,6 @@ mod draw;
 use map::restore_sand_tiles::restore_sand_tiles;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
-use web_sys::console::{self, log_1};
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
 use std::{collections::HashMap, sync::Mutex};
 use crate::player::types::*;
@@ -42,9 +41,7 @@ pub fn render() -> Result<(), JsValue> {
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
     let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
-    if delta == 0. {
-        return Ok(())
-    }
+    if delta == 0. { return Ok(()) }
 
     if !player.is_dead {
         player_move(
@@ -65,7 +62,6 @@ pub fn render() -> Result<(), JsValue> {
             player.is_dead = true;
         }
     }
-
     restore_sand_tiles(
         &mut player,
         &mut collision_map
