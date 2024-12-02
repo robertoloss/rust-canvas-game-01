@@ -15,7 +15,7 @@ use crate::map::map::*;
 use crate::map::map_move::*;
 use crate::map::generate_map_collisions::*;
 use crate::draw::main_draw::*;
-use crate::collisions::normal_tile_collision::*;
+use crate::collisions::lethal_tile_collision::*;
 use crate::collisions::manage_player_collision_with_tile::manage_player_collision_with_tile;
 
 lazy_static! {
@@ -58,7 +58,7 @@ pub fn render() -> Result<(), JsValue> {
         )
     }
     for tile in lethal_tiles.iter() {
-        if normal_tile_collision(&tile, &player) {
+        if lethal_tile_collision(&tile, &player) {
             player.is_dead = true;
         }
     }

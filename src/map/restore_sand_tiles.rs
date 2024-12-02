@@ -1,5 +1,7 @@
 use std::collections::HashMap;
-use crate::{normal_tile_collision, Player, Tile, Vec2, Vec2usize};
+use web_sys::console;
+
+use crate::{collisions::normal_tile_collision::normal_tile_collision, Player, Tile, Vec2, Vec2usize};
 
 pub fn restore_sand_tiles(
     player: &mut Player,

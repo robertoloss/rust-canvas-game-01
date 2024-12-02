@@ -4,7 +4,9 @@ pub fn manage_sprite_sheet <F>(
     sheet: &mut SpriteSheet,
     step: f64,
     limit: f64,
-    mut action: F
+    mut action: F,
+    limit_eq: bool,
+    tile_size: f64,
 )
     where F: FnMut()
 {
@@ -12,8 +14,14 @@ pub fn manage_sprite_sheet <F>(
     if sheet.counter > sheet.counter_limit {
         sheet.counter = 0;
         sheet.tile_position_pointer_y += step;
-        if sheet.tile_position_pointer_y == limit {
-            action()
+        if limit_eq {
+            if sheet.tile_position_pointer_y * tile_size == limit {
+                action();
+            }
+        } else {
+            if sheet.tile_position_pointer_y * tile_size >= limit {
+                action()
+            }
         }
     }
 }
