@@ -43,26 +43,27 @@ pub fn manage_collision(
         off_player_y
     ) = get_manage_collision_parameters(up_down.clone(), left_right.clone(), player);
     
-    let mut check_airborne = || {
+    fn check_airborne(player: &mut Player, up_down: UpDown) {
         if let UpDown::Down = up_down {
             player.moves.airborne = false;
             player.moves.stop_jump = false;
         }
-    };
+    }
     let corner_tile_hit = tile_collision(corner_tile, collision_map).is_some();
+
     if corner_tile_hit {
         //console::log_1(&JsValue::from_str(""));
         if let Some(t) = tile_collision(next_to_corner_tile, collision_map) {
             player.velocity.y = 0.;
             player.position.y = t.position.y + off_tile_y;
-            check_airborne();
+            check_airborne(player, up_down.clone());
             t.touched_by_player = true;
         }
         if let Some(t) = tile_collision(opposite_y_to_corner_tile, collision_map) {
             player.velocity.x = 0.;
             player.position.x = t.position.x + off_tile_x;
-            player.can_cling = left_right.clone();
             t.touched_by_player = true;
+            player_can_cling(&left_right, t, player);
         } else {
             player.can_cling = LeftRight::None
         }
@@ -81,7 +82,7 @@ pub fn manage_collision(
             if from_below_above {
                 player.velocity.y = 0.;
                 player.position.y = t.position.y + off_tile_y;
-                check_airborne();
+                check_airborne(player, up_down);
                 t.touched_by_player = true;
             } else {
                 player.velocity.x = 0.;
@@ -97,7 +98,7 @@ pub fn manage_collision(
             //console::log_1(&JsValue::from_str("top right ---"));
             player.velocity.y = 0.;
             player.position.y = t.position.y + off_tile_y;
-            check_airborne();
+            check_airborne(player, up_down.clone());
             t.touched_by_player = true;
         }
         if let Some(t) = tile_collision(opposite_y_to_corner_tile, collision_map) {

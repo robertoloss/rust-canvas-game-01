@@ -46,7 +46,7 @@ impl Default for Player {
             wants_to_cling: false,
             delta: 0.0,
             is_clinging: false,
-            clinging_tile_coord: None,
+            clinging_tile_coord: Some((0,0)),
             images: HashMap::from([
                 (String::from("tile"), ThreadSafeImage(None)),
                 (String::from("player"), ThreadSafeImage(None)),
@@ -103,6 +103,7 @@ impl Default for Player {
             ]),
             time_to_restore: 200,
             tiles_to_restore: vec![],
+            show_debug: false,
         }
     }
 }

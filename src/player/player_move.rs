@@ -39,7 +39,7 @@ pub fn player_move(
     }
     if player.moves.stop_jump {
         if player.velocity.y <= 0.0 {
-            player.velocity.y += 0.3//3.
+            player.velocity.y += 0.3//3
         } 
     }
     if player.velocity.y < player.max_fall_velocity {
@@ -55,7 +55,7 @@ pub fn player_move(
                 player.velocity.x = 0.;
             } else {
                 player.is_clinging = false;
-                player.can_cling = LeftRight::None;
+                //player.can_cling = LeftRight::None;
             }
         }
     }

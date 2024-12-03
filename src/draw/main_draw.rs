@@ -10,6 +10,7 @@ use wasm_bindgen::JsValue;
 use crate::ThreadSafeImage;
 use crate::Player;
 
+use super::debug::debug;
 use super::manage_sprite_sheet::manage_sprite_sheet;
 
 pub fn main_draw(
@@ -94,13 +95,13 @@ pub fn main_draw(
                                                     x - player.map_origin.x, 
                                                     y - player.map_origin.y
                                                 ));
-                                                let tiles_to_restore = TileToRestore {
+                                                let tile_to_restore = TileToRestore {
                                                     tile_coordinates: Vec2usize { x, y },
                                                     counter: 0,
                                                     counter_limit: player.time_to_restore,
                                                     remove_tile: false,
                                                 };
-                                                player.tiles_to_restore.push(tiles_to_restore)
+                                                player.tiles_to_restore.push(tile_to_restore)
                                             }
                                         }
                                     }
@@ -164,10 +165,8 @@ pub fn main_draw(
                 return  Ok(())
             }
             
-            //ctx.set_font("14px Arial, sans-serif");
-            //ctx.set_fill_style(&JsValue::from_str("yellow"));
-            //let _ = ctx.fill_text(&player.delta.to_string(), 30., 15.);
-            //let _ = ctx.fill_text(&delta.to_string(), 30., 30.);
+            if player.show_debug { debug(ctx, player) };
+
             if player.is_clinging || (player.velocity.x == 0. || player.velocity.y != 0.) {
                 player.sprite_counter = 0;
             }

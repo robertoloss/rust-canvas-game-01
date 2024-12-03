@@ -38,6 +38,9 @@ pub fn movement(key_code: i32) {
         3 => {
             player.wants_to_cling = true;
         }
+        4 => {
+            player.show_debug = !player.show_debug;
+        }
         _ => {}
     }
 }

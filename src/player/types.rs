@@ -68,5 +68,6 @@ pub struct Player {
     pub sprite_counter: u32,
     pub tiles_to_restore: Vec<TileToRestore>,
     pub time_to_restore: usize,
+    pub show_debug: bool,
     //pub is_on_the_ground: bool,
 }

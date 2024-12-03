@@ -49,6 +49,7 @@ async function start() {
 				case 'ArrowRight': keyCode = 1; break;
 				case 'KeyX': keyCode = 2; break;
 				case 'KeyZ': keyCode = 3; break;
+				case 'KeyP': keyCode = 4; break;
 				default: keyCode = -1;
 		}
 		return keyCode
