@@ -54,5 +54,25 @@ export const images = [
 			name: 'hang',
 			isSheet: false,
 		},
+		{
+			src: './assets/p_cling_still_L_1.png',
+			name: 'cling_still_L',
+			isSheet: false,
+		},
+		{
+			src: './assets/p_cling_still_R_1.png',
+			name: 'cling_still_R',
+			isSheet: false,
+		},
+		{
+			src: './assets/p_cling_move_L_5.png',
+			name: 'cling_move_L',
+			isSheet: true,
+		},
+		{
+			src: './assets/p_cling_move_R_5.png',
+			name: 'cling_move_R',
+			isSheet: true,
+		},
 	]
 

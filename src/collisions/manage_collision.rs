@@ -54,7 +54,6 @@ pub fn manage_collision(
     fn check_hanging(player: &mut Player, up_down: UpDown, tile: &Tile) {
         if let UpDown::Up = up_down {
             if tile.hanging_tile {
-                console::log_1(&format!("Hanging!").into());
                 player.velocity.x = 0.;
                 player.is_hanging = true;
             }

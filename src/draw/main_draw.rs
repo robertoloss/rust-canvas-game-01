@@ -183,58 +183,110 @@ pub fn main_draw(
             let mut _image: &ThreadSafeImage = &ThreadSafeImage(None); 
             player.sprite_counter += 1;
 
-            match player.facing_right {
-                true => _image =  if player.is_clinging {
-                    &player.images.get("player_cling").unwrap()
-                } else if player.velocity.x == 0. || player.velocity.y != 0. { 
-                    &player.images.get("player").unwrap()
-                } else {
-                   &player.sprite_sheets.get("player_run_right").unwrap().sheet
-                },
-                false => _image = if player.is_clinging {
-                    &player.images.get("player_cling_left").unwrap()
-                } else if player.velocity.x == 0. || player.velocity.y != 0. {
-                    &player.images.get("player_left").unwrap()
-                } else {
-                   &player.sprite_sheets.get("player_run_left").unwrap().sheet
-                }
-            }
-
-            let mut pointer_y = 0.;
-            //console::log_1(&JsValue::from_str(&format!("{}", player.sprite_counter)));
-
-            let player_sprite = _image.0.clone().unwrap().into();
-            let is_run_right_sheet = std::ptr::eq(_image, 
-                   &player.sprite_sheets.get("player_run_right").unwrap().sheet
-);
-            let is_run_left_sheet = std::ptr::eq(_image, 
-                   &player.sprite_sheets.get("player_run_left").unwrap().sheet
-);
-
-            if is_run_right_sheet {
-                if player.sprite_counter >= player.sprite_sheets.get("player_run_right").unwrap().counter_limit {
-                    player.sprite_counter = 0;
-                    player.sprite_sheets.get_mut("player_run_right").unwrap().pointer_y += tile_size;
-                    if player.sprite_sheets.get("player_run_right").unwrap().pointer_y >= player.sprite_sheets.get("player_run_right").unwrap().pointer_y_limit {
-                        player.sprite_sheets.get_mut("player_run_right").unwrap().pointer_y = 0.
+            if !player.is_hanging {
+                match player.facing_right {
+                    true => _image =  if player.is_clinging {
+                        &player.images.get("player_cling").unwrap()
+                    } else if player.velocity.x == 0. || player.velocity.y != 0. { 
+                        &player.images.get("player").unwrap()
+                    } else {
+                       &player.sprite_sheets.get("player_run_right").unwrap().sheet
+                    },
+                    false => _image = if player.is_clinging {
+                        &player.images.get("player_cling_left").unwrap()
+                    } else if player.velocity.x == 0. || player.velocity.y != 0. {
+                        &player.images.get("player_left").unwrap()
+                    } else {
+                       &player.sprite_sheets.get("player_run_left").unwrap().sheet
                     }
                 }
-                pointer_y = player.sprite_sheets.get("player_run_right").unwrap().pointer_y;
-            } else if is_run_left_sheet {
-                if player.sprite_counter >= player.sprite_sheets.get("player_run_left").unwrap().counter_limit {
-                    player.sprite_counter = 0;
-                    player.sprite_sheets.get_mut("player_run_left").unwrap().pointer_y += tile_size;
-                    if player.sprite_sheets.get("player_run_left").unwrap().pointer_y >= player.sprite_sheets.get("player_run_right").unwrap().pointer_y_limit {
-                        player.sprite_sheets.get_mut("player_run_left").unwrap().pointer_y = 0.
+
+                let mut pointer_y = 0.;
+                //console::log_1(&JsValue::from_str(&format!("{}", player.sprite_counter)));
+
+                let player_sprite = _image.0.clone().unwrap().into();
+                let is_run_right_sheet = std::ptr::eq(_image, 
+                       &player.sprite_sheets.get("player_run_right").unwrap().sheet
+    );
+                let is_run_left_sheet = std::ptr::eq(_image, 
+                       &player.sprite_sheets.get("player_run_left").unwrap().sheet
+    );
+
+                if is_run_right_sheet {
+                    if player.sprite_counter >= player.sprite_sheets.get("player_run_right").unwrap().counter_limit {
+                        player.sprite_counter = 0;
+                        player.sprite_sheets.get_mut("player_run_right").unwrap().pointer_y += tile_size;
+                        if player.sprite_sheets.get("player_run_right").unwrap().pointer_y >= player.sprite_sheets.get("player_run_right").unwrap().pointer_y_limit {
+                            player.sprite_sheets.get_mut("player_run_right").unwrap().pointer_y = 0.
+                        }
+                    }
+                    pointer_y = player.sprite_sheets.get("player_run_right").unwrap().pointer_y;
+                } else if is_run_left_sheet {
+                    if player.sprite_counter >= player.sprite_sheets.get("player_run_left").unwrap().counter_limit {
+                        player.sprite_counter = 0;
+                        player.sprite_sheets.get_mut("player_run_left").unwrap().pointer_y += tile_size;
+                        if player.sprite_sheets.get("player_run_left").unwrap().pointer_y >= player.sprite_sheets.get("player_run_right").unwrap().pointer_y_limit {
+                            player.sprite_sheets.get_mut("player_run_left").unwrap().pointer_y = 0.
+                        }
+                    }
+                    pointer_y = player.sprite_sheets.get("player_run_left").unwrap().pointer_y;
+                }
+                ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
+                    &player_sprite,
+                    0., pointer_y, tile_size, tile_size,
+                    player.position.x, player.position.y, tile_size, tile_size,
+                )?;
+            } else {
+                match player.facing_right {
+                    true => _image = if player.velocity.x == 0. { 
+                            &player.images.get("cling_still_R").unwrap()
+                        } else {
+                           &player.sprite_sheets.get("cling_move_R").unwrap().sheet
+                        },
+                    false => _image = if player.velocity.x == 0. {
+                        &player.images.get("cling_still_L").unwrap()
+                    } else {
+                       &player.sprite_sheets.get("cling_move_L").unwrap().sheet
                     }
                 }
-                pointer_y = player.sprite_sheets.get("player_run_left").unwrap().pointer_y;
+
+                let mut pointer_y = 0.;
+                //console::log_1(&JsValue::from_str(&format!("{}", player.sprite_counter)));
+
+                let player_sprite = _image.0.clone().unwrap().into();
+                let is_run_right_sheet = std::ptr::eq(_image, 
+                       &player.sprite_sheets.get("cling_move_R").unwrap().sheet
+    );
+                let is_run_left_sheet = std::ptr::eq(_image, 
+                       &player.sprite_sheets.get("cling_move_L").unwrap().sheet
+    );
+
+                if is_run_right_sheet {
+                    if player.sprite_counter >= player.sprite_sheets.get("cling_move_R").unwrap().counter_limit {
+                        player.sprite_counter = 0;
+                        player.sprite_sheets.get_mut("cling_move_R").unwrap().pointer_y += tile_size;
+                        if player.sprite_sheets.get("cling_move_R").unwrap().pointer_y >= player.sprite_sheets.get("cling_move_R").unwrap().pointer_y_limit {
+                            player.sprite_sheets.get_mut("cling_move_R").unwrap().pointer_y = 0.
+                        }
+                    }
+                    pointer_y = player.sprite_sheets.get("cling_move_R").unwrap().pointer_y;
+                } else if is_run_left_sheet {
+                    if player.sprite_counter >= player.sprite_sheets.get("cling_move_L").unwrap().counter_limit {
+                        player.sprite_counter = 0;
+                        player.sprite_sheets.get_mut("cling_move_L").unwrap().pointer_y += tile_size;
+                        if player.sprite_sheets.get("cling_move_L").unwrap().pointer_y >= player.sprite_sheets.get("cling_move_L").unwrap().pointer_y_limit {
+                            player.sprite_sheets.get_mut("cling_move_L").unwrap().pointer_y = 0.
+                        }
+                    }
+                    pointer_y = player.sprite_sheets.get("cling_move_L").unwrap().pointer_y;
+                }
+                ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
+                    &player_sprite,
+                    0., pointer_y, tile_size, tile_size,
+                    player.position.x, player.position.y, tile_size, tile_size,
+                )?;
             }
-            ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
-                &player_sprite,
-                0., pointer_y, tile_size, tile_size,
-                player.position.x, player.position.y, tile_size, tile_size,
-            )?;
+
         },
         Err(e) => eprintln!("Error getting context: {:?}", e)
     }

@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use crate::{Player, Tile};
 
-
 pub fn player_can_still_hang(
     player: &mut Player, 
     collision_map: &mut HashMap<(usize, usize), Tile>
