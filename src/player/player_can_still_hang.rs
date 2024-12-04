@@ -7,7 +7,7 @@ pub fn player_can_still_hang(
 ) -> bool {
     let tile_size = player.tile_size;
     let can_still_hang = || -> bool {
-        if let Some(_) = collision_map
+        if let Some(t) = collision_map
             .get(&(
                 ((player.position.x + 
                   if player.facing_right { 
@@ -18,7 +18,10 @@ pub fn player_can_still_hang(
                 ) / tile_size).floor() as usize, 
                 ((player.position.y - tile_size) / tile_size).floor() as usize
             )) {
-            return true
+            if t.hanging_tile {
+                return true
+            }
+            return false
         }
         false
     };
