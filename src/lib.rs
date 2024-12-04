@@ -4,6 +4,7 @@ mod collisions;
 mod player;
 mod draw;
 use map::restore_sand_tiles::restore_sand_tiles;
+use player::player_can_still_hang::player_can_still_hang;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
@@ -68,6 +69,10 @@ pub fn render() -> Result<(), JsValue> {
     );
 
     manage_player_collision_with_tile(&mut(*player), &mut collision_map); 
+
+    if !player_can_still_hang(&mut player, &mut collision_map) {
+        player.is_hanging = false
+    }
 
     if !all_images_present(&player.images) { return Ok(()) }
     if !all_sprite_sheets_present(&player.sprite_sheets) { return Ok(()) }

@@ -24,6 +24,7 @@ pub fn movement(key_code: i32) {
             player.moves.stop_jump = false;
             player.moves.airborne = true;
             player.wants_to_cling = false;
+            player.is_hanging = false;
             if player.is_clinging {
                 player.is_clinging = false;
                 if player.moves.right || player.moves.left {
@@ -37,10 +38,13 @@ pub fn movement(key_code: i32) {
         },
         3 => {
             player.wants_to_cling = true;
-        }
+        },
         4 => {
             player.show_debug = !player.show_debug;
-        }
+        },
+        5 => {
+            player.is_hanging = false;
+        },
         _ => {}
     }
 }

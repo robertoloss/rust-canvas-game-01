@@ -49,5 +49,10 @@ export const images = [
 			name: 'sand',
 			isSheet: true,
 		},
+		{
+			src: './assets/hang.png',
+			name: 'hang',
+			isSheet: false,
+		},
 	]
 

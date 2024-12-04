@@ -46,6 +46,7 @@ impl Default for Player {
             wants_to_cling: false,
             delta: 0.0,
             is_clinging: false,
+            is_hanging: false,
             clinging_tile_coord: Some((0,0)),
             images: HashMap::from([
                 (String::from("tile"), ThreadSafeImage(None)),
@@ -53,6 +54,7 @@ impl Default for Player {
                 (String::from("player_left"), ThreadSafeImage(None)),
                 (String::from("player_cling"), ThreadSafeImage(None)),
                 (String::from("player_cling_left"), ThreadSafeImage(None)),
+                (String::from("hang"), ThreadSafeImage(None))
             ]),
             sprite_sheets: HashMap::from([
                 (String::from("lava"), 

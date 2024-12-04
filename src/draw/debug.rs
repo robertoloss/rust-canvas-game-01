@@ -10,7 +10,7 @@ pub fn debug(ctx: &CanvasRenderingContext2d, player: &Player) {
         32., 24.
     );
     let _ = ctx.fill_text(
-        &("is_clinging = ".to_owned() + &player.can_cling.to_string()).to_string(), 
+        &("can_cling = ".to_owned() + &player.can_cling.to_string()).to_string(), 
         32., 48.
     );
     let _ = ctx.fill_text(

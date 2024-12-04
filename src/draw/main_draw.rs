@@ -22,6 +22,8 @@ pub fn main_draw(
 {
     let tile: HtmlImageElement = player.images.get("tile")
         .unwrap().0.clone().unwrap().into();
+    let hang: HtmlImageElement = player.images.get("hang")
+        .unwrap().0.clone().unwrap().into();
     let lava_sheet: HtmlImageElement = player.sprite_sheets.get("lava")
         .unwrap().sheet.0.clone().unwrap().into();
     let sand_sheet: HtmlImageElement = player.sprite_sheets.get("sand")
@@ -42,6 +44,13 @@ pub fn main_draw(
                     match game_map[y][x] {
                         0 => ctx.draw_image_with_html_image_element_and_dw_and_dh(
                             &tile,
+                            (x % num_of_tiles) as f64 * tile_size, 
+                            (y % num_of_tiles) as f64 * tile_size, 
+                            tile_size,
+                            tile_size,
+                        )?,
+                        7 => ctx.draw_image_with_html_image_element_and_dw_and_dh(
+                            &hang,
                             (x % num_of_tiles) as f64 * tile_size, 
                             (y % num_of_tiles) as f64 * tile_size, 
                             tile_size,

@@ -30,6 +30,7 @@ pub fn restore_sand_tiles(
                 sheet: Some(cloned_sheet),
                 touched_by_player: false,
                 just_restored: true,
+                hanging_tile: false,
             };
             let overlap = normal_tile_collision(&new_tile, player);
             if !overlap {

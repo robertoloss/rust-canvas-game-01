@@ -50,6 +50,7 @@ async function start() {
 				case 'KeyX': keyCode = 2; break;
 				case 'KeyZ': keyCode = 3; break;
 				case 'KeyP': keyCode = 4; break;
+				case 'ArrowDown': keyCode = 5; break;
 				default: keyCode = -1;
 		}
 		return keyCode

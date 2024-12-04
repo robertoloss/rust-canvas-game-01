@@ -17,13 +17,17 @@ pub fn player_move(
         if player.velocity.x > -player.horizontal_velocity {
             player.velocity.x -= acceleration
         }
-    } else if player.velocity.x >= brake {
-        player.velocity.x -= brake
-    } else if player.velocity.x <= -brake {
-        player.velocity.x += brake
+    } else if !player.is_hanging {
+        if player.velocity.x >= brake {
+            player.velocity.x -= brake
+        } else if player.velocity.x <= -brake {
+            player.velocity.x += brake
+        } else {
+            player.velocity.x = 0.
+        }
     } else {
         player.velocity.x = 0.
-    }
+    } 
     //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
     if !player.is_clinging {
         if player.velocity.x > 0. {
@@ -59,6 +63,11 @@ pub fn player_move(
             }
         }
     }
-    player.position.x += player.velocity.x / delta;
-    player.position.y += player.velocity.y / delta;
+    if !player.is_hanging {
+        player.position.x += player.velocity.x / delta;
+        player.position.y += player.velocity.y / delta;
+    } else {
+        player.velocity.y = 0.;
+        player.position.x += player.velocity.x / delta;
+    }
 }

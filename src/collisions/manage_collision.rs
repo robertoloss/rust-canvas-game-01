@@ -1,3 +1,5 @@
+use web_sys::console;
+
 use crate::{Player,Tile};
 use std::collections::HashMap;
 use crate::collisions::types::{LeftRight,UpDown};
@@ -49,6 +51,15 @@ pub fn manage_collision(
             player.moves.stop_jump = false;
         }
     }
+    fn check_hanging(player: &mut Player, up_down: UpDown, tile: &Tile) {
+        if let UpDown::Up = up_down {
+            if tile.hanging_tile {
+                console::log_1(&format!("Hanging!").into());
+                player.velocity.x = 0.;
+                player.is_hanging = true;
+            }
+        }
+    }
     let corner_tile_hit = tile_collision(corner_tile, collision_map).is_some();
 
     if corner_tile_hit {
@@ -57,6 +68,7 @@ pub fn manage_collision(
             player.velocity.y = 0.;
             player.position.y = t.position.y + off_tile_y;
             check_airborne(player, up_down.clone());
+            check_hanging(player, up_down.clone(), &t);
             t.touched_by_player = true;
         }
         if let Some(t) = tile_collision(opposite_y_to_corner_tile, collision_map) {
@@ -67,8 +79,11 @@ pub fn manage_collision(
         } else {
             player.can_cling = LeftRight::None
         }
-        if tile_collision(next_to_corner_tile, collision_map).is_none() && tile_collision(opposite_y_to_corner_tile, collision_map).is_none() {
-                let t = tile_collision(corner_tile, collision_map).unwrap();
+        if 
+            tile_collision(next_to_corner_tile, collision_map).is_none() && 
+            tile_collision(opposite_y_to_corner_tile, collision_map).is_none() 
+        {
+            let t = tile_collision(corner_tile, collision_map).unwrap();
             let m = player.velocity.y / player.velocity.x;
             let intersection_y = m * (
                 (t.position.x + off_tile_x_intersection) - (player.position.x + off_player_x )
@@ -82,7 +97,8 @@ pub fn manage_collision(
             if from_below_above {
                 player.velocity.y = 0.;
                 player.position.y = t.position.y + off_tile_y;
-                check_airborne(player, up_down);
+                check_airborne(player, up_down.clone());
+                check_hanging(player, up_down.clone(), &t);
                 t.touched_by_player = true;
             } else {
                 player.velocity.x = 0.;

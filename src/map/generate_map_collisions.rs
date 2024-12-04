@@ -1,4 +1,7 @@
-use crate::{ Player, HashMap, Tile, Vec2, get_map, Vec2usize };
+use wasm_bindgen::UnwrapThrowExt;
+use web_sys::console;
+
+use crate::{ get_map, HashMap, Player, SpriteSheet, Tile, Vec2, Vec2usize };
 
 pub fn generate_map_collisions(
     origin_x: usize, 
@@ -32,6 +35,7 @@ pub fn generate_map_collisions(
                 sheet: None,
                 touched_by_player: false,
                 just_restored: false,
+                hanging_tile: false,
             };
             if game_map[y][x] == 0 {
                 collisions_map.insert(
@@ -44,6 +48,14 @@ pub fn generate_map_collisions(
                 collisions_map.insert(
                     ( (x % num_of_tiles) , (y % num_of_tiles) ), 
                     tile.clone()
+                );
+            }
+            if game_map[y][x] == 7 {
+                let mut new_tile = tile.clone();
+                new_tile.hanging_tile = true;
+                collisions_map.insert(
+                    ( (x % num_of_tiles) , (y % num_of_tiles) ), 
+                    new_tile
                 );
             }
             if game_map[y][x] == 9 {

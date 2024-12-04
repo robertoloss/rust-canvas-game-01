@@ -62,6 +62,7 @@ pub struct Player {
     pub wants_to_cling: bool,
     pub is_clinging: bool,
     pub clinging_tile_coord: Option<(usize,usize)>,
+    pub is_hanging: bool,
     pub delta: f64,
     pub images: HashMap<String, ThreadSafeImage>,
     pub sprite_sheets: HashMap<String, SpriteSheet>,
