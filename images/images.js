@@ -1,6 +1,6 @@
 export const images = [
 		{ 
-			src: './assets/Tile 8x8 v1.4-1.png.png' ,
+			src: './assets/Tile2_v1_0.png', //Tile 8x8 v1.4-1.png.png' ,
 			name: 'tile',
 			isSheet: false,
 		},

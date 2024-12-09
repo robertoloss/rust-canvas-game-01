@@ -55,6 +55,7 @@ pub struct Player {
     pub horizontal_velocity: f64,
     pub moves: Moves,
     pub facing_right: bool,
+    pub facing_left: bool,
     pub map_origin: Vec2usize,
     pub tile_size: f64,
     pub screen_tiles: usize,

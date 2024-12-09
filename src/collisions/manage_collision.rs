@@ -61,6 +61,11 @@ pub fn manage_collision(
     }
     let corner_tile_hit = tile_collision(corner_tile, collision_map).is_some();
 
+
+    //console::log_1(&format!("up_down: {:?}", up_down).into());
+    //console::log_1(&format!("left_right: {:?}", left_right).into());
+
+
     if corner_tile_hit {
         //console::log_1(&JsValue::from_str(""));
         if let Some(t) = tile_collision(next_to_corner_tile, collision_map) {
@@ -82,7 +87,15 @@ pub fn manage_collision(
             tile_collision(next_to_corner_tile, collision_map).is_none() && 
             tile_collision(opposite_y_to_corner_tile, collision_map).is_none() 
         {
+            console::log_1(&format!("only corner").into());
+            console::log_1(&format!("velocity.x {}", player.velocity.x).into());
+            console::log_1(&format!("position.x {}", player.position.x).into());
+            console::log_1(&format!("facing_left {}", player.facing_left).into());
+            console::log_1(&format!("facing_right {}", player.facing_right).into());
+            console::log_1(&format!("up_down: {:?}", up_down).into());
+            console::log_1(&format!("left_right: {:?}", left_right).into());
             let t = tile_collision(corner_tile, collision_map).unwrap();
+            console::log_1(&format!("{:?}", t).into());
             let m = player.velocity.y / player.velocity.x;
             let intersection_y = m * (
                 (t.position.x + off_tile_x_intersection) - (player.position.x + off_player_x )
@@ -93,6 +106,7 @@ pub fn manage_collision(
                 UpDown::Up => from_below_above = intersection_y > t.position.y + off_tile_y_intersection,
                 UpDown::Down => from_below_above = intersection_y < t.position.y + off_tile_y_intersection
             }
+            console::log_1(&format!("from_below_above {}", from_below_above).into());
             if from_below_above {
                 player.velocity.y = 0.;
                 player.position.y = t.position.y + off_tile_y;

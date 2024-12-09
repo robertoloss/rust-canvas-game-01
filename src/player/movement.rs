@@ -10,12 +10,14 @@ pub fn movement(key_code: i32) {
             player.moves.right = false;
             if !player.is_clinging {
                 player.facing_right = false;
+                player.facing_left = true;
             }
         },
         1 => {
             player.moves.right = true;
             player.moves.left = false;
             if !player.is_clinging {
+                player.facing_left = false;
                 player.facing_right = true;
             }
         },
@@ -29,6 +31,11 @@ pub fn movement(key_code: i32) {
                 player.is_clinging = false;
                 if player.moves.right || player.moves.left {
                     player.facing_right = if player.moves.right {
+                        true
+                    } else {
+                        false
+                    };
+                    player.facing_left = if player.moves.left {
                         true
                     } else {
                         false

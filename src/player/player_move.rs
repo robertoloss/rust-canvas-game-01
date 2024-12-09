@@ -31,10 +31,12 @@ pub fn player_move(
     //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
     if !player.is_clinging {
         if player.velocity.x > 0. {
-            player.facing_right = true
+            player.facing_right = true;
+            player.facing_left = false;
         }
         if player.velocity.x < 0. {
-            player.facing_right = false
+            player.facing_right = false;
+            player.facing_left = true;
         }
     }
     if player.moves.jump {
