@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use crate::generate_map_collisions;
 use crate::get_map;
+use crate::play_sound;
 use crate::HtmlImageElement;
 use crate::get_context;
 use crate::Tile;
@@ -95,6 +96,10 @@ pub fn main_draw(
                                         );
                                     }
                                     if sand_tile.touched_by_player && !sand_tile.just_restored {
+                                        if !player.sound_playing.get("sand").unwrap() {
+                                            play_sound("sand");
+                                            player.sound_playing.insert("sand".into(), true);
+                                        };
                                         sand_sprite_sheet.counter += 1;
                                         if sand_sprite_sheet.counter > sand_sprite_sheet.counter_limit {
                                             sand_sprite_sheet.counter = 0;
@@ -104,6 +109,7 @@ pub fn main_draw(
                                                     x - player.map_origin.x, 
                                                     y - player.map_origin.y
                                                 ));
+                                                player.sound_playing.insert("sand".into(), false);
                                                 let tile_to_restore = TileToRestore {
                                                     tile_coordinates: Vec2usize { x, y },
                                                     counter: 0,

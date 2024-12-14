@@ -4,8 +4,11 @@ import init, {
 } from "./pkg/game_canvas.js";
 import { images } from "./images/images.js";
 import { processImages } from "./images/processImages.js";
+import { SoundManager } from "./sounds/soundManager.js";
 
 let wasm;
+
+window.SoundManager = SoundManager;
 
 async function start() {
 	wasm = await init();
@@ -14,7 +17,6 @@ async function start() {
 	wasm.initialize()
 
 	processImages(images, set_image)
-	console.log("test")
 
 	const mobileJump = document.getElementById('mobile-jump')
 	const mobileCling = document.getElementById('mobile-cling')

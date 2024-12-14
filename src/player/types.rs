@@ -46,6 +46,7 @@ pub struct TileToRestore {
 pub struct Player {
     pub position: Vec2,
     pub is_dead: bool,
+    pub sound_playing: HashMap<String, bool>,
     pub position_spawn: Vec2,
     pub hitbox: Direction,
     pub velocity: Vec2,

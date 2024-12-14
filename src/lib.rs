@@ -26,6 +26,15 @@ lazy_static! {
 }
 
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(js_namespace = SoundManager)]
+    fn play(sound_name: &str);
+}
+pub fn play_sound(sound_name: &str) {
+    play(sound_name); 
+}
+
+#[wasm_bindgen]
 pub fn initialize() {
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();

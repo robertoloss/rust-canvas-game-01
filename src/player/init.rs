@@ -124,6 +124,9 @@ impl Default for Player {
                     pointer_y_limit: 3. * tile_size,
                 }),
             ]),
+            sound_playing: HashMap::from([
+                ("sand".to_string(), false)
+            ]),
             time_to_restore: 200,
             tiles_to_restore: vec![],
             show_debug: false,
