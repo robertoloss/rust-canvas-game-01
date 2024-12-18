@@ -1,36 +1,21 @@
 use std::collections::HashMap;
 use crate::generate_map_collisions;
-use crate::get_map;
-use crate::play_sound;
 use crate::HtmlImageElement;
 use crate::get_context;
 use crate::Tile;
-use crate::TileToRestore;
-use crate::Vec2usize;
 use wasm_bindgen::JsValue;
 use crate::ThreadSafeImage;
 use crate::Player;
-
 use super::debug::debug;
-use super::manage_sprite_sheet::manage_sprite_sheet;
+use super::draw_map::draw_map;
 
 pub fn main_draw(
     collision_map: &mut HashMap<(usize, usize), Tile>,
     player: &mut Player,
-    tile_size: f64,
-    num_of_tiles: usize,
-) -> Result<(), JsValue> 
+) 
+    -> Result<(), JsValue> 
 {
-    let tile: HtmlImageElement = player.images.get("tile")
-        .unwrap().0.clone().unwrap().into();
-    let hang: HtmlImageElement = player.images.get("hang")
-        .unwrap().0.clone().unwrap().into();
-    let lava_sheet: HtmlImageElement = player.sprite_sheets.get("lava")
-        .unwrap().sheet.0.clone().unwrap().into();
-    let sand_sheet: HtmlImageElement = player.sprite_sheets.get("sand")
-        .unwrap().sheet.0.clone().unwrap().into();
-    let game_map = get_map();
-
+    let tile_size = player.tile_size;
     match get_context(&(*player)) {
         Ok((context, canvas)) => {
             let ctx = &context;
@@ -39,94 +24,12 @@ pub fn main_draw(
             ctx.set_fill_style(&JsValue::from_str("black"));
             ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
 
-            for y in player.map_origin.y..player.map_origin.y + num_of_tiles {
-                for x in player.map_origin.x..player.map_origin.x + num_of_tiles {
-                    let lava_sprite_sheet = player.sprite_sheets.get("lava").unwrap();
-                    match game_map[y][x] {
-                        0 => ctx.draw_image_with_html_image_element_and_dw_and_dh(
-                            &tile,
-                            (x % num_of_tiles) as f64 * tile_size, 
-                            (y % num_of_tiles) as f64 * tile_size, 
-                            tile_size,
-                            tile_size,
-                        )?,
-                        7 => ctx.draw_image_with_html_image_element_and_dw_and_dh(
-                            &hang,
-                            (x % num_of_tiles) as f64 * tile_size, 
-                            (y % num_of_tiles) as f64 * tile_size, 
-                            tile_size,
-                            tile_size,
-                        )?,
-                        9 => ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
-                            &lava_sheet,
-                            0., 
-                            lava_sprite_sheet.tile_position_pointer_y * tile_size,
-                            tile_size, 
-                            tile_size,
-                            (x % num_of_tiles) as f64 * tile_size, 
-                            (y % num_of_tiles) as f64 * tile_size, 
-                            tile_size, 
-                            tile_size,
-                        )?,
-                        6 => {
-                            let sand_tile_option = collision_map.get_mut(&(
-                                    x - player.map_origin.x, 
-                                    y - player.map_origin.y
-                                ));
-                            if sand_tile_option.is_some() {
-                                let sand_tile = sand_tile_option.unwrap();
-                                //console::log_1(&format!("SAND {:?}", sand_tile).into());
-                                if let Some(sand_sprite_sheet) = &mut sand_tile.sheet {
-                                    ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
-                                        &sand_sheet,
-                                        0., 
-                                        sand_sprite_sheet.tile_position_pointer_y * tile_size,
-                                        tile_size, 
-                                        tile_size,
-                                        (x % num_of_tiles) as f64 * tile_size, 
-                                        (y % num_of_tiles) as f64 * tile_size, 
-                                        tile_size, 
-                                        tile_size,
-                                    )?;
-                                    if sand_tile.just_restored {
-                                        manage_sprite_sheet(sand_sprite_sheet, -1., 0., 
-                                            || { sand_tile.just_restored = false; },
-                                            true,
-                                            tile_size
-                                        );
-                                    }
-                                    if sand_tile.touched_by_player && !sand_tile.just_restored {
-                                        if !player.sound_playing.get("sand").unwrap() {
-                                            play_sound("sand");
-                                            player.sound_playing.insert("sand".into(), true);
-                                        };
-                                        sand_sprite_sheet.counter += 1;
-                                        if sand_sprite_sheet.counter > sand_sprite_sheet.counter_limit {
-                                            sand_sprite_sheet.counter = 0;
-                                            sand_sprite_sheet.tile_position_pointer_y += 1.;
-                                            if sand_sprite_sheet.tile_position_pointer_y * tile_size >= sand_sprite_sheet.pointer_y_limit {
-                                                collision_map.remove(&(
-                                                    x - player.map_origin.x, 
-                                                    y - player.map_origin.y
-                                                ));
-                                                player.sound_playing.insert("sand".into(), false);
-                                                let tile_to_restore = TileToRestore {
-                                                    tile_coordinates: Vec2usize { x, y },
-                                                    counter: 0,
-                                                    counter_limit: player.time_to_restore,
-                                                    remove_tile: false,
-                                                };
-                                                player.tiles_to_restore.push(tile_to_restore)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        _ => {}
-                     } 
-                }
-            }
+            draw_map(
+                player,
+                ctx,
+                collision_map
+            )?;
+
             let lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
             lava_sprite_sheet.counter += 1;
             if lava_sprite_sheet.counter > lava_sprite_sheet.counter_limit {

@@ -2,7 +2,7 @@ mod map;
 mod utils;
 mod collisions;
 mod player;
-mod draw;
+pub mod draw;
 use map::restore_sand_tiles::restore_sand_tiles;
 use player::player_can_still_hang::player_can_still_hang;
 use wasm_bindgen::prelude::*;
@@ -89,8 +89,6 @@ pub fn render() -> Result<(), JsValue> {
     let res = main_draw(
         &mut collision_map,
         &mut player,
-        tile_size,
-        num_of_tiles,
     );
     res
 }

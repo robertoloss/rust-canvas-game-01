@@ -176,26 +176,18 @@ function getDataViewMemory0() {
     }
     return cachedDataViewMemory0;
 }
-
-function isLikeNone(x) {
-    return x === undefined || x === null;
-}
 /**
- * @param {string} name
- * @param {boolean} sheet
- * @param {HTMLImageElement | undefined} [img]
+ * @param {number} key_code
  */
-export function set_image(name, sheet, img) {
-    const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
-    wasm.set_image(ptr0, len0, sheet, isLikeNone(img) ? 0 : addHeapObject(img));
+export function movement(key_code) {
+    wasm.movement(key_code);
 }
 
 /**
- * @param {number | undefined} [num]
+ * @param {number} key_code
  */
-export function get_and_give_f64(num) {
-    wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
+export function stop_movement(key_code) {
+    wasm.stop_movement(key_code);
 }
 
 export function initialize() {
@@ -216,18 +208,25 @@ export function render() {
     }
 }
 
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
 /**
- * @param {number} key_code
+ * @param {string} name
+ * @param {boolean} sheet
+ * @param {HTMLImageElement | undefined} [img]
  */
-export function movement(key_code) {
-    wasm.movement(key_code);
+export function set_image(name, sheet, img) {
+    const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.set_image(ptr0, len0, sheet, isLikeNone(img) ? 0 : addHeapObject(img));
 }
 
 /**
- * @param {number} key_code
+ * @param {number | undefined} [num]
  */
-export function stop_movement(key_code) {
-    wasm.stop_movement(key_code);
+export function get_and_give_f64(num) {
+    wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
 }
 
 function handleError(f, args) {
@@ -279,12 +278,12 @@ function __wbg_get_imports() {
         const ret = getObject(arg0);
         return addHeapObject(ret);
     };
+    imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
+        SoundManager.play(getStringFromWasm0(arg0, arg1));
+    };
     imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
         const ret = getStringFromWasm0(arg0, arg1);
         return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
-        SoundManager.play(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbg_instanceof_Window_6575cd7f1322f82f = function(arg0) {
         let result;
