@@ -1,13 +1,18 @@
 use std::collections::HashMap;
+use std::fmt::format;
 use crate::generate_map_collisions;
 use crate::HtmlImageElement;
 use crate::get_context;
 use crate::Tile;
 use wasm_bindgen::JsValue;
+use web_sys::console;
 use crate::ThreadSafeImage;
 use crate::Player;
 use super::debug::debug;
 use super::draw_map::draw_map;
+use super::manage_death::manage_death;
+use super::manage_sprite_sheet;
+use super::manage_sprite_sheet::manage_sprite_sheet;
 
 pub fn main_draw(
     collision_map: &mut HashMap<(usize, usize), Tile>,
@@ -30,62 +35,23 @@ pub fn main_draw(
                 collision_map
             )?;
 
-            let lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
-            lava_sprite_sheet.counter += 1;
-            if lava_sprite_sheet.counter > lava_sprite_sheet.counter_limit {
-                lava_sprite_sheet.counter = 0;
-                lava_sprite_sheet.tile_position_pointer_y += 1.;
-                if lava_sprite_sheet.tile_position_pointer_y * tile_size >= lava_sprite_sheet.pointer_y_limit {
-                    lava_sprite_sheet.tile_position_pointer_y = 0.
-                }
-            }
+            let mut lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
+            let lava_pointer_y_limit = lava_sprite_sheet.pointer_y_limit;
+            manage_sprite_sheet::<fn()>(
+                &mut lava_sprite_sheet,
+                1.0,
+                lava_pointer_y_limit,
+                None,
+                tile_size
+            );
 
             if player.is_dead {
-                let death_sheet: HtmlImageElement = player.sprite_sheets
-                    .get("death")
-                    .unwrap()
-                    .sheet
-                    .0
-                    .clone()
-                    .unwrap()
-                    .into();
-
-                ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
-                    &death_sheet,
-                    0., player.sprite_sheets.get("death").unwrap().tile_position_pointer_y * tile_size, 
-                    tile_size, 
-                    tile_size,
-                    player.position.x, 
-                    player.position.y, 
-                    tile_size, 
-                    tile_size,
-                )?;
-                player.sprite_sheets.get_mut("death").unwrap().counter += 1;
-                if player.sprite_sheets.get_mut("death").unwrap().counter > player.sprite_sheets.get("death").unwrap().counter_limit {
-                    player.sprite_sheets.get_mut("death").unwrap().counter = 0;
-                    player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y += 1.;
-                    if player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y * player.tile_size >= player.sprite_sheets.get("death").unwrap().pointer_y_limit {
-                        //player.death_sheet.tile_position_pointer_y = 0.;
-                        player.position = player.position_spawn.clone();
-                        player.tiles_to_restore = vec![];
-                        *collision_map = generate_map_collisions(
-                            player.map_origin.x, 
-                            player.map_origin.y, 
-                            player
-                        ).0;
-                        player.is_dead = false;
-                        player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y = 0.;
-                        return Ok(())
-                    }
-                }
-
-
-                return  Ok(())
+                return manage_death(player, &ctx, collision_map)
             }
             
             if player.show_debug { debug(ctx, player) };
 
-            if player.is_clinging || (player.velocity.x == 0. || player.velocity.y != 0.) {
+            if  player.is_clinging || (player.velocity.x == 0. || player.velocity.y != 0.) {
                 player.sprite_counter = 0;
             }
 
@@ -109,43 +75,46 @@ pub fn main_draw(
                        &player.sprite_sheets.get("player_run_left").unwrap().sheet
                     }
                 }
-
                 let mut pointer_y = 0.;
-                //console::log_1(&JsValue::from_str(&format!("{}", player.sprite_counter)));
 
                 let player_sprite = _image.0.clone().unwrap().into();
                 let is_run_right_sheet = std::ptr::eq(_image, 
                        &player.sprite_sheets.get("player_run_right").unwrap().sheet
-    );
+                );
                 let is_run_left_sheet = std::ptr::eq(_image, 
                        &player.sprite_sheets.get("player_run_left").unwrap().sheet
-    );
+                );
 
                 if is_run_right_sheet {
-                    if player.sprite_counter >= player.sprite_sheets.get("player_run_right").unwrap().counter_limit {
-                        player.sprite_counter = 0;
-                        player.sprite_sheets.get_mut("player_run_right").unwrap().pointer_y += tile_size;
-                        if player.sprite_sheets.get("player_run_right").unwrap().pointer_y >= player.sprite_sheets.get("player_run_right").unwrap().pointer_y_limit {
-                            player.sprite_sheets.get_mut("player_run_right").unwrap().pointer_y = 0.
-                        }
-                    }
-                    pointer_y = player.sprite_sheets.get("player_run_right").unwrap().pointer_y;
+                    let sheet = player.sprite_sheets.get_mut("player_run_right").unwrap();
+                    let limit = sheet.pointer_y_limit;
+                    manage_sprite_sheet::<fn()>(
+                        sheet,
+                        1.0,
+                        limit,
+                        None,
+                        tile_size
+                    );
+                    pointer_y = sheet.tile_position_pointer_y;
                 } else if is_run_left_sheet {
-                    if player.sprite_counter >= player.sprite_sheets.get("player_run_left").unwrap().counter_limit {
-                        player.sprite_counter = 0;
-                        player.sprite_sheets.get_mut("player_run_left").unwrap().pointer_y += tile_size;
-                        if player.sprite_sheets.get("player_run_left").unwrap().pointer_y >= player.sprite_sheets.get("player_run_right").unwrap().pointer_y_limit {
-                            player.sprite_sheets.get_mut("player_run_left").unwrap().pointer_y = 0.
-                        }
-                    }
-                    pointer_y = player.sprite_sheets.get("player_run_left").unwrap().pointer_y;
+                    let sheet = player.sprite_sheets.get_mut("player_run_left").unwrap();
+                    let limit = sheet.pointer_y_limit;
+                    manage_sprite_sheet::<fn()>(
+                        sheet,
+                        1.0,
+                        limit,
+                        None,
+                        tile_size
+                    );
+                    pointer_y = sheet.tile_position_pointer_y;
                 }
                 ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                     &player_sprite,
-                    0., pointer_y, tile_size, tile_size,
+                    0., pointer_y * tile_size, tile_size, tile_size,
                     player.position.x, player.position.y, tile_size, tile_size,
                 )?;
-            } else {
+            } 
+            else {
                 match player.facing_right {
                     true => _image = if player.velocity.x == 0. { 
                             &player.images.get("cling_still_R").unwrap()
@@ -160,7 +129,6 @@ pub fn main_draw(
                 }
 
                 let mut pointer_y = 0.;
-                //console::log_1(&JsValue::from_str(&format!("{}", player.sprite_counter)));
 
                 let player_sprite = _image.0.clone().unwrap().into();
                 let is_run_right_sheet = std::ptr::eq(_image, 
@@ -191,8 +159,14 @@ pub fn main_draw(
                 }
                 ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                     &player_sprite,
-                    0., pointer_y, tile_size, tile_size,
-                    player.position.x, player.position.y, tile_size, tile_size,
+                    0., 
+                    pointer_y, 
+                    tile_size, 
+                    tile_size,
+                    player.position.x, 
+                    player.position.y, 
+                    tile_size, 
+                    tile_size,
                 )?;
             }
 

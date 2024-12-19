@@ -1,10 +1,11 @@
 use std::{collections::HashMap, u32};
+use web_sys::HtmlImageElement;
 use crate::Vec2usize;
 use crate::collisions::types::LeftRight;
 
 #[derive(Clone)]
 #[derive(Debug, Default)]
-pub struct ThreadSafeImage(pub Option<wasm_bindgen::JsValue>);
+pub struct ThreadSafeImage(pub Option<HtmlImageElement>);
 unsafe impl Send for ThreadSafeImage {}
 unsafe impl Sync for ThreadSafeImage {}
 

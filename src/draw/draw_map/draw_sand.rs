@@ -42,9 +42,11 @@ pub fn draw_sand(
                 tile_size,
             )?;
             if sand_tile.just_restored {
-                manage_sprite_sheet(sand_sprite_sheet, -1., 0., 
-                    || { sand_tile.just_restored = false; },
-                    true,
+                manage_sprite_sheet(
+                    sand_sprite_sheet, 
+                    -1., 
+                    0., 
+                    Some(|| { sand_tile.just_restored = false; }),
                     tile_size
                 );
             }

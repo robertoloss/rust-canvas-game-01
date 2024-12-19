@@ -179,13 +179,6 @@ function getDataViewMemory0() {
 /**
  * @param {number} key_code
  */
-export function movement(key_code) {
-    wasm.movement(key_code);
-}
-
-/**
- * @param {number} key_code
- */
 export function stop_movement(key_code) {
     wasm.stop_movement(key_code);
 }
@@ -206,6 +199,13 @@ export function render() {
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
+}
+
+/**
+ * @param {number} key_code
+ */
+export function movement(key_code) {
+    wasm.movement(key_code);
 }
 
 function isLikeNone(x) {
@@ -278,12 +278,12 @@ function __wbg_get_imports() {
         const ret = getObject(arg0);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
-        SoundManager.play(getStringFromWasm0(arg0, arg1));
-    };
     imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
         const ret = getStringFromWasm0(arg0, arg1);
         return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
+        SoundManager.play(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbg_instanceof_Window_6575cd7f1322f82f = function(arg0) {
         let result;
@@ -302,9 +302,6 @@ function __wbg_get_imports() {
     imports.wbg.__wbg_getElementById_734c4eac4fec5911 = function(arg0, arg1, arg2) {
         const ret = getObject(arg0).getElementById(getStringFromWasm0(arg1, arg2));
         return isLikeNone(ret) ? 0 : addHeapObject(ret);
-    };
-    imports.wbg.__wbg_log_f740dc2253ea759b = function(arg0) {
-        console.log(getObject(arg0));
     };
     imports.wbg.__wbg_instanceof_CanvasRenderingContext2d_775df7bd32f07559 = function(arg0) {
         let result;

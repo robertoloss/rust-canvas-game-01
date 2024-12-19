@@ -1,6 +1,7 @@
 use crate::{ PLAYER, ThreadSafeImage, SpriteSheet, HashMap, wasm_bindgen, Player, CanvasRenderingContext2d, HtmlCanvasElement, JsValue };
 use wasm_bindgen::JsCast;
 use crate::HtmlImageElement;
+use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub fn set_image(name: String, sheet: bool, img: Option<HtmlImageElement>) {
@@ -14,6 +15,7 @@ pub fn set_image(name: String, sheet: bool, img: Option<HtmlImageElement>) {
         }
     }
 }
+
 #[wasm_bindgen]
 pub fn get_and_give_f64(num: Option<f64>) {
     //console::log_1(&JsValue::from_str(&format!("{}", num)));
