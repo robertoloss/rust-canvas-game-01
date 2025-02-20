@@ -75,8 +75,13 @@ export const images = [
 			isSheet: true,
 		},
 		{
-			src: './assets/crawler_1_0.png',
+			src: './assets/crawler_1_1.png',
 			name: 'crawler_1_0',
+			isSheet: true,
+		},
+		{
+			src: './assets/crawler_1_1_R.png',
+			name: 'crawler_1_0_R',
 			isSheet: true,
 		},
 	]

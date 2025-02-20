@@ -1,7 +1,7 @@
 use wasm_bindgen::{JsValue, UnwrapThrowExt};
 use web_sys::console;
 
-use crate::{ enemies::{self, types::Crawler}, get_map, HashMap, Player, SpriteSheet, Tile, Vec2, Vec2usize, ENEMIES };
+use crate::{ enemies::{self, types::Crawler}, get_map, log_out_f, HashMap, Player, SpriteSheet, Tile, Vec2, Vec2usize, ENEMIES };
 
 pub fn generate_map_collisions(
     origin_x: usize, 

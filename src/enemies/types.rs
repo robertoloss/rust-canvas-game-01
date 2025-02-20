@@ -1,18 +1,21 @@
-use crate::{SpriteSheet, Vec2};
+use crate::{SpriteSheet, Vec2, PLAYER};
 
 pub trait EnemyTrait: Send + Sync {
     fn moves(&mut self);
     fn draw(&self);
     fn change_direction(&mut self);
+    fn get_direction(&self) -> &LeftRight;
+    fn direction_is_left(&self) -> bool;
     fn get_spritesheet(&mut self) -> &mut SpriteSheet;
     fn position(&self) -> Vec2;
 }
-#[derive(PartialEq)]
+#[derive(PartialEq,Debug)]
 pub enum LeftRight {
     Left,
     Right
 }
 
+#[derive(Debug)]
 pub struct Crawler {
     pub position: Vec2,
     pub velocity: Vec2,
@@ -24,6 +27,12 @@ pub struct Crawler {
 }
 
 impl EnemyTrait for Crawler {
+    fn direction_is_left(&self) -> bool {
+        self.direction == LeftRight::Left
+    }
+    fn get_direction(&self) -> &LeftRight {
+        &self.direction
+    }
     fn draw(&self) {
         todo!()
     }
