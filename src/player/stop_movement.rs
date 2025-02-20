@@ -1,9 +1,10 @@
+use web_sys::console;
+
 use crate::PLAYER;
 use crate::wasm_bindgen;
 
 #[wasm_bindgen]
 pub fn stop_movement(key_code: i32) {
-    //console::log_1(&JsValue::from_str(&format!("key_code: {}", key_code)));
     let mut player = PLAYER.lock().unwrap();
     match key_code {
         0 => {

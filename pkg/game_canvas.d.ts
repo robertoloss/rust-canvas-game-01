@@ -3,13 +3,13 @@
 /**
  * @param {number} key_code
  */
-export function stop_movement(key_code: number): void;
-export function initialize(): void;
-export function render(): void;
+export function movement(key_code: number): void;
 /**
  * @param {number} key_code
  */
-export function movement(key_code: number): void;
+export function stop_movement(key_code: number): void;
+export function initialize(): void;
+export function render(): void;
 /**
  * @param {string} name
  * @param {boolean} sheet
@@ -25,16 +25,19 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly movement: (a: number) => void;
   readonly stop_movement: (a: number) => void;
   readonly initialize: () => void;
-  readonly render: (a: number) => void;
-  readonly movement: (a: number) => void;
+  readonly render: () => Array;
   readonly set_image: (a: number, b: number, c: number, d: number) => void;
   readonly get_and_give_f64: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
-  readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
+  readonly __wbindgen_export_2: WebAssembly.Table;
+  readonly __externref_table_dealloc: (a: number) => void;
+  readonly __externref_table_alloc: () => number;
   readonly __wbindgen_exn_store: (a: number) => void;
+  readonly __wbindgen_start: () => void;
 }
 
 export type SyncInitInput = BufferSource | WebAssembly.Module;

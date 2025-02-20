@@ -1,7 +1,7 @@
-use wasm_bindgen::UnwrapThrowExt;
+use wasm_bindgen::{JsValue, UnwrapThrowExt};
 use web_sys::console;
 
-use crate::{ get_map, HashMap, Player, SpriteSheet, Tile, Vec2, Vec2usize };
+use crate::{ enemies::{self, types::Crawler}, get_map, HashMap, Player, SpriteSheet, Tile, Vec2, Vec2usize, ENEMIES };
 
 pub fn generate_map_collisions(
     origin_x: usize, 
@@ -17,6 +17,7 @@ pub fn generate_map_collisions(
     let game_map = get_map();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
+    let mut enemies = ENEMIES.lock().unwrap();
     
     if game_map.len() == 0 {
         return (collisions_map,lethal_tiles)
@@ -60,6 +61,32 @@ pub fn generate_map_collisions(
             }
             if game_map[y][x] == 9 {
                 lethal_tiles.push(tile.clone())
+            }
+            if game_map[y][x] == 2 {
+                let abs_x = (x % num_of_tiles) as f64 * tile_size;
+                let abs_y = (y % num_of_tiles) as f64 * tile_size;
+                let crawler = Crawler {
+                    position: Vec2 {
+                        x: abs_x,
+                        y: abs_y
+                    },
+                    initial_position: Vec2 {
+                        x: abs_x,
+                        y: abs_y
+                    },
+                    limit_position: Vec2 {
+                        x: (abs_x - (tile_size * 2.)),
+                        y: abs_y
+                    },
+                    direction: enemies::types::LeftRight::Left,
+                    initial_direction: enemies::types::LeftRight::Left,
+                    velocity: Vec2 {
+                        x: -0.5,
+                        y: 0.,
+                    },
+                    spritesheet: player.sprite_sheets.get("crawler_1_0").unwrap().clone(),
+                };
+                enemies.push(Box::new(crawler));
             }
         }
     }

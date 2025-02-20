@@ -74,5 +74,10 @@ export const images = [
 			name: 'cling_move_R',
 			isSheet: true,
 		},
+		{
+			src: './assets/crawler_1_0.png',
+			name: 'crawler_1_0',
+			isSheet: true,
+		},
 	]
 

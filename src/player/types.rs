@@ -34,6 +34,8 @@ pub struct SpriteSheet {
     pub tile_position_pointer_y: f64,
     pub counter: u32,
     pub counter_limit: u32,
+    pub wait_counter: u32,
+    pub wait_counter_limit: u32,
     pub pointer_y_limit: f64,
 }
 #[derive(Debug, PartialEq, Clone)]

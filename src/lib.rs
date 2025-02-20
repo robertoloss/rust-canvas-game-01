@@ -2,7 +2,10 @@ mod map;
 mod utils;
 mod collisions;
 mod player;
+mod enemies;
 pub mod draw;
+use enemies::enemies_move::enemies_move;
+use enemies::types::EnemyTrait;
 use map::restore_sand_tiles::restore_sand_tiles;
 use player::player_can_still_hang::player_can_still_hang;
 use wasm_bindgen::prelude::*;
@@ -23,6 +26,7 @@ lazy_static! {
     static ref PLAYER: Mutex<Player> = Mutex::new(Player::default());
     static ref MAP_COLLISIONS: Mutex<HashMap<(usize,usize), Tile>> = Mutex::new(HashMap::new());
     static ref LETHAL_TILES: Mutex<Vec<Tile>> = Mutex::new(vec![]);
+    static ref ENEMIES: Mutex<Vec<Box<dyn EnemyTrait>>> = Mutex::new(vec![]);
 }
 
 #[wasm_bindgen]
@@ -52,6 +56,8 @@ pub fn render() -> Result<(), JsValue> {
     let num_of_tiles = player.screen_tiles;
     let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
     if delta == 0. { return Ok(()) }
+
+    enemies_move();
 
     if !player.is_dead {
         player_move(

@@ -1,6 +1,4 @@
-mod draw_this;
-mod draw_this_sw_sh;
-mod draw_sand;
+use super::draw_map::*;
 use std::collections::HashMap;
 use crate::JsValue;
 use draw_sand::draw_sand;
@@ -9,7 +7,7 @@ use draw_this_sw_sh::draw_this_sw_sh;
 use web_sys::{CanvasRenderingContext2d, HtmlImageElement};
 use crate::{get_map, Player, Tile};
 
-pub fn draw_map(
+pub fn do_draw_map(
     player: &mut Player,
     ctx: &CanvasRenderingContext2d,
     collision_map: &mut HashMap<(usize, usize), Tile>,

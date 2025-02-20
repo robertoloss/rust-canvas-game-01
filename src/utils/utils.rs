@@ -1,7 +1,9 @@
+use std::fmt::Debug;
+
 use crate::{ PLAYER, ThreadSafeImage, SpriteSheet, HashMap, wasm_bindgen, Player, CanvasRenderingContext2d, HtmlCanvasElement, JsValue };
 use wasm_bindgen::JsCast;
+use web_sys::console;
 use crate::HtmlImageElement;
-use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub fn set_image(name: String, sheet: bool, img: Option<HtmlImageElement>) {
@@ -10,8 +12,11 @@ pub fn set_image(name: String, sheet: bool, img: Option<HtmlImageElement>) {
     if !sheet {
         player.images.insert(name, image);
     } else {
+        console::log_1(&JsValue::from_str(&name));
         if let Some(sheet) = player.sprite_sheets.get_mut(&name) {
             sheet.sheet = image;
+        } else {
+            console::log_1(&JsValue::from_str(&format!("There was a problem while loading an image")))
         }
     }
 }
@@ -48,3 +53,10 @@ pub fn get_context(player: &Player) -> Result<(CanvasRenderingContext2d,HtmlCanv
     Ok((context,canvas))
 }
 
+
+pub fn log_out_s(s: &str) {
+    console::log_1(&JsValue::from_str(s))
+}
+pub fn log_out_f<T: Debug>(f: T) {
+    console::log_1(&JsValue::from_str(&format!("{:?}", f)))
+}

@@ -1,18 +1,18 @@
 use std::collections::HashMap;
-use std::fmt::format;
-use crate::generate_map_collisions;
-use crate::HtmlImageElement;
 use crate::get_context;
 use crate::Tile;
+use crate::ENEMIES;
+use draw_abs::draw_abs;
+use draw_this_sw_sh::draw_this_sw_sh;
 use wasm_bindgen::JsValue;
-use web_sys::console;
+use web_sys::HtmlImageElement;
 use crate::ThreadSafeImage;
 use crate::Player;
 use super::debug::debug;
-use super::draw_map::draw_map;
 use super::manage_death::manage_death;
-use super::manage_sprite_sheet;
 use super::manage_sprite_sheet::manage_sprite_sheet;
+use super::do_draw_map::do_draw_map;
+use super::draw_map::*;
 
 pub fn main_draw(
     collision_map: &mut HashMap<(usize, usize), Tile>,
@@ -20,16 +20,17 @@ pub fn main_draw(
 ) 
     -> Result<(), JsValue> 
 {
+    let mut enemies = ENEMIES.lock().unwrap();
     let tile_size = player.tile_size;
     match get_context(&(*player)) {
         Ok((context, canvas)) => {
             let ctx = &context;
             ctx.set_image_smoothing_enabled(false);
             ctx.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
-            ctx.set_fill_style(&JsValue::from_str("black"));
+            ctx.set_fill_style_str(&"black");
             ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
 
-            draw_map(
+            do_draw_map(
                 player,
                 ctx,
                 collision_map
@@ -44,6 +45,34 @@ pub fn main_draw(
                 None,
                 tile_size
             );
+
+            for enemy in enemies.iter_mut() {
+                //console::log_1(&JsValue::from_str(&format!("{:?}",enemy.get_spritesheet())));
+                let position = enemy.position();
+                let sheet = enemy.get_spritesheet();
+                let limit = sheet.pointer_y_limit.clone();
+
+                manage_sprite_sheet::<fn()>(
+                    sheet,
+                    1.0,
+                    limit,
+                    None,
+                    tile_size
+                );
+                let img_sheet: HtmlImageElement = player
+                    .sprite_sheets
+                    .get("crawler_1_0") // add method to trait
+                    .unwrap().sheet.0.clone().unwrap().into();
+
+                draw_abs(
+                    &img_sheet, 
+                    sheet, 
+                    ctx, 
+                    player, 
+                    position.x,
+                    position.y
+                )?
+            }
 
             if player.is_dead {
                 return manage_death(player, &ctx, collision_map)

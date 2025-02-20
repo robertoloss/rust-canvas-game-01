@@ -1,4 +1,4 @@
-use crate::SpriteSheet;
+use crate::{log_out_f, SpriteSheet};
 
 pub fn manage_sprite_sheet <F>(
     sheet: &mut SpriteSheet,
@@ -9,6 +9,11 @@ pub fn manage_sprite_sheet <F>(
 )
     where F: FnMut()
 {
+    if sheet.wait_counter < sheet.wait_counter_limit {
+        sheet.wait_counter += 1;
+        return
+    }
+    sheet.wait_counter = 0;
     sheet.counter += 1;
     if sheet.counter > sheet.counter_limit {
         sheet.counter = 0;
