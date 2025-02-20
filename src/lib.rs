@@ -43,9 +43,10 @@ pub fn play_sound(sound_name: &str) {
 pub fn initialize() {
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
+    let mut enemies = ENEMIES.lock().unwrap();
     let player = PLAYER.lock().unwrap();
-    *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).0;
-    *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player)).1;
+    *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).0;
+    *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).1;
 }
 
 #[wasm_bindgen]
@@ -53,17 +54,16 @@ pub fn render() -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
+    let mut enemies = ENEMIES.lock().unwrap();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
     let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
     if delta == 0. { return Ok(()) }
 
-    enemies_move();
-
-    //enemies_check_collisions(&mut player);
-
+    enemies_move(&mut enemies);
 
     if !player.is_dead {
+        enemies_check_collisions(&mut player, &mut enemies);
         player_move(
             &mut player,
             delta,
@@ -75,6 +75,7 @@ pub fn render() -> Result<(), JsValue> {
             num_of_tiles,
             tile_size,
             &mut collision_map,
+            &mut enemies
         )
     }
     for tile in lethal_tiles.iter() {
@@ -99,6 +100,7 @@ pub fn render() -> Result<(), JsValue> {
     let res = main_draw(
         &mut collision_map,
         &mut player,
+        &mut enemies
     );
     res
 }

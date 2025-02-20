@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use crate::enemies::types::EnemyTrait;
 use crate::enemies::types::LeftRight;
 use crate::get_context;
 use crate::Tile;
@@ -17,10 +18,10 @@ use super::draw_map::*;
 pub fn main_draw(
     collision_map: &mut HashMap<(usize, usize), Tile>,
     player: &mut Player,
+    enemies: &mut Vec<Box<dyn EnemyTrait>>,
 ) 
     -> Result<(), JsValue> 
 {
-    let mut enemies = ENEMIES.lock().unwrap();
     let tile_size = player.tile_size;
     match get_context(&(*player)) {
         Ok((context, canvas)) => {
@@ -83,7 +84,7 @@ pub fn main_draw(
             }
 
             if player.is_dead {
-                return manage_death(player, &ctx, collision_map)
+                return manage_death(player, &ctx, collision_map, enemies)
             }
             
             if player.show_debug { debug(ctx, player) };

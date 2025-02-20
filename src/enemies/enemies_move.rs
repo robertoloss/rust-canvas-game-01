@@ -1,9 +1,6 @@
-use crate::ENEMIES;
+use super::types::EnemyTrait;
 
-
-pub fn enemies_move() {
-    let mut enemies = ENEMIES.lock().unwrap();
-
+pub fn enemies_move(enemies: &mut Vec<Box<dyn EnemyTrait>>) {
     for enemy in enemies.iter_mut() {
         enemy.moves();
     }

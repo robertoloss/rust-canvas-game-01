@@ -1,12 +1,13 @@
 use wasm_bindgen::{JsValue, UnwrapThrowExt};
 use web_sys::console;
 
-use crate::{ enemies::{self, types::Crawler}, get_map, log_out_f, HashMap, Player, SpriteSheet, Tile, Vec2, Vec2usize, ENEMIES };
+use crate::{ enemies::{self, types::{Crawler, EnemyTrait}}, get_map, log_out_f, HashMap, Player, SpriteSheet, Tile, Vec2, Vec2usize, ENEMIES };
 
 pub fn generate_map_collisions(
     origin_x: usize, 
     origin_y: usize, 
-    player: &Player
+    player: &Player,
+    enemies: &mut Vec<Box<dyn EnemyTrait>>
 ) -> (
     HashMap<(usize,usize), 
     Tile>,
@@ -17,7 +18,6 @@ pub fn generate_map_collisions(
     let game_map = get_map();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
-    let mut enemies = ENEMIES.lock().unwrap();
     *enemies = vec![];
     
     if game_map.len() == 0 {
