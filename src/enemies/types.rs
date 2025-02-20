@@ -1,4 +1,4 @@
-use crate::{SpriteSheet, Vec2, PLAYER};
+use crate::{SpriteSheet, Vec2, Player};
 
 pub trait EnemyTrait: Send + Sync {
     fn moves(&mut self);
@@ -8,6 +8,7 @@ pub trait EnemyTrait: Send + Sync {
     fn direction_is_left(&self) -> bool;
     fn get_spritesheet(&mut self) -> &mut SpriteSheet;
     fn position(&self) -> Vec2;
+    fn check_collision(&self, player: &mut Player);
 }
 #[derive(PartialEq,Debug)]
 pub enum LeftRight {
@@ -27,6 +28,14 @@ pub struct Crawler {
 }
 
 impl EnemyTrait for Crawler {
+    fn check_collision(&self, player: &mut Player) {
+        let tile_size = player.tile_size;
+        if self.position.x > player.position.x + tile_size  { return };
+        if self.position.x + tile_size < player.position.x  { return };
+        if self.position.y > player.position.y + tile_size  { return };
+        if self.position.y + tile_size < player.position.y  { return };
+        player.is_dead = true;
+    }
     fn direction_is_left(&self) -> bool {
         self.direction == LeftRight::Left
     }

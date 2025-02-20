@@ -4,6 +4,7 @@ mod collisions;
 mod player;
 mod enemies;
 pub mod draw;
+use enemies::enemies_check_collision::enemies_check_collisions;
 use enemies::enemies_move::enemies_move;
 use enemies::types::EnemyTrait;
 use map::restore_sand_tiles::restore_sand_tiles;
@@ -58,6 +59,9 @@ pub fn render() -> Result<(), JsValue> {
     if delta == 0. { return Ok(()) }
 
     enemies_move();
+
+    //enemies_check_collisions(&mut player);
+
 
     if !player.is_dead {
         player_move(

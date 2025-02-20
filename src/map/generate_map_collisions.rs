@@ -18,6 +18,7 @@ pub fn generate_map_collisions(
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
     let mut enemies = ENEMIES.lock().unwrap();
+    *enemies = vec![];
     
     if game_map.len() == 0 {
         return (collisions_map,lethal_tiles)
