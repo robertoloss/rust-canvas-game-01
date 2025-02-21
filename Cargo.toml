@@ -3,6 +3,9 @@ name = "game_canvas"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+default = ["console_error_panic_hook"]
+
 [dependencies]
 wasm-bindgen = "0.2"
 web-sys = { version = "0.3.72", features = [
@@ -13,7 +16,7 @@ web-sys = { version = "0.3.72", features = [
 	"CanvasRenderingContext2d",
 	"console"
 ] }
-
+console_error_panic_hook = { version = "0.1.7", optional = true }
 lazy_static = "1.4"
 js-sys = "0.3.70"
 web-time = "1.1.0"

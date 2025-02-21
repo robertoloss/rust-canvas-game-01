@@ -77,6 +77,7 @@ export const images = [
 		{
 			src: './assets/crawler_1_1.png',
 			name: 'crawler_1_0',
+      enemy: true,
 			isSheet: true,
 		},
 		{

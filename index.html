@@ -9,7 +9,7 @@
             touch-action: manipulation;
         }
 				@media (min-width: 1200px) {
-          #mobile-jump, #mobile-cling, #mobile-left-and-right {
+          #mobile-jump, #mobile-cling, #mobile-left-and-right, #left-container {
             display: none !important;
           }
         }
@@ -71,39 +71,77 @@
 			</h1>
 			<canvas id="gameCanvas" width="640" height="640"></canvas>
 		</div>
-		<div
-			id="mobile-left-and-right"
-			style="
-				display: flex;
-				flex-grow: 1;
-				flex-direction: row;
-				align-self: end;
-				max-width: 200px;
-				height: 100px;
-			"
-		>
-			<div
-				id="mobile-left"
-				style="
-					display: flex;
-					flex-grow: 1;
-					max-width: 100px;
-					height: 100px;
-					background-color: red;
-					align-self: end;
-				"
-				></div>
-			<div
-				id="mobile-right"
-				style="
-					display: flex;
-					flex-grow: 1;
-					max-width: 100px;
-					height: 100px;
-					background-color: darkblue;
-					align-self: end;
-				"
-				></div>
+    <div
+      id="left-container"
+      style="
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        min-width: 160px;
+        max-width: 200px;
+        align-self: end;
+        height: 200px;
+      "
+    >
+      <div
+        id="mobile-left-and-right"
+        style="
+          display: flex;
+          flex-grow: 1;
+          flex-direction: row;
+          align-self: end;
+          width: 100%;
+          max-width: 200px;
+          height: 100px;
+        "
+      >
+        <div
+          id="mobile-left"
+          style="
+            display: flex;
+            flex-grow: 1;
+            max-width: 100px;
+            height: 100px;
+            background-color: red;
+            align-self: end;
+          "
+          ></div>
+        <div
+          id="mobile-right"
+          style="
+            display: flex;
+            flex-grow: 1;
+            max-width: 100px;
+            height: 100px;
+            background-color: darkblue;
+            align-self: end;
+          "
+          ></div>
+      </div>
+      <div
+        id="mobile-down-container"
+        style="
+          display: flex;
+          flex-direction: row;
+          align-self: end;
+          justify-content: center;
+          width: 100%;
+          max-width: 200px;
+          height: 50px;
+        "
+      >
+        <div
+          id="mobile-down"
+          style="
+            display: flex;
+            flex-grow: 1;
+            max-width: 100px;
+            height: 50px;
+            background-color: green;
+            align-self: end;
+          "
+          ></div>
+      </div>
 		</div>
     <script type="module" src='./index.js'></script>
 </body>

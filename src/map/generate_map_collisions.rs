@@ -1,7 +1,5 @@
-use wasm_bindgen::{JsValue, UnwrapThrowExt};
-use web_sys::console;
-
-use crate::{ enemies::{self, types::{Crawler, EnemyTrait}}, get_map, log_out_f, HashMap, Player, SpriteSheet, Tile, Vec2, Vec2usize, ENEMIES };
+use std::collections::HashMap;
+use crate::{ enemies::{self, crawler::crawler::Crawler, types::EnemyTrait}, get_map, get_random, log_out_f, Player, Tile, Vec2, Vec2usize };
 
 pub fn generate_map_collisions(
     origin_x: usize, 
@@ -9,8 +7,7 @@ pub fn generate_map_collisions(
     player: &Player,
     enemies: &mut Vec<Box<dyn EnemyTrait>>
 ) -> (
-    HashMap<(usize,usize), 
-    Tile>,
+    HashMap<(usize,usize),Tile>,
     Vec<Tile>
 ) {
     let mut collisions_map = HashMap::new(); 
@@ -24,7 +21,9 @@ pub fn generate_map_collisions(
         return (collisions_map,lethal_tiles)
     }
     for y in origin_y..origin_y + num_of_tiles {
+        if y >= game_map.len() { return (collisions_map,lethal_tiles) }
         for x in origin_x..origin_x + num_of_tiles {
+            if x >= game_map[y].len() { return (collisions_map,lethal_tiles) }
             let mut tile = Tile {
                 tile_pos: Vec2usize {
                     x: (x % num_of_tiles),
@@ -63,7 +62,10 @@ pub fn generate_map_collisions(
             if game_map[y][x] == 9 {
                 lethal_tiles.push(tile.clone())
             }
+
             if game_map[y][x] == 2 {
+                let random = get_random(0.1, 0.9);
+                let sheet_name = "crawler_1_0".to_string();
                 let abs_x = (x % num_of_tiles) as f64 * tile_size;
                 let abs_y = (y % num_of_tiles) as f64 * tile_size;
                 let crawler = Crawler {
@@ -71,6 +73,8 @@ pub fn generate_map_collisions(
                         x: abs_x,
                         y: abs_y
                     },
+                    spritesheet: player.sprite_sheets.get(&sheet_name).unwrap().clone(),
+                    sheet_name,
                     initial_position: Vec2 {
                         x: abs_x,
                         y: abs_y
@@ -82,10 +86,9 @@ pub fn generate_map_collisions(
                     direction: enemies::types::LeftRight::Left,
                     initial_direction: enemies::types::LeftRight::Left,
                     velocity: Vec2 {
-                        x: -0.5,
+                        x: -random,
                         y: 0.,
                     },
-                    spritesheet: player.sprite_sheets.get("crawler_1_0").unwrap().clone(),
                 };
                 enemies.push(Box::new(crawler));
             }

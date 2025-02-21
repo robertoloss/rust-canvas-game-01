@@ -24,7 +24,9 @@ pub fn do_draw_map(
     let num_of_tiles = player.screen_tiles;
 
     for y in player.map_origin.y..player.map_origin.y + num_of_tiles {
+        if y >= game_map.len() { return Ok(()) }
         for x in player.map_origin.x..player.map_origin.x + num_of_tiles {
+            if x >= game_map[y].len() { return Ok(()) }
             let lava_sprite_sheet = player.sprite_sheets.get("lava").unwrap();
             match game_map[y][x] {
                 0 => draw_this(&tile, ctx, player, x, y)?,

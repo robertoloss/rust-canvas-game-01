@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use crate::enemies::types::EnemyTrait;
 use crate::enemies::types::LeftRight;
 use crate::get_context;
+use crate::log_out_f;
 use crate::Tile;
 use crate::ENEMIES;
 use draw_abs::draw_abs;
@@ -48,9 +49,8 @@ pub fn main_draw(
             );
 
             for enemy in enemies.iter_mut() {
-                //console::log_1(&JsValue::from_str(&format!("{:?}",enemy.get_spritesheet())));
                 let position = enemy.position();
-                let direction_left = enemy.direction_is_left();
+                let sheet_name = enemy.get_sheetname();
                 let sheet = enemy.get_spritesheet();
                 let limit = sheet.pointer_y_limit.clone();
 
@@ -61,26 +61,17 @@ pub fn main_draw(
                     None,
                     tile_size
                 );
-                let img_sheet: HtmlImageElement = if direction_left {
-                    player
-                        .sprite_sheets
-                        .get("crawler_1_0")
-                        .unwrap().sheet.0.clone().unwrap().into()
-                } else {
-                    player
-                        .sprite_sheets
-                        .get("crawler_1_0_R") // add method to trait
-                        .unwrap().sheet.0.clone().unwrap().into()
-                };
 
-                draw_abs(
-                    &img_sheet, 
-                    sheet, 
-                    ctx, 
-                    player, 
-                    position.x,
-                    position.y
-                )?
+                if let Some(img_sheet) = player.sprite_sheets.get_mut(&sheet_name).unwrap().sheet.0.clone() {
+                    draw_abs(
+                        &img_sheet, 
+                        sheet, 
+                        ctx, 
+                        player, 
+                        position.x,
+                        position.y
+                    )?
+                }
             }
 
             if player.is_dead {

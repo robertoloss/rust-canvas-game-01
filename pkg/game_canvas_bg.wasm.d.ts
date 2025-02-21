@@ -12,5 +12,6 @@ export function __wbindgen_realloc(a: number, b: number, c: number, d: number): 
 export const __wbindgen_export_2: WebAssembly.Table;
 export function __externref_table_dealloc(a: number): void;
 export function __externref_table_alloc(): number;
+export function __wbindgen_free(a: number, b: number, c: number): void;
 export function __wbindgen_exn_store(a: number): void;
 export function __wbindgen_start(): void;

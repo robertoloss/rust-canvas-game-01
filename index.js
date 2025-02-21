@@ -9,6 +9,12 @@ import { SoundManager } from "./sounds/soundManager.js";
 let wasm;
 
 window.SoundManager = SoundManager;
+window.get_random = (min, max) => {
+    const factor = 10; 
+    const minScaled = Math.ceil(min * factor);
+    const maxScaled = Math.floor(max * factor);
+    return (Math.floor(Math.random() * (maxScaled - minScaled + 1)) + minScaled) / factor;
+}
 
 async function start() {
 	wasm = await init();
@@ -22,12 +28,14 @@ async function start() {
 	const mobileCling = document.getElementById('mobile-cling')
 	const mobileLeft = document.getElementById('mobile-left')
 	const mobileRight = document.getElementById('mobile-right')
+	const mobileDown = document.getElementById('mobile-down')
 
 	const listeners = [
 		{ element: mobileLeft, wasmNumber: 0 },
 		{ element: mobileRight, wasmNumber: 1 },
 		{ element: mobileCling, wasmNumber: 3 },
 		{ element: mobileJump, wasmNumber: 2 },
+		{ element: mobileDown, wasmNumber: 5 },
 	]
 	const events = [ 
 		{ type: 'touchstart', action: wasm.movement },

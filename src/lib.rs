@@ -34,13 +34,18 @@ lazy_static! {
 extern "C" {
     #[wasm_bindgen(js_namespace = SoundManager)]
     fn play(sound_name: &str);
+
+    #[wasm_bindgen(js_namespace = window )]
+    fn get_random(min: f64, max: f64) -> f64;
 }
+
 pub fn play_sound(sound_name: &str) {
     play(sound_name); 
 }
 
 #[wasm_bindgen]
 pub fn initialize() {
+    set_panic_hook();
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
     let mut enemies = ENEMIES.lock().unwrap();
@@ -59,6 +64,7 @@ pub fn render() -> Result<(), JsValue> {
     let num_of_tiles = player.screen_tiles;
     let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
     if delta == 0. { return Ok(()) }
+    
 
     enemies_move(&mut enemies);
 

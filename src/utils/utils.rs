@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use crate::{ PLAYER, ThreadSafeImage, SpriteSheet, HashMap, wasm_bindgen, Player, CanvasRenderingContext2d, HtmlCanvasElement, JsValue };
+use crate::{ enemies, wasm_bindgen, CanvasRenderingContext2d, HashMap, HtmlCanvasElement, JsValue, Player, SpriteSheet, ThreadSafeImage, ENEMIES, PLAYER };
 use wasm_bindgen::JsCast;
 use web_sys::console;
 use crate::HtmlImageElement;
@@ -12,7 +12,6 @@ pub fn set_image(name: String, sheet: bool, img: Option<HtmlImageElement>) {
     if !sheet {
         player.images.insert(name, image);
     } else {
-        console::log_1(&JsValue::from_str(&name));
         if let Some(sheet) = player.sprite_sheets.get_mut(&name) {
             sheet.sheet = image;
         } else {
@@ -59,4 +58,16 @@ pub fn log_out_s(s: &str) {
 }
 pub fn log_out_f<T: Debug>(f: T) {
     console::log_1(&JsValue::from_str(&format!("{:?}", f)))
+}
+
+#[allow(dead_code)]
+pub fn set_panic_hook() {
+    // When the `console_error_panic_hook` feature is enabled, we can call the
+    // `set_panic_hook` function at least once during initialization, and then
+    // we will get better error messages if our code ever panics.
+    //
+    // For more details see
+    // https://github.com/rustwasm/console_error_panic_hook#readme
+    #[cfg(feature = "console_error_panic_hook")]
+    console_error_panic_hook::set_once();
 }
