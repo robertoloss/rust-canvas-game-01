@@ -14,7 +14,8 @@ pub fn map_move(
     collision_map: &mut HashMap<(usize, usize), Tile>,
     enemies: &mut Vec<Box< dyn EnemyTrait>>
 ) {
-    if player.position.x > tile_size * (num_of_tiles as f64) {
+    let buffer = 10.;
+    if player.position.x > (tile_size * (num_of_tiles as f64) - buffer) {
         player.map_origin.x += num_of_tiles;
         player.position.x = 0.;
         *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), enemies).0;
@@ -26,13 +27,13 @@ pub fn map_move(
         *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), enemies).0;
         *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), enemies).1;
     }
-    if player.position.y > tile_size * (num_of_tiles as f64) {
+    if player.position.y > (tile_size * (num_of_tiles as f64)) - buffer {
         player.map_origin.y += num_of_tiles;
         player.position.y = 0.;
         *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), enemies).0;
         *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), enemies).1;
     }
-    if player.position.y < -tile_size {
+    if player.position.y < -tile_size + buffer {
         player.map_origin.y -= num_of_tiles;
         player.position.y = ((num_of_tiles as f64) - 1.0) * tile_size;
         *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), enemies).0;

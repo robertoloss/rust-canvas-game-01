@@ -1,4 +1,3 @@
-use web_sys::HtmlImageElement;
 use crate::{enemies::types::{EnemyTrait, LeftRight}, Player, SpriteSheet, Vec2};
 use crate::ThreadSafeImage;
 
@@ -19,9 +18,6 @@ impl EnemyTrait for Crawler {
     fn get_sheetname(&self) -> String {
         self.sheet_name.clone()
     }
-    fn set_image(&mut self, image: HtmlImageElement) {
-        self.spritesheet.sheet = ThreadSafeImage(Some(image));
-    }
     fn check_collision(&self, player: &mut Player) {
         let tile_size = player.tile_size;
         if self.position.x + 20. > player.position.x + tile_size  { return };
@@ -29,15 +25,6 @@ impl EnemyTrait for Crawler {
         if self.position.y > player.position.y + tile_size -20.  { return };
         if self.position.y + tile_size < player.position.y  { return };
         player.is_dead = true;
-    }
-    fn direction_is_left(&self) -> bool {
-        self.direction == LeftRight::Left
-    }
-    fn get_direction(&self) -> &LeftRight {
-        &self.direction
-    }
-    fn draw(&self) {
-        todo!()
     }
     fn moves(&mut self) {
         let in_dir_left = self.initial_direction == LeftRight::Left;

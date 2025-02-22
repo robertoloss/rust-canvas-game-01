@@ -1,13 +1,9 @@
 use std::collections::HashMap;
 use crate::enemies::types::EnemyTrait;
-use crate::enemies::types::LeftRight;
 use crate::get_context;
-use crate::log_out_f;
 use crate::Tile;
-use crate::ENEMIES;
 use draw_abs::draw_abs;
 use wasm_bindgen::JsValue;
-use web_sys::HtmlImageElement;
 use crate::ThreadSafeImage;
 use crate::Player;
 use super::debug::debug;

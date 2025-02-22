@@ -85,5 +85,15 @@ export const images = [
 			name: 'crawler_1_0_R',
 			isSheet: true,
 		},
+		{
+			src: './assets/climber_1_R.png',
+			name: 'climber_R',
+			isSheet: true,
+		},
+		{
+			src: './assets/climber_1_L.png',
+			name: 'climber_L',
+			isSheet: true,
+		},
 	]
 

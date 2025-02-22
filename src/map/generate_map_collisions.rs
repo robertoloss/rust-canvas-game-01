@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::{ enemies::{self, crawler::crawler::Crawler, types::EnemyTrait}, get_map, get_random, log_out_f, Player, Tile, Vec2, Vec2usize };
+use crate::{ enemies::{self, climber::climber::Climber, crawler::crawler::Crawler, types::EnemyTrait}, get_map, get_random, log_out_f, Player, Tile, Vec2, Vec2usize };
 
 pub fn generate_map_collisions(
     origin_x: usize, 
@@ -91,6 +91,66 @@ pub fn generate_map_collisions(
                     },
                 };
                 enemies.push(Box::new(crawler));
+            }
+            if game_map[y][x] == 3 {
+                let random = get_random(0.1, 0.5);
+                let sheet_name = "climber_R".to_string();
+                let abs_x = (x % num_of_tiles) as f64 * tile_size;
+                let abs_y = (y % num_of_tiles) as f64 * tile_size;
+                let climber = Climber {
+                    facing_right: true,
+                    spritesheet: player.sprite_sheets.get(&sheet_name).unwrap().clone(),
+                    sheet_name,
+                    position: Vec2 {
+                        x: abs_x,
+                        y: abs_y
+                    },
+                    initial_position: Vec2 {
+                        x: abs_x,
+                        y: abs_y
+                    },
+                    limit_position: Vec2 {
+                        x: abs_x,
+                        y: (abs_y + (tile_size * 2.)),
+                    },
+                    direction: enemies::types::UpDown::Down,
+                    initial_direction: enemies::types::UpDown::Down,
+                    velocity: Vec2 {
+                        x: 0.,
+                        y: random,
+                    },
+                };
+                enemies.push(Box::new(climber));
+            }
+            if game_map[y][x] == 4 {
+                let random = get_random(0.1, 0.5);
+                let sheet_name = "climber_L".to_string();
+                let abs_x = (x % num_of_tiles) as f64 * tile_size;
+                let abs_y = (y % num_of_tiles) as f64 * tile_size;
+                let climber = Climber {
+                    facing_right: false,
+                    spritesheet: player.sprite_sheets.get(&sheet_name).unwrap().clone(),
+                    sheet_name,
+                    position: Vec2 {
+                        x: abs_x,
+                        y: abs_y
+                    },
+                    initial_position: Vec2 {
+                        x: abs_x,
+                        y: abs_y
+                    },
+                    limit_position: Vec2 {
+                        x: abs_x,
+                        y: (abs_y + (tile_size * 2.)),
+                    },
+                    direction: enemies::types::UpDown::Down,
+                    initial_direction: enemies::types::UpDown::Down,
+                    velocity: Vec2 {
+                        x: 0.,
+                        y: random,
+                    },
+                };
+                enemies.push(Box::new(climber));
             }
         }
     }
