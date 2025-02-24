@@ -64,11 +64,10 @@ pub fn render() -> Result<(), JsValue> {
     let num_of_tiles = player.screen_tiles;
     let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
     if delta == 0. { return Ok(()) }
-    
-    let game_map = get_map();
-    log_out_f(&format!("game map length: {}", game_map[0].len()));
 
     enemies_move(&mut enemies);
+    
+    if collision_map.len() == 0 { return Ok(()) };
 
     if !player.is_dead {
         enemies_check_collisions(&mut player, &mut enemies);
