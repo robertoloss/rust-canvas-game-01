@@ -1,7 +1,7 @@
 use std::collections::HashMap;
+use crate::play;
 use crate::Vec2usize;
 use crate::TileToRestore;
-use crate::play_sound;
 use crate::draw::manage_sprite_sheet::manage_sprite_sheet;
 use crate::JsValue;
 use crate::Tile;
@@ -52,7 +52,7 @@ pub fn draw_sand(
             }
             if sand_tile.touched_by_player && !sand_tile.just_restored {
                 if !player.sound_playing.get("sand").unwrap() {
-                    play_sound("sand");
+                    play("sand");
                     player.sound_playing.insert("sand".into(), true);
                 };
                 sand_sprite_sheet.counter += 1;

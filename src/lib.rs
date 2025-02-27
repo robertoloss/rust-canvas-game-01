@@ -39,10 +39,6 @@ extern "C" {
     fn get_random(min: f64, max: f64) -> f64;
 }
 
-pub fn play_sound(sound_name: &str) {
-    play(sound_name); 
-}
-
 #[wasm_bindgen]
 pub fn initialize() {
     set_panic_hook();
@@ -67,7 +63,12 @@ pub fn render() -> Result<(), JsValue> {
 
     enemies_move(&mut enemies);
     
-    if collision_map.len() == 0 { return Ok(()) };
+    if collision_map.len() == 0 { 
+        log_out_f("coll map 0"); 
+        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).0;
+        *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).1;
+        return Ok(()) 
+    };
 
     if !player.is_dead {
         enemies_check_collisions(&mut player, &mut enemies);

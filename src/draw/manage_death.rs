@@ -8,6 +8,7 @@ use crate::log_out_f;
 use crate::HtmlImageElement;
 use crate::Player;
 use crate::Tile;
+use crate::Vec2;
 
 pub fn manage_death(
     player: &mut Player,
@@ -44,6 +45,8 @@ pub fn manage_death(
         if player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y * player.tile_size >= player.sprite_sheets.get("death").unwrap().pointer_y_limit {
             //player.death_sheet.tile_position_pointer_y = 0.;
             player.position = player.position_spawn.clone();
+            player.velocity = Vec2 { x: 0., y: 0. }; 
+            player.moves.jump = false;
             player.tiles_to_restore = vec![];
             *collision_map = generate_map_collisions(
                 player.map_origin.x, 

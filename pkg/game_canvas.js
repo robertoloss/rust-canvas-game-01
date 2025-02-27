@@ -250,14 +250,14 @@ async function __wbg_load(module, imports) {
 function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
-        const ret = getStringFromWasm0(arg0, arg1);
-        return ret;
-    };
     imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
         SoundManager.play(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbg_getrandom_e44eeeeb5d71b1cf = typeof window.get_random == 'function' ? window.get_random : notDefined('window.get_random');
+    imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
+        const ret = getStringFromWasm0(arg0, arg1);
+        return ret;
+    };
     imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
         const ret = new Error();
         return ret;

@@ -1,6 +1,6 @@
 use web_sys::console;
 
-use crate::{Player,Tile};
+use crate::{log_out_f, Player, Tile};
 use std::collections::HashMap;
 use crate::collisions::types::{LeftRight,UpDown};
 use crate::collisions::get_manage_collision_params::*;
@@ -61,13 +61,7 @@ pub fn manage_collision(
     }
     let corner_tile_hit = tile_collision(corner_tile, collision_map).is_some();
 
-
-    //console::log_1(&format!("up_down: {:?}", up_down).into());
-    //console::log_1(&format!("left_right: {:?}", left_right).into());
-
-
     if corner_tile_hit {
-        //console::log_1(&JsValue::from_str(""));
         if let Some(t) = tile_collision(next_to_corner_tile, collision_map) {
             player.velocity.y = 0.;
             player.position.y = t.position.y + off_tile_y;
@@ -87,13 +81,6 @@ pub fn manage_collision(
             tile_collision(next_to_corner_tile, collision_map).is_none() && 
             tile_collision(opposite_y_to_corner_tile, collision_map).is_none() 
         {
-            //console::log_1(&format!("only corner").into());
-            //console::log_1(&format!("velocity.x {}", player.velocity.x).into());
-            //console::log_1(&format!("position.x {}", player.position.x).into());
-            //console::log_1(&format!("facing_left {}", player.facing_left).into());
-            //console::log_1(&format!("facing_right {}", player.facing_right).into());
-            //console::log_1(&format!("up_down: {:?}", up_down).into());
-            //console::log_1(&format!("left_right: {:?}", left_right).into());
             let t = tile_collision(corner_tile, collision_map).unwrap();
             //console::log_1(&format!("{:?}", t).into());
             let m = player.velocity.y / player.velocity.x;
