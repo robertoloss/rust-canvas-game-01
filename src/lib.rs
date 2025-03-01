@@ -40,6 +40,9 @@ extern "C" {
 
     #[wasm_bindgen(js_namespace = window )]
     fn get_random(min: f64, max: f64) -> f64;
+
+    #[wasm_bindgen(js_namespace = window )]
+    fn get_random_int(min: u32, max: u32) -> u32;
 }
 
 #[wasm_bindgen]
@@ -49,18 +52,10 @@ pub fn initialize() {
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
     let mut enemies = ENEMIES.lock().unwrap();
     let player = PLAYER.lock().unwrap();
-    let mut particles = PARTICLES.lock().unwrap();
 
     *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).0;
     *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).1;
 
-    let test = Particle {
-        position: Vec2 { x: 48. * 8., y: 48. * 3. },
-        velocity: Vec2 { x: 0.,  y: 0.  },
-        active: true,
-        color: "blue".to_string()
-    };
-    particles.push(test);
 }
 
 #[wasm_bindgen]
@@ -74,19 +69,29 @@ pub fn render() -> Result<(), JsValue> {
     let mut enemies = ENEMIES.lock().unwrap();
     let mut particles = PARTICLES.lock().unwrap();
 
+    particles
+        .iter_mut()
+        .for_each(|particle| {
+            particle.moves();
+        });
+    particles
+        .retain(|p| p.active);
+
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
     let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
     if delta == 0. { return Ok(()) }
 
-
-
     enemies_move(&mut enemies);
     
     if collision_map.len() == 0 { 
         log_out_f("coll map 0"); 
-        *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).0;
-        *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).1;
+        drop(collision_map);
+        drop(lethal_tiles);
+        drop(enemies);
+        drop(particles);
+        drop(player);
+        initialize();
         return Ok(()) 
     };
 

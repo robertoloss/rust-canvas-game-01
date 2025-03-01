@@ -15,6 +15,9 @@ window.get_random = (min, max) => {
     const maxScaled = Math.floor(max * factor);
     return (Math.floor(Math.random() * (maxScaled - minScaled + 1)) + minScaled) / factor;
 }
+window.get_random_int = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 async function start() {
 	wasm = await init();

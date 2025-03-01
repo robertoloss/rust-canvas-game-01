@@ -30,12 +30,6 @@ pub fn main_draw(
             ctx.set_fill_style_str(&"black");
             ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
 
-            do_draw_map(
-                player,
-                ctx,
-                collision_map
-            )?;
-            
             particles
                 .into_iter()
                 .for_each(|particle| {
@@ -47,6 +41,13 @@ pub fn main_draw(
                         6.0
                     );
                 });
+
+            do_draw_map(
+                player,
+                ctx,
+                collision_map
+            )?;
+            
 
             let mut lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
             let lava_pointer_y_limit = lava_sprite_sheet.pointer_y_limit;

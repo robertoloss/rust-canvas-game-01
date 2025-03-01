@@ -1,3 +1,5 @@
+use crate::particles::jump_particles::generate_jump_particles;
+use crate::play;
 use crate::PLAYER;
 use crate::wasm_bindgen;
 
@@ -26,6 +28,10 @@ pub fn movement(key_code: i32) {
             player.moves.stop_jump = false;
             player.moves.airborne = true;
             player.wants_to_cling = false;
+            if !player.is_hanging {
+                generate_jump_particles(&player);
+                play("jump");
+            }
             player.is_hanging = false;
             if player.is_clinging {
                 player.is_clinging = false;
