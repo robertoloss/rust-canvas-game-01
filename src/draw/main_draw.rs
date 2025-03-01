@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use crate::enemies::types::EnemyTrait;
 use crate::get_context;
+use crate::particles::types::Particle;
 use crate::Tile;
 use draw_abs::draw_abs;
 use wasm_bindgen::JsValue;
@@ -16,6 +17,7 @@ pub fn main_draw(
     collision_map: &mut HashMap<(usize, usize), Tile>,
     player: &mut Player,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
+    particles: &mut Vec<Particle>
 ) 
     -> Result<(), JsValue> 
 {
@@ -33,6 +35,18 @@ pub fn main_draw(
                 ctx,
                 collision_map
             )?;
+            
+            particles
+                .into_iter()
+                .for_each(|particle| {
+                    ctx.set_fill_style_str(&particle.color);
+                    ctx.fill_rect(
+                        particle.position.x, 
+                        particle.position.y, 
+                        6.0, 
+                        6.0
+                    );
+                });
 
             let mut lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
             let lava_pointer_y_limit = lava_sprite_sheet.pointer_y_limit;

@@ -17,9 +17,6 @@ pub fn generate_map_collisions(
     let num_of_tiles = player.screen_tiles;
     *enemies = vec![];
     
-    //if game_map.len() == 0 {
-    //    return (collisions_map,lethal_tiles)
-    //}
     for y in origin_y..origin_y + num_of_tiles {
         if y >= game_map.len() { return (collisions_map,lethal_tiles) }
         for x in origin_x..origin_x + num_of_tiles {
