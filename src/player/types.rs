@@ -64,6 +64,7 @@ pub struct Player {
     pub can_cling: LeftRight,
     pub wants_to_cling: bool,
     pub is_clinging: bool,
+    pub played_clinging_sound: bool,
     pub clinging_tile_coord: Option<(usize,usize)>,
     pub is_hanging: bool,
     pub delta: f64,

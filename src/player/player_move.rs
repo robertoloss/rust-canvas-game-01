@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::{Player, Tile};
+use crate::{play, Player, Tile};
 use crate::collisions::types::LeftRight;
 
 pub fn player_move(
@@ -52,7 +52,11 @@ pub fn player_move(
         player.velocity.y += player.gravity / delta
     }
     if player.wants_to_cling && player.can_cling != LeftRight::None {
-        player.is_clinging = true
+        player.is_clinging = true;
+        if !player.played_clinging_sound {
+            play("cling");
+            player.played_clinging_sound = true;
+        }
     }
     if player.is_clinging {
         if let Some(tile) = player.clinging_tile_coord {
@@ -61,6 +65,7 @@ pub fn player_move(
                 player.velocity.x = 0.;
             } else {
                 player.is_clinging = false;
+                player.played_clinging_sound = false;
                 //player.can_cling = LeftRight::None;
             }
         }

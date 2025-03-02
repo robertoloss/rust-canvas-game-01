@@ -26,7 +26,7 @@ impl Default for Player {
             sprite_counter: 0,
             jump_velocity: -5.7, //-6.4, //-10.1,
             horizontal_velocity: 2.,
-            max_fall_velocity: 35.,
+            max_fall_velocity: 10.,
             //is_on_the_ground: true,
             moves: Moves {
                 left: false,
@@ -47,6 +47,7 @@ impl Default for Player {
             wants_to_cling: false,
             delta: 0.0,
             is_clinging: false,
+            played_clinging_sound: false,
             is_hanging: false,
             clinging_tile_coord: Some((0,0)),
             images: HashMap::from([

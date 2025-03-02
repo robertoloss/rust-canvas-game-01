@@ -19,6 +19,7 @@ pub fn stop_movement(key_code: i32) {
         3 => {
             player.wants_to_cling = false;
             player.is_clinging = false;
+            player.played_clinging_sound = false;
         }
         _ => {}
     }

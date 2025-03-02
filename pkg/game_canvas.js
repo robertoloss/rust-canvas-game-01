@@ -178,13 +178,6 @@ export function get_and_give_f64(num) {
 /**
  * @param {number} key_code
  */
-export function movement(key_code) {
-    wasm.movement(key_code);
-}
-
-/**
- * @param {number} key_code
- */
 export function stop_movement(key_code) {
     wasm.stop_movement(key_code);
 }
@@ -206,6 +199,13 @@ export function render() {
     if (ret[1]) {
         throw takeFromExternrefTable0(ret[0]);
     }
+}
+
+/**
+ * @param {number} key_code
+ */
+export function movement(key_code) {
+    wasm.movement(key_code);
 }
 
 function handleError(f, args) {
@@ -256,12 +256,12 @@ function __wbg_get_imports() {
         const ret = getStringFromWasm0(arg0, arg1);
         return ret;
     };
+    imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
+        SoundManager.play(getStringFromWasm0(arg0, arg1));
+    };
     imports.wbg.__wbg_getrandomint_db1e3bdafe1f2f77 = function(arg0, arg1) {
         const ret = window.get_random_int(arg0 >>> 0, arg1 >>> 0);
         return ret;
-    };
-    imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
-        SoundManager.play(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
         const ret = new Error();

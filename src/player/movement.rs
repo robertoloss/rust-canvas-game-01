@@ -35,6 +35,7 @@ pub fn movement(key_code: i32) {
             player.is_hanging = false;
             if player.is_clinging {
                 player.is_clinging = false;
+                player.played_clinging_sound = false;
                 if player.moves.right || player.moves.left {
                     player.facing_right = if player.moves.right {
                         true
