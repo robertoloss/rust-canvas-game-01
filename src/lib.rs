@@ -53,9 +53,13 @@ pub fn initialize() {
     let mut enemies = ENEMIES.lock().unwrap();
     let player = PLAYER.lock().unwrap();
 
-    *collision_map = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).0;
-    *lethal_tiles = generate_map_collisions(player.map_origin.x, player.map_origin.y, &(*player), &mut enemies).1;
-
+    (*collision_map,*lethal_tiles) = generate_map_collisions(
+        player.map_origin.x, 
+        player.map_origin.y, 
+        &(*player), 
+        &mut enemies,
+        true
+    );
 }
 
 #[wasm_bindgen]
@@ -86,6 +90,11 @@ pub fn render() -> Result<(), JsValue> {
     
     if collision_map.len() == 0 { 
         log_out_f("coll map 0"); 
+        log_out_f(player.map_origin.x);
+        log_out_f(player.map_origin.y);
+        player.map_origin.x = 0;
+        player.map_origin.y = 0;
+        player.position = player.position_spawn.clone();
         drop(collision_map);
         drop(lethal_tiles);
         drop(enemies);
@@ -126,7 +135,6 @@ pub fn render() -> Result<(), JsValue> {
     if !player_can_still_hang(&mut player, &mut collision_map) {
         player.is_hanging = false
     }
-
 
     let res = main_draw(
         &mut collision_map,

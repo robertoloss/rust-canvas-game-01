@@ -52,7 +52,8 @@ pub fn manage_death(
                 player.map_origin.x, 
                 player.map_origin.y, 
                 player,
-                enemies
+                enemies,
+                false
             ).0;
             player.is_dead = false;
             player.sprite_sheets.get_mut("death").unwrap().tile_position_pointer_y = 0.;

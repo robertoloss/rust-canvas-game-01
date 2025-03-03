@@ -5,7 +5,8 @@ pub fn generate_map_collisions(
     origin_x: usize, 
     origin_y: usize, 
     player: &Player,
-    enemies: &mut Vec<Box<dyn EnemyTrait>>
+    enemies: &mut Vec<Box<dyn EnemyTrait>>,
+    generate_enemies: bool
 ) -> (
     HashMap<(usize,usize),Tile>,
     Vec<Tile>
@@ -15,7 +16,9 @@ pub fn generate_map_collisions(
     let game_map = get_map();
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
-    *enemies = vec![];
+    if generate_enemies {
+        *enemies = vec![];
+    }
     
     for y in origin_y..origin_y + num_of_tiles {
         if y >= game_map.len() { return (collisions_map,lethal_tiles) }
@@ -58,6 +61,10 @@ pub fn generate_map_collisions(
             }
             if game_map[y][x] == 9 {
                 lethal_tiles.push(tile.clone())
+            }
+
+            if !generate_enemies {
+                continue;
             }
 
             if game_map[y][x] == 2 {
