@@ -2,6 +2,8 @@ use std::collections::HashMap;
 use crate::{play, Player, Tile};
 use crate::collisions::types::LeftRight;
 
+use super::player_can_still_hang::player_can_still_hang;
+
 pub fn player_move(
     player: &mut Player, 
     delta: f64,
@@ -28,6 +30,9 @@ pub fn player_move(
     } else {
         player.velocity.x = 0.
     } 
+    if !player_can_still_hang(player, collision_map) {
+        player.is_hanging = false
+    }
     //player.velocity.y = if player.moves.down { 4.0 } else if player.moves.up { -4.0 } else { 0. };
     if !player.is_clinging {
         if player.velocity.x > 0. {

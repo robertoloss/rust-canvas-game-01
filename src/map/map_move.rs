@@ -20,11 +20,11 @@ fn update_collisions_and_lethal_tiles(
 pub fn map_move(
     player: &mut Player, 
     lethal_tiles: &mut Vec<Tile>,
-    num_of_tiles: usize,
-    tile_size: f64,
     collision_map: &mut HashMap<(usize, usize), Tile>,
     enemies: &mut Vec<Box<dyn EnemyTrait>>
 ) {
+    let tile_size = player.tile_size;
+    let num_of_tiles = player.screen_tiles;
     let buffer = 16.;
     let mut update = false;
     if player.position.x > (tile_size * (num_of_tiles as f64) - buffer) {

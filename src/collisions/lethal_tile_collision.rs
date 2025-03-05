@@ -8,3 +8,14 @@ pub fn lethal_tile_collision(tile: &Tile, player: &Player) -> bool {
     if tile.position.y + tile_size < player.position.y  { return false };
     true
 }
+
+pub fn manage_lethal_tile_collision(
+    lethal_tiles: &Vec<Tile>,
+    player: &mut Player
+) {
+    for tile in lethal_tiles.iter() {
+        if lethal_tile_collision(&tile, &player) {
+            player.is_dead = true;
+        }
+    }
+}

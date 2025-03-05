@@ -9,8 +9,8 @@ use enemies::enemies_check_collision::enemies_check_collisions;
 use enemies::enemies_move::enemies_move;
 use enemies::types::EnemyTrait;
 use map::restore_sand_tiles::restore_sand_tiles;
+use particles::manage_particles::manage_particles;
 use particles::types::Particle;
-use player::player_can_still_hang::player_can_still_hang;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
@@ -43,6 +43,9 @@ extern "C" {
 
     #[wasm_bindgen(js_namespace = window )]
     fn get_random_int(min: u32, max: u32) -> u32;
+
+    #[wasm_bindgen(js_namespace = window )]
+    fn is_game_paused() -> bool;
 }
 
 #[wasm_bindgen]
@@ -65,33 +68,25 @@ pub fn initialize() {
 #[wasm_bindgen]
 pub fn render() -> Result<(), JsValue> {
     let mut player = PLAYER.lock().unwrap();
-    if !all_images_present(&player.images) { return Ok(()) }
-    if !all_sprite_sheets_present(&player.sprite_sheets) { return Ok(()) }
-
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
     let mut enemies = ENEMIES.lock().unwrap();
     let mut particles = PARTICLES.lock().unwrap();
-
-    particles
-        .iter_mut()
-        .for_each(|particle| {
-            particle.moves();
-        });
-    particles
-        .retain(|p| p.active);
-
-    let tile_size = player.tile_size;
-    let num_of_tiles = player.screen_tiles;
-    let delta = player.delta / 60.; //0.016 * (0.016 * 1000. * 3.3);
-    if delta == 0. { return Ok(()) }
-
-    enemies_move(&mut enemies);
     
+    let delta = player.delta / 60.;
+
+    if !all_images_present(&player.images) { return Ok(()) }
+    if !all_sprite_sheets_present(&player.sprite_sheets) { return Ok(()) }
+    if delta == 0. { return Ok(()) }
+    if is_game_paused() { return Ok(()) }
+
     if collision_map.len() == 0 { 
         log_out_f("coll map 0"); 
         log_out_f(player.map_origin.x);
         log_out_f(player.map_origin.y);
+        if player.map_origin.x == 0 && player.map_origin.y == 0 {
+            return Ok(())
+        }
         player.map_origin.x = 0;
         player.map_origin.y = 0;
         player.position = player.position_spawn.clone();
@@ -105,7 +100,13 @@ pub fn render() -> Result<(), JsValue> {
     };
 
     if !player.is_dead {
-        enemies_check_collisions(&mut player, &mut enemies);
+        enemies_check_collisions(
+            &mut player, 
+            &mut enemies);
+        manage_lethal_tile_collision(
+            &lethal_tiles, 
+            &mut player
+        );
         player_move(
             &mut player,
             delta,
@@ -114,27 +115,23 @@ pub fn render() -> Result<(), JsValue> {
         map_move(
             &mut player,
             &mut lethal_tiles,
-            num_of_tiles,
-            tile_size,
             &mut collision_map,
             &mut enemies
-        )
+        );
+        manage_player_collision_with_tile(
+            &mut(*player), 
+            &mut collision_map
+        ); 
     }
-    for tile in lethal_tiles.iter() {
-        if lethal_tile_collision(&tile, &player) {
-            player.is_dead = true;
-        }
-    }
+    
+    manage_particles(&mut particles);
+
+    enemies_move(&mut enemies);
+
     restore_sand_tiles(
         &mut player,
         &mut collision_map
     );
-
-    manage_player_collision_with_tile(&mut(*player), &mut collision_map); 
-
-    if !player_can_still_hang(&mut player, &mut collision_map) {
-        player.is_hanging = false
-    }
 
     let res = main_draw(
         &mut collision_map,

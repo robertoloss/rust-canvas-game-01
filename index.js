@@ -18,6 +18,27 @@ window.get_random = (min, max) => {
 window.get_random_int = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+window.isGamePaused = false;
+window.is_game_paused = () => window.isGamePaused;
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        console.log("Tab hidden, pausing game...");
+        window.isGamePaused = true;
+    } else {
+        console.log("Tab active, resuming game...");
+        window.isGamePaused = false;
+    }
+});
+window.addEventListener("blur", () => {
+    console.log("Window lost focus, pausing game...");
+    window.isGamePaused = true;
+});
+
+window.addEventListener("focus", () => {
+    console.log("Window active, resuming game...");
+    window.isGamePaused = false;
+});
+
 
 async function start() {
 	wasm = await init();
@@ -54,6 +75,8 @@ async function start() {
 	mobileCling.addEventListener('touchend', ()=>{
 		wasm.stop_movement(3)
 	})
+  
+
 
 	function getKeyCode(eventCode) {
 		let keyCode;
