@@ -46,6 +46,9 @@ extern "C" {
 
     #[wasm_bindgen(js_namespace = window )]
     fn is_game_paused() -> bool;
+    
+    #[wasm_bindgen(js_namespace = window )]
+    fn screen_size() -> u32;
 }
 
 #[wasm_bindgen]
@@ -73,9 +76,10 @@ pub fn render() -> Result<(), JsValue> {
     let mut enemies = ENEMIES.lock().unwrap();
     let mut particles = PARTICLES.lock().unwrap();
     
-    let delta = (player.delta / 60.).clamp(0.9, 1.1);
-
-    log_out_f(delta);
+    let mut delta = (player.delta / 60.).clamp(0.9, 1.1);
+    if screen_size() < 800 { 
+        delta = delta.clamp(0.4, 0.5) 
+    };
 
     if !all_images_present(&player.images) { return Ok(()) }
     if !all_sprite_sheets_present(&player.sprite_sheets) { return Ok(()) }

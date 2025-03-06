@@ -39,6 +39,12 @@ window.addEventListener("focus", () => {
     window.isGamePaused = false;
 });
 
+window.screenSize = window.innerWidth;
+window.screen_size = () => window.screenSize;
+window.addEventListener("resize", () => {
+  return window.screenSize = windown.innerWidth
+})
+
 
 async function start() {
 	wasm = await init();
