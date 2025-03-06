@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use crate::enemies::types::EnemyTrait;
 use crate::get_context;
 use crate::particles::types::Particle;
+use crate::screen_size;
 use crate::Tile;
 use draw_abs::draw_abs;
 use wasm_bindgen::JsValue;
@@ -89,7 +90,12 @@ pub fn main_draw(
                 return manage_death(player, &ctx, collision_map, enemies)
             }
             
-            if player.show_debug { debug(ctx, player) };
+            ctx.set_font("20px Arial, sans-serif");
+            ctx.set_fill_style(&JsValue::from_str("yellow"));
+            let _ = ctx.fill_text(&format!("Screen size: {}", screen_size()), 32., 120.);
+            if player.show_debug { 
+                debug(ctx, player) 
+            };
 
             if  player.is_clinging || (player.velocity.x == 0. || player.velocity.y != 0.) {
                 player.sprite_counter = 0;
