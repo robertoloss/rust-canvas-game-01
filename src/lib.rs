@@ -78,7 +78,7 @@ pub fn render() -> Result<(), JsValue> {
     
     let mut delta = (player.delta / 60.).clamp(0.9, 1.1);
     if screen_size() < 800 { 
-        delta = delta.clamp(1.4, 1.6) 
+        delta = delta.clamp(1.9, 2.1) 
     };
 
     if !all_images_present(&player.images) { return Ok(()) }

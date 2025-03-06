@@ -90,9 +90,6 @@ pub fn main_draw(
                 return manage_death(player, &ctx, collision_map, enemies)
             }
             
-            ctx.set_font("20px Arial, sans-serif");
-            ctx.set_fill_style(&JsValue::from_str("yellow"));
-            let _ = ctx.fill_text(&format!("Screen size: {}", screen_size()), 32., 120.);
             if player.show_debug { 
                 debug(ctx, player) 
             };

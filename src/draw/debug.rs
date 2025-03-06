@@ -1,10 +1,9 @@
 use web_sys::CanvasRenderingContext2d;
-use crate::JsValue;
-use crate::Player;
+use crate::{screen_size, Player};
 
 pub fn debug(ctx: &CanvasRenderingContext2d, player: &Player) {
     ctx.set_font("20px Arial, sans-serif");
-    ctx.set_fill_style(&JsValue::from_str("yellow"));
+    ctx.set_fill_style_str("yellow");
     let _ = ctx.fill_text(
         &("is_clinging = ".to_owned() + &player.is_clinging.to_string()).to_string(), 
         32., 24.
@@ -25,4 +24,5 @@ pub fn debug(ctx: &CanvasRenderingContext2d, player: &Player) {
         ).to_string(), 
         32., 96.
     );
+    let _ = ctx.fill_text(&format!("Screen size: {}", screen_size()), 32., 120.);
 }

@@ -30,7 +30,7 @@ pub fn movement(key_code: i32) {
             player.wants_to_cling = false;
             if !player.is_hanging {
                 generate_jump_particles(&player);
-                play("jump");
+                play("jump2");
             }
             player.is_hanging = false;
             if player.is_clinging {
