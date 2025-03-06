@@ -73,7 +73,9 @@ pub fn render() -> Result<(), JsValue> {
     let mut enemies = ENEMIES.lock().unwrap();
     let mut particles = PARTICLES.lock().unwrap();
     
-    let delta = player.delta / 60.;
+    let delta = (player.delta / 60.).clamp(0.9, 1.1);
+
+    log_out_f(delta);
 
     if !all_images_present(&player.images) { return Ok(()) }
     if !all_sprite_sheets_present(&player.sprite_sheets) { return Ok(()) }
