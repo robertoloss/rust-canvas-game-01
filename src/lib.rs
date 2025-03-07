@@ -76,7 +76,7 @@ pub fn render() -> Result<(), JsValue> {
     let mut enemies = ENEMIES.lock().unwrap();
     let mut particles = PARTICLES.lock().unwrap();
     
-    let mut delta = (player.delta / 60.).clamp(0.9, 1.1);
+    let mut delta = (player.delta / 60.).clamp(1.1, 1.2);
     if screen_size() < 800 { 
         delta = delta.clamp(2.4, 2.6) 
     };
@@ -86,24 +86,24 @@ pub fn render() -> Result<(), JsValue> {
     if delta == 0. { return Ok(()) }
     if is_game_paused() { return Ok(()) }
 
-    if collision_map.len() == 0 { 
-        log_out_f("coll map 0"); 
-        log_out_f(player.map_origin.x);
-        log_out_f(player.map_origin.y);
-        if player.map_origin.x == 0 && player.map_origin.y == 0 {
-            return Ok(())
-        }
-        player.map_origin.x = 0;
-        player.map_origin.y = 0;
-        player.position = player.position_spawn.clone();
-        drop(collision_map);
-        drop(lethal_tiles);
-        drop(enemies);
-        drop(particles);
-        drop(player);
-        initialize();
-        return Ok(()) 
-    };
+    //if collision_map.len() == 0 { 
+    //    log_out_f("coll map 0"); 
+    //    log_out_f(player.map_origin.x);
+    //    log_out_f(player.map_origin.y);
+    //    if player.map_origin.x == 0 && player.map_origin.y == 0 {
+    //        return Ok(())
+    //    }
+    //    player.map_origin.x = 0;
+    //    player.map_origin.y = 0;
+    //    player.position = player.position_spawn.clone();
+    //    drop(collision_map);
+    //    drop(lethal_tiles);
+    //    drop(enemies);
+    //    drop(particles);
+    //    drop(player);
+    //    initialize();
+    //    return Ok(()) 
+    //};
 
     if !player.is_dead {
         enemies_check_collisions(
@@ -130,9 +130,15 @@ pub fn render() -> Result<(), JsValue> {
         ); 
     }
     
-    manage_particles(&mut particles);
+    manage_particles(
+        &mut particles,
+        delta
+    );
 
-    enemies_move(&mut enemies);
+    enemies_move(
+        &mut enemies,
+        delta
+    );
 
     restore_sand_tiles(
         &mut player,

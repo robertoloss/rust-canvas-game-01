@@ -33,7 +33,7 @@ impl EnemyTrait for Climber {
         player.is_dead = true;
     }
 
-    fn moves(&mut self) {
+    fn moves(&mut self, delta: f64) {
         let in_dir_up = self.initial_direction == UpDown::Up;
         let y_not_at_up_limit = self.position.y > 
             if in_dir_up { self.limit_position.y } else { self.initial_position.y };
@@ -42,13 +42,13 @@ impl EnemyTrait for Climber {
 
         if self.direction == UpDown::Up {
             if y_not_at_up_limit {
-                self.position.y += self.velocity.y;
+                self.position.y += self.velocity.y / delta;
             } else {
                 self.change_direction();
             }
         } else {
             if y_not_at_down_limit {
-                self.position.y += self.velocity.y;
+                self.position.y += self.velocity.y / delta;
             } else {
                 self.change_direction();
             }

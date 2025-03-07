@@ -28,7 +28,7 @@ impl Default for Particle {
 
 
 impl Particle {
-    pub fn moves(&mut self) {
+    pub fn moves(&mut self, delta: f64) {
         if self.counter >= self.limit {
             self.active = false;
             return
@@ -36,8 +36,8 @@ impl Particle {
         self.velocity.x += self.velocity_change.x;
         self.velocity.y += self.velocity_change.y;
 
-        self.position.x += self.velocity.x;
-        self.position.y += self.velocity.y;
+        self.position.x += self.velocity.x / delta;
+        self.position.y += self.velocity.y / delta;
 
         self.color = darken_color(&self.color);
 

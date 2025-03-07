@@ -26,7 +26,7 @@ impl EnemyTrait for Crawler {
         if self.position.y + tile_size < player.position.y  { return };
         player.is_dead = true;
     }
-    fn moves(&mut self) {
+    fn moves(&mut self, delta: f64) {
         let in_dir_left = self.initial_direction == LeftRight::Left;
         let x_not_at_left_limit = self.position.x > 
             if in_dir_left { self.limit_position.x } else { self.initial_position.x };
@@ -35,13 +35,13 @@ impl EnemyTrait for Crawler {
 
         if self.direction == LeftRight::Left {
             if x_not_at_left_limit {
-                self.position.x += self.velocity.x;
+                self.position.x += self.velocity.x / delta;
             } else {
                 self.change_direction();
             }
         } else {
             if x_not_at_right_limit {
-                self.position.x += self.velocity.x;
+                self.position.x += self.velocity.x / delta;
             } else {
                 self.change_direction();
             }
