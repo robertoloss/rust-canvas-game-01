@@ -1,12 +1,13 @@
 use std::collections::HashMap;
-use crate::{ enemies::{self, climber::climber::Climber, crawler::crawler::Crawler, types::EnemyTrait}, get_map, get_random, log_out_f, Player, Tile, Vec2, Vec2usize };
+use crate::{ coins::types::Coin, enemies::{self, climber::climber::Climber, crawler::crawler::Crawler, types::EnemyTrait}, get_map, get_random, log_out_f, Player, Tile, Vec2, Vec2usize };
 
 pub fn generate_map_collisions(
     origin_x: usize, 
     origin_y: usize, 
     player: &Player,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
-    generate_enemies: bool
+    coins: &mut Vec<Coin>,
+    generate_enemies: bool,
 ) -> (
     HashMap<(usize,usize),Tile>,
     Vec<Tile>
@@ -61,6 +62,12 @@ pub fn generate_map_collisions(
             }
             if game_map[y][x] == 9 {
                 lethal_tiles.push(tile.clone())
+            }
+            if game_map[y][x] == 12 {
+                coins.push(Coin {
+                    tile: tile.clone(),
+                    active: true,
+                });
             }
 
             if !generate_enemies {

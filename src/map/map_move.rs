@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use crate::coins::types::Coin;
 use crate::enemies::types::EnemyTrait;
 use crate::generate_map_collisions;
 use crate::{Tile, Player};
@@ -7,13 +8,15 @@ fn update_collisions_and_lethal_tiles(
     player: &mut Player, 
     lethal_tiles: &mut Vec<Tile>,
     collision_map: &mut HashMap<(usize, usize), Tile>,
-    enemies: &mut Vec<Box<dyn EnemyTrait>>
+    enemies: &mut Vec<Box<dyn EnemyTrait>>,
+    coins: &mut Vec<Coin>
 ) {
     (*collision_map,*lethal_tiles) = generate_map_collisions(
         player.map_origin.x, 
         player.map_origin.y, 
         &(*player), 
         enemies,
+        coins,
         true
     );
 }
@@ -21,7 +24,8 @@ pub fn map_move(
     player: &mut Player, 
     lethal_tiles: &mut Vec<Tile>,
     collision_map: &mut HashMap<(usize, usize), Tile>,
-    enemies: &mut Vec<Box<dyn EnemyTrait>>
+    enemies: &mut Vec<Box<dyn EnemyTrait>>,
+    coins: &mut Vec<Coin>
 ) {
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
@@ -48,6 +52,12 @@ pub fn map_move(
         update = true;
     }
     if update {
-        update_collisions_and_lethal_tiles(player, lethal_tiles, collision_map, enemies);
+        update_collisions_and_lethal_tiles(
+            player, 
+            lethal_tiles, 
+            collision_map, 
+            enemies, 
+            coins
+        );
     }
 }

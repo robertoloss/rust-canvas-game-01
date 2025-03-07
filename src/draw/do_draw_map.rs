@@ -20,6 +20,8 @@ pub fn do_draw_map(
         .unwrap().0.clone().unwrap().into();
     let lava_sheet: HtmlImageElement = player.sprite_sheets.get("lava")
         .unwrap().sheet.0.clone().unwrap().into();
+    let coin_sheet: HtmlImageElement = player.sprite_sheets.get("coin")
+        .unwrap().sheet.0.clone().unwrap().into();
     let game_map = get_map();
     let num_of_tiles = player.screen_tiles;
 
@@ -28,6 +30,7 @@ pub fn do_draw_map(
         for x in player.map_origin.x..player.map_origin.x + num_of_tiles {
             if x >= game_map[y].len() { return Ok(()) }
             let lava_sprite_sheet = player.sprite_sheets.get("lava").unwrap();
+            let coin_sprite_sheet = player.sprite_sheets.get("coin").unwrap();
             match game_map[y][x] {
                 0 => draw_this(&tile, ctx, player, x, y)?,
                 7 => draw_this(&hang, ctx, player, x, y)?,

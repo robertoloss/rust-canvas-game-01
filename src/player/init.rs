@@ -70,6 +70,15 @@ impl Default for Player {
                     counter_limit: 8,
                     pointer_y_limit: 8. * tile_size,
                 }),
+                (String::from("coin"), 
+                 SpriteSheet {
+                    sheet: ThreadSafeImage(None),
+                    pointer_y: 0.,
+                    tile_position_pointer_y: 0.,
+                    counter: 0,
+                    counter_limit: 4,
+                    pointer_y_limit: 24. * tile_size,
+                }),
                 (String::from("sand"), 
                  SpriteSheet {
                     sheet: ThreadSafeImage(None),

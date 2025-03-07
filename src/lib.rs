@@ -4,7 +4,10 @@ mod utils;
 mod collisions;
 mod player;
 mod enemies;
+mod coins;
 pub mod draw;
+use coins::manage_coins;
+use coins::manage_coins::manage_coins;
 use enemies::enemies_check_collision::enemies_check_collisions;
 use enemies::enemies_move::enemies_move;
 use enemies::types::EnemyTrait;
@@ -24,6 +27,7 @@ use crate::map::generate_map_collisions::*;
 use crate::draw::main_draw::*;
 use crate::collisions::lethal_tile_collision::*;
 use crate::collisions::manage_player_collision_with_tile::manage_player_collision_with_tile;
+use crate::coins::types::Coin;
 
 lazy_static! {
     static ref PLAYER: Mutex<Player> = Mutex::new(Player::default());
@@ -31,6 +35,7 @@ lazy_static! {
     static ref LETHAL_TILES: Mutex<Vec<Tile>> = Mutex::new(vec![]);
     static ref ENEMIES: Mutex<Vec<Box<dyn EnemyTrait>>> = Mutex::new(vec![]);
     static ref PARTICLES: Mutex<Vec<Particle>> = Mutex::new(vec![]);
+    static ref COINS: Mutex<Vec<Coin>> = Mutex::new(vec![]);
 }
 
 #[wasm_bindgen]
@@ -57,6 +62,7 @@ pub fn initialize() {
     let mut collision_map = MAP_COLLISIONS.lock().unwrap();
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
     let mut enemies = ENEMIES.lock().unwrap();
+    let mut coins = COINS.lock().unwrap();
     let player = PLAYER.lock().unwrap();
 
     (*collision_map,*lethal_tiles) = generate_map_collisions(
@@ -64,6 +70,7 @@ pub fn initialize() {
         player.map_origin.y, 
         &(*player), 
         &mut enemies,
+        &mut coins,
         true
     );
 }
@@ -75,8 +82,9 @@ pub fn render() -> Result<(), JsValue> {
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
     let mut enemies = ENEMIES.lock().unwrap();
     let mut particles = PARTICLES.lock().unwrap();
+    let mut coins = COINS.lock().unwrap();
     
-    let mut delta = (player.delta / 60.).clamp(1.1, 1.2);
+    let mut delta = (player.delta / 60.).clamp(0.9, 1.1);
     if screen_size() < 800 { 
         delta = delta.clamp(2.4, 2.6) 
     };
@@ -103,7 +111,8 @@ pub fn render() -> Result<(), JsValue> {
             &mut player,
             &mut lethal_tiles,
             &mut collision_map,
-            &mut enemies
+            &mut enemies,
+            &mut coins
         );
         manage_player_collision_with_tile(
             &mut(*player), 
@@ -114,6 +123,11 @@ pub fn render() -> Result<(), JsValue> {
     manage_particles(
         &mut particles,
         delta
+    );
+
+    manage_coins(
+        &mut player,
+        &mut coins
     );
 
     enemies_move(
@@ -130,7 +144,8 @@ pub fn render() -> Result<(), JsValue> {
         &mut collision_map,
         &mut player,
         &mut enemies,
-        &mut particles
+        &mut particles,
+        &mut coins
     );
     res
 }

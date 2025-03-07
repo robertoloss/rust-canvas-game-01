@@ -1,8 +1,9 @@
 use std::collections::HashMap;
+use draw_this_sw_sh::draw_this_sw_sh;
+use web_sys::HtmlImageElement;
 use crate::enemies::types::EnemyTrait;
 use crate::get_context;
 use crate::particles::types::Particle;
-use crate::screen_size;
 use crate::Tile;
 use draw_abs::draw_abs;
 use wasm_bindgen::JsValue;
@@ -13,12 +14,14 @@ use super::manage_death::manage_death;
 use super::manage_sprite_sheet::manage_sprite_sheet;
 use super::do_draw_map::do_draw_map;
 use super::draw_map::*;
+use crate::coins::types::Coin;
 
 pub fn main_draw(
     collision_map: &mut HashMap<(usize, usize), Tile>,
     player: &mut Player,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
-    particles: &mut Vec<Particle>
+    particles: &mut Vec<Particle>,
+    coins: &mut Vec<Coin>
 ) 
     -> Result<(), JsValue> 
 {
@@ -50,15 +53,42 @@ pub fn main_draw(
             )?;
             
 
-            let mut lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
-            let lava_pointer_y_limit = lava_sprite_sheet.pointer_y_limit;
-            manage_sprite_sheet::<fn()>(
-                &mut lava_sprite_sheet,
-                1.0,
-                lava_pointer_y_limit,
-                None,
-                tile_size
-            );
+            {
+                let mut lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
+                let lava_pointer_y_limit = lava_sprite_sheet.pointer_y_limit;
+                manage_sprite_sheet::<fn()>(
+                    &mut lava_sprite_sheet,
+                    1.0,
+                    lava_pointer_y_limit,
+                    None,
+                    tile_size
+                );
+            }
+
+            let coin_sheet: HtmlImageElement = player.sprite_sheets.get("coin")
+                .unwrap().sheet.0.clone().unwrap().into();
+            for coin in &mut *coins {
+                {
+                    let coin_sprite_sheet = player.sprite_sheets.get_mut("coin").unwrap().clone();
+                    draw_this_sw_sh(
+                        &coin_sheet, 
+                        &coin_sprite_sheet, 
+                        ctx, 
+                        player, 
+                        coin.tile.tile_pos.x, 
+                        coin.tile.tile_pos.y, 
+                    );
+                }
+                let coin_sprite_sheet = player.sprite_sheets.get_mut("coin").unwrap();
+                let coin_pointer_limit = coin_sprite_sheet.pointer_y_limit.clone();
+                manage_sprite_sheet::<fn()>(
+                    coin_sprite_sheet,
+                    1.0,
+                    coin_pointer_limit,
+                    None,
+                    tile_size
+                );
+            }
 
             for enemy in enemies.iter_mut() {
                 let position = enemy.position();
@@ -87,7 +117,13 @@ pub fn main_draw(
             }
 
             if player.is_dead {
-                return manage_death(player, &ctx, collision_map, enemies)
+                return manage_death(
+                    player, 
+                    &ctx, 
+                    collision_map, 
+                    enemies,
+                    coins
+                )
             }
             
             if player.show_debug { 

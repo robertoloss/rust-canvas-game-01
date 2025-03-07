@@ -95,5 +95,10 @@ export const images = [
 			name: 'climber_L',
 			isSheet: true,
 		},
+		{
+			src: './assets/coin_6.png',
+			name: 'coin',
+			isSheet: true,
+		},
 	]
 
