@@ -86,25 +86,6 @@ pub fn render() -> Result<(), JsValue> {
     if delta == 0. { return Ok(()) }
     if is_game_paused() { return Ok(()) }
 
-    //if collision_map.len() == 0 { 
-    //    log_out_f("coll map 0"); 
-    //    log_out_f(player.map_origin.x);
-    //    log_out_f(player.map_origin.y);
-    //    if player.map_origin.x == 0 && player.map_origin.y == 0 {
-    //        return Ok(())
-    //    }
-    //    player.map_origin.x = 0;
-    //    player.map_origin.y = 0;
-    //    player.position = player.position_spawn.clone();
-    //    drop(collision_map);
-    //    drop(lethal_tiles);
-    //    drop(enemies);
-    //    drop(particles);
-    //    drop(player);
-    //    initialize();
-    //    return Ok(()) 
-    //};
-
     if !player.is_dead {
         enemies_check_collisions(
             &mut player, 
