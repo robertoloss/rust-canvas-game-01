@@ -7,6 +7,7 @@ pub struct Coin {
     pub show_plus_one: bool,
     pub active: bool,
     pub counter: u8,
+    pub playing_sound: bool,
 }
 impl Coin {
     pub fn player_collision(&self, player: &Player) -> bool {

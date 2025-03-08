@@ -29,6 +29,7 @@ pub fn generate_persisting_entities(
                         active: true,
                         show_plus_one: false,
                         counter: 0,
+                        playing_sound: false,
                     });
                 }
                 _ => {}

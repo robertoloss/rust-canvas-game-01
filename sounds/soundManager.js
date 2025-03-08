@@ -5,6 +5,7 @@ export const SoundManager = {
     jump: new Audio("./sounds/jump.wav"),
     jump2: new Audio("./sounds/jump2.wav"),
     cling: new Audio("./sounds/cling.wav"),
+    coin: new Audio("./sounds/coin.wav"),
   },
   play(soundName) {
     const sound = this.sounds[soundName];
@@ -18,6 +19,9 @@ export const SoundManager = {
           sound.volume = 0.4; 
           break;
         case "jump2":
+          sound.volume = 1; 
+          break;
+        case "coin":
           sound.volume = 1; 
           break;
         default:
