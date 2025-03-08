@@ -11,6 +11,7 @@ use coins::manage_coins::manage_coins;
 use enemies::enemies_check_collision::enemies_check_collisions;
 use enemies::enemies_move::enemies_move;
 use enemies::types::EnemyTrait;
+use map::generate_persisting_entities::generate_persisting_entities;
 use map::restore_sand_tiles::restore_sand_tiles;
 use particles::manage_particles::manage_particles;
 use particles::types::Particle;
@@ -68,10 +69,14 @@ pub fn initialize() {
     (*collision_map,*lethal_tiles) = generate_map_collisions(
         player.map_origin.x, 
         player.map_origin.y, 
-        &(*player), 
+        &player, 
         &mut enemies,
         &mut coins,
         true
+    );
+    generate_persisting_entities(
+        &mut coins, 
+        &player
     );
 }
 

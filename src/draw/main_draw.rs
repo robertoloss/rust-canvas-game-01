@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use draw_this_sw_sh::draw_this_sw_sh;
 use web_sys::HtmlImageElement;
 use crate::enemies::types::EnemyTrait;
 use crate::get_context;
@@ -66,30 +65,33 @@ pub fn main_draw(
             }
 
             for coin in &mut *coins {
-                let sheet_name = if coin.show_plus_one { "plus" } else { "coin"};
+                let coin_in_screen = coin.map_origin == player.map_origin;
+                if coin_in_screen {
+                    let sheet_name = if coin.show_plus_one { "plus" } else { "coin"};
 
-                let coin_sheet: HtmlImageElement = player.sprite_sheets.get(sheet_name)
-                    .unwrap().sheet.0.clone().unwrap().into();
-                {
-                    let coin_sprite_sheet = player.sprite_sheets.get_mut(sheet_name).unwrap().clone();
-                    let _ = draw_abs(
-                        &coin_sheet, 
-                        &coin_sprite_sheet, 
-                        ctx, 
-                        player, 
-                        coin.tile.position.x, 
-                        coin.tile.position.y, 
+                    let coin_sheet: HtmlImageElement = player.sprite_sheets.get(sheet_name)
+                        .unwrap().sheet.0.clone().unwrap().into();
+                    {
+                        let coin_sprite_sheet = player.sprite_sheets.get_mut(sheet_name).unwrap().clone();
+                        let _ = draw_abs(
+                            &coin_sheet, 
+                            &coin_sprite_sheet, 
+                            ctx, 
+                            player, 
+                            coin.position.x, 
+                            coin.position.y, 
+                        );
+                    }
+                    let coin_sprite_sheet = player.sprite_sheets.get_mut(sheet_name).unwrap();
+                    let coin_pointer_limit = coin_sprite_sheet.pointer_y_limit.clone();
+                    manage_sprite_sheet::<fn()>(
+                        coin_sprite_sheet,
+                        1.0,
+                        coin_pointer_limit,
+                        None,
+                        tile_size
                     );
                 }
-                let coin_sprite_sheet = player.sprite_sheets.get_mut(sheet_name).unwrap();
-                let coin_pointer_limit = coin_sprite_sheet.pointer_y_limit.clone();
-                manage_sprite_sheet::<fn()>(
-                    coin_sprite_sheet,
-                    1.0,
-                    coin_pointer_limit,
-                    None,
-                    tile_size
-                );
             }
 
             for enemy in enemies.iter_mut() {

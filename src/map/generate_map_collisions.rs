@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::{ coins::types::Coin, enemies::{self, climber::climber::Climber, crawler::crawler::Crawler, types::EnemyTrait}, get_map, get_random, log_out_f, Player, Tile, Vec2, Vec2usize };
+use crate::{ coins::types::Coin, enemies::{self, climber::climber::Climber, crawler::crawler::Crawler, types::EnemyTrait}, get_map, get_random, Player, Tile, Vec2, Vec2usize };
 
 pub fn generate_map_collisions(
     origin_x: usize, 
@@ -62,14 +62,6 @@ pub fn generate_map_collisions(
             }
             if game_map[y][x] == 9 {
                 lethal_tiles.push(tile.clone())
-            }
-            if game_map[y][x] == 12 {
-                coins.push(Coin {
-                    tile: tile.clone(),
-                    active: true,
-                    show_plus_one: false,
-                    counter: 0,
-                });
             }
 
             if !generate_enemies {

@@ -1,6 +1,14 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
+ * @param {number} key_code
+ */
+export function movement(key_code: number): void;
+/**
+ * @param {number} key_code
+ */
+export function stop_movement(key_code: number): void;
+/**
  * @param {string} name
  * @param {boolean} sheet
  * @param {HTMLImageElement | undefined} [img]
@@ -12,25 +20,17 @@ export function set_image(name: string, sheet: boolean, img?: HTMLImageElement):
 export function get_and_give_f64(num?: number): void;
 export function initialize(): void;
 export function render(): void;
-/**
- * @param {number} key_code
- */
-export function movement(key_code: number): void;
-/**
- * @param {number} key_code
- */
-export function stop_movement(key_code: number): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly movement: (a: number) => void;
+  readonly stop_movement: (a: number) => void;
   readonly set_image: (a: number, b: number, c: number, d: number) => void;
   readonly get_and_give_f64: (a: number, b: number) => void;
   readonly initialize: () => void;
   readonly render: () => Array;
-  readonly movement: (a: number) => void;
-  readonly stop_movement: (a: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;

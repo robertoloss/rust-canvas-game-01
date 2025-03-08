@@ -1,7 +1,9 @@
-use crate::{Player, Tile};
+use crate::{Player, Vec2, Vec2usize};
 
+#[derive(Debug)]
 pub struct Coin {
-    pub tile: Tile,
+    pub map_origin: Vec2usize,
+    pub position: Vec2,
     pub show_plus_one: bool,
     pub active: bool,
     pub counter: u8,
@@ -9,10 +11,10 @@ pub struct Coin {
 impl Coin {
     pub fn player_collision(&self, player: &Player) -> bool {
         let tile_size = player.tile_size;
-        if self.tile.position.x + 20. > player.position.x + tile_size  { return false };
-        if self.tile.position.x + tile_size < player.position.x + 20.  { return false };
-        if self.tile.position.y > player.position.y + tile_size -20.  { return false };
-        if self.tile.position.y + tile_size < player.position.y  { return false };
+        if self.position.x + 20. > player.position.x + tile_size  { return false };
+        if self.position.x + tile_size < player.position.x + 20.  { return false };
+        if self.position.y > player.position.y + tile_size -20.  { return false };
+        if self.position.y + tile_size < player.position.y  { return false };
         true
     }
     pub fn show_plus_one(&mut self) {
