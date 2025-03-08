@@ -1,7 +1,11 @@
 use crate::{play, Player};
 use super::types::Coin;
 
-pub fn manage_coins(player: &mut Player, coins: &mut Vec<Coin>) {
+pub fn manage_coins(
+    player: &mut Player, 
+    coins: &mut Vec<Coin>,
+    delta: f64
+) {
     coins
         .iter_mut()
         .for_each(|coin| {
@@ -15,7 +19,7 @@ pub fn manage_coins(player: &mut Player, coins: &mut Vec<Coin>) {
                 }
                 if coin.show_plus_one {
                     if coin.counter < 50 {
-                        coin.position.y -= 1.;
+                        coin.position.y -= 1. / delta;
                         coin.counter += 1;
                     } else {
                         coin.deactivate();

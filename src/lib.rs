@@ -6,7 +6,6 @@ mod player;
 mod enemies;
 mod coins;
 pub mod draw;
-use coins::manage_coins;
 use coins::manage_coins::manage_coins;
 use enemies::enemies_check_collision::enemies_check_collisions;
 use enemies::enemies_move::enemies_move;
@@ -132,7 +131,8 @@ pub fn render() -> Result<(), JsValue> {
 
     manage_coins(
         &mut player,
-        &mut coins
+        &mut coins,
+        delta
     );
 
     enemies_move(
