@@ -1,8 +1,10 @@
-use crate::{collisions::normal_tile_collision::normal_tile_collision, Player, Tile};
+use crate::{Player, Tile};
 
 pub struct Coin {
     pub tile: Tile,
+    pub show_plus_one: bool,
     pub active: bool,
+    pub counter: u8,
 }
 impl Coin {
     pub fn player_collision(&self, player: &Player) -> bool {
@@ -12,6 +14,9 @@ impl Coin {
         if self.tile.position.y > player.position.y + tile_size -20.  { return false };
         if self.tile.position.y + tile_size < player.position.y  { return false };
         true
+    }
+    pub fn show_plus_one(&mut self) {
+        self.show_plus_one = true;
     }
     pub fn deactivate(&mut self) {
         self.active = false;

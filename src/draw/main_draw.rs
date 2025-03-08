@@ -65,21 +65,23 @@ pub fn main_draw(
                 );
             }
 
-            let coin_sheet: HtmlImageElement = player.sprite_sheets.get("coin")
-                .unwrap().sheet.0.clone().unwrap().into();
             for coin in &mut *coins {
+                let sheet_name = if coin.show_plus_one { "plus" } else { "coin"};
+
+                let coin_sheet: HtmlImageElement = player.sprite_sheets.get(sheet_name)
+                    .unwrap().sheet.0.clone().unwrap().into();
                 {
-                    let coin_sprite_sheet = player.sprite_sheets.get_mut("coin").unwrap().clone();
-                    draw_this_sw_sh(
+                    let coin_sprite_sheet = player.sprite_sheets.get_mut(sheet_name).unwrap().clone();
+                    let _ = draw_abs(
                         &coin_sheet, 
                         &coin_sprite_sheet, 
                         ctx, 
                         player, 
-                        coin.tile.tile_pos.x, 
-                        coin.tile.tile_pos.y, 
+                        coin.tile.position.x, 
+                        coin.tile.position.y, 
                     );
                 }
-                let coin_sprite_sheet = player.sprite_sheets.get_mut("coin").unwrap();
+                let coin_sprite_sheet = player.sprite_sheets.get_mut(sheet_name).unwrap();
                 let coin_pointer_limit = coin_sprite_sheet.pointer_y_limit.clone();
                 manage_sprite_sheet::<fn()>(
                     coin_sprite_sheet,

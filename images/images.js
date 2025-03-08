@@ -100,5 +100,10 @@ export const images = [
 			name: 'coin',
 			isSheet: true,
 		},
+		{
+			src: './assets/plus_1.png',
+			name: 'plus',
+			isSheet: true,
+		},
 	]
 

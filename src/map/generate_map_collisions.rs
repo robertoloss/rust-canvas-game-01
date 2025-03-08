@@ -67,6 +67,8 @@ pub fn generate_map_collisions(
                 coins.push(Coin {
                     tile: tile.clone(),
                     active: true,
+                    show_plus_one: false,
+                    counter: 0,
                 });
             }
 
