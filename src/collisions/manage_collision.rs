@@ -104,6 +104,9 @@ pub fn manage_collision(
                 UpDown::Up => from_below_above = intersection_y > t.position.y + off_tile_y_intersection,
                 UpDown::Down => {
                     from_below_above = intersection_y < t.position.y + off_tile_y_intersection;
+                    if !player.on_the_ground {
+                        player.on_the_ground = true;
+                    } 
                 }
             }
             //console::log_1(&format!("from_below_above {}", from_below_above).into());

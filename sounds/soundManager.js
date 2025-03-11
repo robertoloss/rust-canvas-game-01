@@ -26,7 +26,7 @@ export const SoundManager = {
           sound.volume = 0.5; 
           break;
         case "ground":
-          sound.volume = 0.7; 
+          sound.volume = 0.5; 
           break;
         default:
           sound.volume = 0.5; 
