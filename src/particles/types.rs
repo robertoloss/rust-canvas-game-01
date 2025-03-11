@@ -25,8 +25,6 @@ impl Default for Particle {
     }
 }
 
-
-
 impl Particle {
     pub fn moves(&mut self, delta: f64) {
         if self.counter >= self.limit {

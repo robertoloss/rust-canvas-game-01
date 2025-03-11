@@ -161,6 +161,25 @@ export function stop_movement(key_code) {
     wasm.stop_movement(key_code);
 }
 
+function notDefined(what) { return () => { throw new Error(`${what} is not defined`); }; }
+
+export function initialize() {
+    wasm.initialize();
+}
+
+function takeFromExternrefTable0(idx) {
+    const value = wasm.__wbindgen_export_2.get(idx);
+    wasm.__externref_table_dealloc(idx);
+    return value;
+}
+
+export function render() {
+    const ret = wasm.render();
+    if (ret[1]) {
+        throw takeFromExternrefTable0(ret[0]);
+    }
+}
+
 function isLikeNone(x) {
     return x === undefined || x === null;
 }
@@ -186,25 +205,6 @@ export function set_image(name, sheet, img) {
  */
 export function get_and_give_f64(num) {
     wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
-}
-
-function notDefined(what) { return () => { throw new Error(`${what} is not defined`); }; }
-
-export function initialize() {
-    wasm.initialize();
-}
-
-function takeFromExternrefTable0(idx) {
-    const value = wasm.__wbindgen_export_2.get(idx);
-    wasm.__externref_table_dealloc(idx);
-    return value;
-}
-
-export function render() {
-    const ret = wasm.render();
-    if (ret[1]) {
-        throw takeFromExternrefTable0(ret[0]);
-    }
 }
 
 function handleError(f, args) {
@@ -254,16 +254,16 @@ function __wbg_get_imports() {
     imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
         SoundManager.play(getStringFromWasm0(arg0, arg1));
     };
-    imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
-        const ret = getStringFromWasm0(arg0, arg1);
-        return ret;
-    };
     imports.wbg.__wbg_getrandomint_db1e3bdafe1f2f77 = function(arg0, arg1) {
         const ret = window.get_random_int(arg0 >>> 0, arg1 >>> 0);
         return ret;
     };
     imports.wbg.__wbg_screensize_53f1d2fd205ae306 = typeof window.screen_size == 'function' ? window.screen_size : notDefined('window.screen_size');
     imports.wbg.__wbg_isgamepaused_b10417fb6998d7a7 = typeof window.is_game_paused == 'function' ? window.is_game_paused : notDefined('window.is_game_paused');
+    imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
+        const ret = getStringFromWasm0(arg0, arg1);
+        return ret;
+    };
     imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
         const ret = new Error();
         return ret;

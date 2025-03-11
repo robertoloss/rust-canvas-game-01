@@ -1,3 +1,4 @@
+use crate::initialize;
 use crate::particles::jump_particles::generate_jump_particles;
 use crate::play;
 use crate::PLAYER;
@@ -59,6 +60,11 @@ pub fn movement(key_code: i32) {
         5 => {
             player.is_hanging = false;
         },
+        10 => {
+            player.position = player.position_spawn.clone();
+            drop(player);
+            initialize();
+        }
         _ => {}
     }
 }

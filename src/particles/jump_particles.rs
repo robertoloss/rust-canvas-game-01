@@ -1,10 +1,6 @@
 use crate::{get_random, get_random_int, Player, Vec2, PARTICLES};
-use super::types::Particle;
+use super::{types::Particle, utils::random_gray};
 
-fn random_gray() -> String {
-    let gray_value = get_random_int(100, 200); 
-    format!("#{:02X}{:02X}{:02X}", gray_value, gray_value, gray_value) 
-}
 
 pub fn generate_jump_particles(player: &Player) {
     let mut particles = PARTICLES.lock().unwrap();
@@ -33,7 +29,7 @@ pub fn generate_jump_particles(player: &Player) {
                 x: vel_x + off_x,  
                 y: 0.5 + off_y  
             },
-            color: random_gray(),
+            color: random_gray(100,200),
             limit: 15 + off_limit as u64,
             ..Default::default()
         };

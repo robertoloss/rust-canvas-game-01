@@ -42,7 +42,7 @@ window.addEventListener("focus", () => {
 window.screenSize = window.innerWidth;
 window.screen_size = () => window.screenSize;
 window.addEventListener("resize", () => {
-  return window.screenSize = windown.innerWidth
+  return window.screenSize = window?.innerWidth
 })
 
 
@@ -93,6 +93,7 @@ async function start() {
 				case 'KeyZ': keyCode = 3; break;
 				case 'KeyP': keyCode = 4; break;
 				case 'ArrowDown': keyCode = 5; break;
+				case 'KeyR': keyCode = 10; break;
 				default: keyCode = -1;
 		}
 		return keyCode
