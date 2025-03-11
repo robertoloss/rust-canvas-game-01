@@ -147,6 +147,34 @@ function getDataViewMemory0() {
     }
     return cachedDataViewMemory0;
 }
+
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
+
+function addToExternrefTable0(obj) {
+    const idx = wasm.__externref_table_alloc();
+    wasm.__wbindgen_export_2.set(idx, obj);
+    return idx;
+}
+/**
+ * @param {string} name
+ * @param {boolean} sheet
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_image(name, sheet, img) {
+    const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.set_image(ptr0, len0, sheet, isLikeNone(img) ? 0 : addToExternrefTable0(img));
+}
+
+/**
+ * @param {number | undefined} [num]
+ */
+export function get_and_give_f64(num) {
+    wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
+}
+
 /**
  * @param {number} key_code
  */
@@ -178,33 +206,6 @@ export function render() {
     if (ret[1]) {
         throw takeFromExternrefTable0(ret[0]);
     }
-}
-
-function isLikeNone(x) {
-    return x === undefined || x === null;
-}
-
-function addToExternrefTable0(obj) {
-    const idx = wasm.__externref_table_alloc();
-    wasm.__wbindgen_export_2.set(idx, obj);
-    return idx;
-}
-/**
- * @param {string} name
- * @param {boolean} sheet
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_image(name, sheet, img) {
-    const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
-    wasm.set_image(ptr0, len0, sheet, isLikeNone(img) ? 0 : addToExternrefTable0(img));
-}
-
-/**
- * @param {number | undefined} [num]
- */
-export function get_and_give_f64(num) {
-    wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
 }
 
 function handleError(f, args) {
@@ -251,19 +252,19 @@ function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
     imports.wbg.__wbg_getrandom_e44eeeeb5d71b1cf = typeof window.get_random == 'function' ? window.get_random : notDefined('window.get_random');
-    imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
-        SoundManager.play(getStringFromWasm0(arg0, arg1));
-    };
-    imports.wbg.__wbg_getrandomint_db1e3bdafe1f2f77 = function(arg0, arg1) {
-        const ret = window.get_random_int(arg0 >>> 0, arg1 >>> 0);
-        return ret;
-    };
-    imports.wbg.__wbg_screensize_53f1d2fd205ae306 = typeof window.screen_size == 'function' ? window.screen_size : notDefined('window.screen_size');
-    imports.wbg.__wbg_isgamepaused_b10417fb6998d7a7 = typeof window.is_game_paused == 'function' ? window.is_game_paused : notDefined('window.is_game_paused');
     imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
         const ret = getStringFromWasm0(arg0, arg1);
         return ret;
     };
+    imports.wbg.__wbg_play_167e5b0db9e20b38 = function(arg0, arg1) {
+        SoundManager.play(getStringFromWasm0(arg0, arg1));
+    };
+    imports.wbg.__wbg_screensize_53f1d2fd205ae306 = typeof window.screen_size == 'function' ? window.screen_size : notDefined('window.screen_size');
+    imports.wbg.__wbg_getrandomint_db1e3bdafe1f2f77 = function(arg0, arg1) {
+        const ret = window.get_random_int(arg0 >>> 0, arg1 >>> 0);
+        return ret;
+    };
+    imports.wbg.__wbg_isgamepaused_b10417fb6998d7a7 = typeof window.is_game_paused == 'function' ? window.is_game_paused : notDefined('window.is_game_paused');
     imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
         const ret = new Error();
         return ret;
