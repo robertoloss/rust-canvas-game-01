@@ -11,6 +11,9 @@ pub fn player_move(
 ) {
     let brake = if player.moves.airborne { 0.06 } else { 0.5 };
     let acceleration = 0.3;
+    if player.velocity.y > 0. {
+        player.on_the_ground = false;
+    }
     if player.moves.right {
         if player.velocity.x < player.horizontal_velocity {
             player.velocity.x += acceleration 

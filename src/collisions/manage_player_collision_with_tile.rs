@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use crate::particles::types::Particle;
 use crate::{Player, Tile};
 use crate::collisions::types::{LeftRight,UpDown};
 use crate::collisions::manage_collision::manage_collision;
@@ -6,7 +7,8 @@ use crate::collisions::manage_collision::manage_collision;
 
 pub fn manage_player_collision_with_tile(
     player: &mut Player, 
-    collision_map: &mut HashMap<(usize, usize), Tile>
+    collision_map: &mut HashMap<(usize, usize), Tile>,
+    particles: &mut Vec<Particle>
 ) {
     let tile_size = player.tile_size;
     let cling_offset = -0.1;
@@ -37,7 +39,8 @@ pub fn manage_player_collision_with_tile(
                 (top_left, top_right, bottom_left),
                 player,
                 UpDown::Up, 
-                LeftRight::Left
+                LeftRight::Left,
+                particles
             )
         } else {
             manage_collision(
@@ -45,7 +48,8 @@ pub fn manage_player_collision_with_tile(
                 (top_right, top_left, bottom_right),
                 player,
                 UpDown::Up, 
-                LeftRight::Right
+                LeftRight::Right,
+                particles
             );
         }
     } else if player.velocity.y > 0. {
@@ -55,35 +59,18 @@ pub fn manage_player_collision_with_tile(
                 (bottom_left, bottom_right, top_left),
                 player,
                 UpDown::Down,
-                LeftRight::Left
+                LeftRight::Left,
+                particles
             );
-        } else 
-            //if player.velocity.x > 0. 
-        {
+        } else {
             manage_collision(
                 collision_map,
                 (bottom_right, bottom_left, top_right),
                 player, 
                 UpDown::Down,
-                LeftRight::Right
+                LeftRight::Right,
+                particles
             );
         } 
-        //else if player.facing_left {
-        //    manage_collision(
-        //        collision_map,
-        //        (bottom_left, bottom_right, top_left),
-        //        player,
-        //        UpDown::Down,
-        //        LeftRight::Left
-        //    );
-        //} else {
-        //    manage_collision(
-        //        collision_map,
-        //        (bottom_right, bottom_left_behind, top_right),
-        //        player, 
-        //        UpDown::Down,
-        //        LeftRight::Right
-        //    );
-        //}
     }
 }

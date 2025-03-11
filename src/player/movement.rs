@@ -25,6 +25,7 @@ pub fn movement(key_code: i32) {
             }
         },
         2 => {
+            player.on_the_ground = false;
             player.moves.jump = true;
             player.moves.stop_jump = false;
             player.moves.airborne = true;

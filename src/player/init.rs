@@ -23,6 +23,7 @@ impl Default for Player {
                 y: 0.0
             },
             gravity: 0.2, //0.5,
+            on_the_ground: true,
             sprite_counter: 0,
             jump_velocity: -5.7, //-6.4, //-10.1,
             horizontal_velocity: 2.,

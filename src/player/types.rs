@@ -52,6 +52,7 @@ pub struct Player {
     pub hitbox: Direction,
     pub velocity: Vec2,
     pub gravity: f64,
+    pub on_the_ground: bool,
     pub jump_velocity: f64,
     pub max_fall_velocity: f64,
     pub horizontal_velocity: f64,

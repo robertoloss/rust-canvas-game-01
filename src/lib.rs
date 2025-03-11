@@ -120,7 +120,8 @@ pub fn render() -> Result<(), JsValue> {
         );
         manage_player_collision_with_tile(
             &mut(*player), 
-            &mut collision_map
+            &mut collision_map,
+            &mut particles
         ); 
     }
     

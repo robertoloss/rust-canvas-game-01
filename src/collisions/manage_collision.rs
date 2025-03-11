@@ -1,5 +1,5 @@
-use web_sys::console;
-
+use crate::particles::hit_ground_particles::hit_ground_particles;
+use crate::particles::types::Particle;
 use crate::{log_out_f, Player, Tile};
 use std::collections::HashMap;
 use crate::collisions::types::{LeftRight,UpDown};
@@ -29,7 +29,8 @@ pub fn manage_collision(
     ntuple: ((usize, usize), (usize, usize), (usize, usize)), 
     player: &mut Player,
     up_down: UpDown,
-    left_right: LeftRight
+    left_right: LeftRight,
+    particles: &mut Vec<Particle>
 ) {
     let (
         corner_tile,
@@ -68,6 +69,15 @@ pub fn manage_collision(
             check_airborne(player, up_down.clone());
             check_hanging(player, up_down.clone(), &t);
             t.touched_by_player = true;
+            match up_down {
+                UpDown::Down => {
+                    if !player.on_the_ground {
+                        hit_ground_particles(player, particles);
+                        player.on_the_ground = true;
+                    } 
+                }
+                _ => { }
+            }
         }
         if let Some(t) = tile_collision(opposite_y_to_corner_tile, collision_map) {
             player.velocity.x = 0.;
@@ -91,7 +101,13 @@ pub fn manage_collision(
             let from_below_above: bool; 
             match up_down {
                 UpDown::Up => from_below_above = intersection_y > t.position.y + off_tile_y_intersection,
-                UpDown::Down => from_below_above = intersection_y < t.position.y + off_tile_y_intersection
+                UpDown::Down => {
+                    from_below_above = intersection_y < t.position.y + off_tile_y_intersection;
+                    if !player.on_the_ground && false {
+                        hit_ground_particles(player, particles);
+                        player.on_the_ground = true;
+                    } 
+                }
             }
             //console::log_1(&format!("from_below_above {}", from_below_above).into());
             if from_below_above {
