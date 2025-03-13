@@ -105,5 +105,10 @@ export const images = [
 			name: 'plus',
 			isSheet: true,
 		},
+		{
+			src: './assets/spawn.png',
+			name: 'spawn',
+			isSheet: false,
+		},
 	]
 

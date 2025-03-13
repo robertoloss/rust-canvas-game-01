@@ -60,6 +60,7 @@ impl Default for Player {
                 (String::from("hang"), ThreadSafeImage(None)),
                 (String::from("cling_still_R"), ThreadSafeImage(None)),
                 (String::from("cling_still_L"), ThreadSafeImage(None)),
+                (String::from("spawn"), ThreadSafeImage(None)),
             ]),
             sprite_sheets: HashMap::from([
                 (String::from("lava"), 

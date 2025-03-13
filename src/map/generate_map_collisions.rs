@@ -45,6 +45,12 @@ pub fn generate_map_collisions(
                     tile.clone()
                 );
             }
+            if game_map[y][x] == 20 {
+                collisions_map.insert(
+                    ( (x % num_of_tiles) , (y % num_of_tiles) ), 
+                    tile.clone()
+                );
+            }
             if game_map[y][x] == 6 {
                 tile.sheet = Some(player.sprite_sheets.get("sand").unwrap().clone());
                 collisions_map.insert(
