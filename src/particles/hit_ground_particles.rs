@@ -1,4 +1,4 @@
-use crate::{get_random, get_random_int, Player, Vec2};
+use crate::{utils::extern_c::{get_random, get_random_int}, Player, Vec2};
 use super::{types::Particle, utils::random_gray};
 
 

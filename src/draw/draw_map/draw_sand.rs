@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::play;
+use crate::utils::extern_c::play;
 use crate::Vec2usize;
 use crate::TileToRestore;
 use crate::draw::manage_sprite_sheet::manage_sprite_sheet;

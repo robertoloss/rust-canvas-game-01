@@ -1,6 +1,7 @@
 use crate::particles::hit_ground_particles::hit_ground_particles;
 use crate::particles::types::Particle;
-use crate::{log_out_f, play, Player, Tile};
+use crate::utils::extern_c::play;
+use crate::{log_out_f, Player, Tile};
 use std::collections::HashMap;
 use crate::collisions::types::{LeftRight,UpDown};
 use crate::collisions::get_manage_collision_params::*;

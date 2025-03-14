@@ -5,7 +5,7 @@ mod collisions;
 mod player;
 mod enemies;
 mod coins;
-pub mod draw;
+mod draw;
 use coins::manage_coins::manage_coins;
 use enemies::enemies_check_collision::enemies_check_collisions;
 use enemies::enemies_move::enemies_move;
@@ -14,6 +14,8 @@ use map::generate_persisting_entities::generate_persisting_entities;
 use map::restore_sand_tiles::restore_sand_tiles;
 use particles::manage_particles::manage_particles;
 use particles::types::Particle;
+use utils::extern_c::is_game_paused;
+use utils::extern_c::screen_size;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
@@ -38,23 +40,6 @@ lazy_static! {
     static ref COINS: Mutex<Vec<Coin>> = Mutex::new(vec![]);
 }
 
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = SoundManager)]
-    fn play(sound_name: &str);
-
-    #[wasm_bindgen(js_namespace = window )]
-    fn get_random(min: f64, max: f64) -> f64;
-
-    #[wasm_bindgen(js_namespace = window )]
-    fn get_random_int(min: u32, max: u32) -> u32;
-
-    #[wasm_bindgen(js_namespace = window )]
-    fn is_game_paused() -> bool;
-    
-    #[wasm_bindgen(js_namespace = window )]
-    fn screen_size() -> u32;
-}
 
 #[wasm_bindgen]
 pub fn initialize() {

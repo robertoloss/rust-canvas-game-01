@@ -1,4 +1,4 @@
-use crate::{play, Player};
+use crate::{utils::extern_c::play, Player};
 use super::types::Coin;
 
 pub fn manage_coins(

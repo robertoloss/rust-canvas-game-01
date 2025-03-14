@@ -1,6 +1,6 @@
 use crate::initialize;
 use crate::particles::jump_particles::generate_jump_particles;
-use crate::play;
+use crate::utils::extern_c::play;
 use crate::PLAYER;
 use crate::wasm_bindgen;
 

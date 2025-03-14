@@ -1,5 +1,8 @@
 use std::collections::HashMap;
-use crate::{ coins::types::Coin, enemies::{self, climber::climber::Climber, crawler::crawler::Crawler, types::EnemyTrait}, get_map, get_random, Player, Tile, Vec2, Vec2usize };
+use crate::utils::extern_c::get_random;
+use crate::{ 
+    coins::types::Coin, enemies::{self, climber::climber::Climber, crawler::crawler::Crawler, types::EnemyTrait}, get_map, Player, Tile, Vec2, Vec2usize 
+};
 
 pub fn generate_map_collisions(
     origin_x: usize, 

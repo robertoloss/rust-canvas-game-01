@@ -1,5 +1,6 @@
 use std::collections::HashMap;
-use crate::{play, Player, Tile};
+use crate::utils::extern_c::play;
+use crate::{Player, Tile};
 use crate::collisions::types::LeftRight;
 
 use super::player_can_still_hang::player_can_still_hang;
