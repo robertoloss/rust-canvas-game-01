@@ -42,6 +42,10 @@ impl Default for Player {
                 x: 0,
                 y: 0
             },
+            map_origin_spawn: Vec2usize {
+                x: 0,
+                y: 0
+            },
             tile_size,
             screen_tiles: 16,
             can_cling: LeftRight::None,

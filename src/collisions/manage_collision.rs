@@ -1,3 +1,4 @@
+use crate::map::manage_spawn_collision::manage_spawn_collision;
 use crate::particles::hit_ground_particles::hit_ground_particles;
 use crate::particles::types::Particle;
 use crate::utils::extern_c::play;
@@ -72,6 +73,9 @@ pub fn manage_collision(
             t.touched_by_player = true;
             match up_down {
                 UpDown::Down => {
+                    if t.spawning_tile {
+                        manage_spawn_collision(player, t);
+                    }
                     if !player.on_the_ground {
                         play("ground");
                         hit_ground_particles(player, particles);
@@ -104,6 +108,9 @@ pub fn manage_collision(
             match up_down {
                 UpDown::Up => from_below_above = intersection_y > t.position.y + off_tile_y_intersection,
                 UpDown::Down => {
+                    if t.spawning_tile {
+                        manage_spawn_collision(player, t);
+                    }
                     from_below_above = intersection_y < t.position.y + off_tile_y_intersection;
                     if !player.on_the_ground {
                         player.on_the_ground = true;

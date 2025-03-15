@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use crate::log_out_f;
 use crate::utils::extern_c::get_random;
 use crate::{ 
     coins::types::Coin, enemies::{self, climber::climber::Climber, crawler::crawler::Crawler, types::EnemyTrait}, get_map, Player, Tile, Vec2, Vec2usize 
@@ -9,7 +10,6 @@ pub fn generate_map_collisions(
     origin_y: usize, 
     player: &Player,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
-    coins: &mut Vec<Coin>,
     generate_enemies: bool,
 ) -> (
     HashMap<(usize,usize),Tile>,
@@ -29,6 +29,7 @@ pub fn generate_map_collisions(
         for x in origin_x..origin_x + num_of_tiles {
             if x >= game_map[y].len() { return (collisions_map,lethal_tiles) }
             let mut tile = Tile {
+                map_origin: player.map_origin.clone(),
                 tile_pos: Vec2usize {
                     x: (x % num_of_tiles),
                     y: (y % num_of_tiles)
@@ -41,6 +42,7 @@ pub fn generate_map_collisions(
                 touched_by_player: false,
                 just_restored: false,
                 hanging_tile: false,
+                spawning_tile: false,
             };
             if game_map[y][x] == 0 {
                 collisions_map.insert(
@@ -49,9 +51,11 @@ pub fn generate_map_collisions(
                 );
             }
             if game_map[y][x] == 20 {
+                let mut new_tile = tile.clone();
+                new_tile.spawning_tile = true;
                 collisions_map.insert(
                     ( (x % num_of_tiles) , (y % num_of_tiles) ), 
-                    tile.clone()
+                    new_tile
                 );
             }
             if game_map[y][x] == 6 {

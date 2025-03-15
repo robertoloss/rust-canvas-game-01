@@ -19,6 +19,7 @@ pub fn restore_sand_tiles(
             let mut cloned_sheet = sheet.clone().unwrap();
             cloned_sheet.tile_position_pointer_y = 6.;
             let new_tile = Tile {
+                map_origin: player.map_origin.clone(),
                 tile_pos: Vec2usize {
                     x: tile.tile_coordinates.x - origin_x,
                     y: tile.tile_coordinates.y - origin_y,
@@ -31,6 +32,7 @@ pub fn restore_sand_tiles(
                 touched_by_player: false,
                 just_restored: true,
                 hanging_tile: false,
+                spawning_tile: false
             };
             let overlap = normal_tile_collision(&new_tile, player);
             if !overlap {

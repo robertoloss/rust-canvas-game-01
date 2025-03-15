@@ -3,3 +3,4 @@ pub mod map_move;
 pub mod generate_map_collisions;
 pub mod restore_sand_tiles;
 pub mod generate_persisting_entities;
+pub mod manage_spawn_collision;

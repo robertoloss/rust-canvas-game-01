@@ -55,7 +55,6 @@ pub fn initialize() {
         player.map_origin.y, 
         &player, 
         &mut enemies,
-        &mut coins,
         true
     );
     generate_persisting_entities(

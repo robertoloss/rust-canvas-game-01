@@ -16,7 +16,6 @@ fn update_collisions_and_lethal_tiles(
         player.map_origin.y, 
         &(*player), 
         enemies,
-        coins,
         true
     );
 }

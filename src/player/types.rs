@@ -49,6 +49,7 @@ pub struct Player {
     pub is_dead: bool,
     pub sound_playing: HashMap<String, bool>,
     pub position_spawn: Vec2,
+    pub map_origin_spawn: Vec2usize,
     pub hitbox: Direction,
     pub velocity: Vec2,
     pub gravity: f64,
