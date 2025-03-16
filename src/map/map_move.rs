@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use crate::coins::types::Coin;
 use crate::enemies::types::EnemyTrait;
 use crate::generate_map_collisions;
+use crate::particles::types::Particle;
 use crate::{Tile, Player};
 
 fn update_collisions_and_lethal_tiles(
@@ -20,6 +21,7 @@ fn update_collisions_and_lethal_tiles(
     );
 }
 pub fn map_move(
+    particles: &mut Vec<Particle>,
     player: &mut Player, 
     lethal_tiles: &mut Vec<Tile>,
     collision_map: &mut HashMap<(usize, usize), Tile>,
@@ -51,6 +53,7 @@ pub fn map_move(
         update = true;
     }
     if update {
+        *particles = vec![];
         update_collisions_and_lethal_tiles(
             player, 
             lethal_tiles, 

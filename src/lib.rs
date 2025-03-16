@@ -13,6 +13,7 @@ use enemies::types::EnemyTrait;
 use map::generate_persisting_entities::generate_persisting_entities;
 use map::restore_sand_tiles::restore_sand_tiles;
 use particles::manage_particles::manage_particles;
+use particles::spawn_particles::spawn_particles;
 use particles::types::Particle;
 use utils::extern_c::is_game_paused;
 use utils::extern_c::screen_size;
@@ -96,6 +97,7 @@ pub fn render() -> Result<(), JsValue> {
             &mut collision_map
         );
         map_move(
+            &mut particles,
             &mut player,
             &mut lethal_tiles,
             &mut collision_map,
@@ -108,7 +110,14 @@ pub fn render() -> Result<(), JsValue> {
             &mut particles
         ); 
     }
-    
+
+    if player.map_origin == player.map_origin_spawn {
+        spawn_particles(
+            &player,
+            &mut particles
+        );
+    }
+
     manage_particles(
         &mut particles,
         delta

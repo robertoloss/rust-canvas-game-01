@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use web_sys::HtmlImageElement;
 use crate::enemies::types::EnemyTrait;
 use crate::get_context;
+use crate::log_out_f;
 use crate::particles::types::Particle;
 use crate::Tile;
 use draw_abs::draw_abs;

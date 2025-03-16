@@ -35,7 +35,7 @@ export const images = [
 			isSheet: true,
 		},
 		{
-			src: './assets/Lava_1_3.png',
+			src: './assets/Lava_1_4.png',
 			name: 'lava',
 			isSheet: true,
 		},

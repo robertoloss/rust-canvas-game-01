@@ -17,7 +17,7 @@ impl Default for Particle {
             position: Vec2 { x: 0.0, y: 0.0 },
             velocity: Vec2 { x: 0.0, y: 0.0 },
             velocity_change: Vec2 { x: 0.0, y: 0.0 },
-            color: "white".to_string(),
+            color: "#ffffff".to_string(),
             active: true,  
             counter: 0,    
             limit: 50,
@@ -43,9 +43,21 @@ impl Particle {
     }
 }
 
+
 fn darken_color(hex: &str) -> String {
-    let part = &hex[1..3];
-    let value = u32::from_str_radix(part, 16).unwrap(); 
-    let darker = if value > 20 { value - 3 } else { value }; 
-    format!("#{:02X}{:02X}{:02X}", darker, darker, darker)
+    if !hex.starts_with('#') || hex.len() != 7 {
+        return "#FFFFFF".to_string(); // Fallback if input is invalid
+    }
+    let r = u32::from_str_radix(&hex[1..3], 16).unwrap();
+    let g = u32::from_str_radix(&hex[3..5], 16).unwrap();
+    let b = u32::from_str_radix(&hex[5..7], 16).unwrap();
+
+    let darken = |v: u32| if v > 20 { v - 3 } else { v };
+
+    let new_r = darken(r);
+    let new_g = darken(g);
+    let new_b = darken(b);
+
+    format!("#{:02X}{:02X}{:02X}", new_r, new_g, new_b)
 }
+
