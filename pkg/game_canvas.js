@@ -149,6 +149,34 @@ function getDataViewMemory0() {
 }
 
 function notDefined(what) { return () => { throw new Error(`${what} is not defined`); }; }
+
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
+
+function addToExternrefTable0(obj) {
+    const idx = wasm.__externref_table_alloc();
+    wasm.__wbindgen_export_2.set(idx, obj);
+    return idx;
+}
+/**
+ * @param {string} name
+ * @param {boolean} sheet
+ * @param {HTMLImageElement | undefined} [img]
+ */
+export function set_image(name, sheet, img) {
+    const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    wasm.set_image(ptr0, len0, sheet, isLikeNone(img) ? 0 : addToExternrefTable0(img));
+}
+
+/**
+ * @param {number | undefined} [num]
+ */
+export function get_and_give_f64(num) {
+    wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
+}
+
 /**
  * @param {number} key_code
  */
@@ -178,33 +206,6 @@ export function render() {
     if (ret[1]) {
         throw takeFromExternrefTable0(ret[0]);
     }
-}
-
-function isLikeNone(x) {
-    return x === undefined || x === null;
-}
-
-function addToExternrefTable0(obj) {
-    const idx = wasm.__externref_table_alloc();
-    wasm.__wbindgen_export_2.set(idx, obj);
-    return idx;
-}
-/**
- * @param {string} name
- * @param {boolean} sheet
- * @param {HTMLImageElement | undefined} [img]
- */
-export function set_image(name, sheet, img) {
-    const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-    const len0 = WASM_VECTOR_LEN;
-    wasm.set_image(ptr0, len0, sheet, isLikeNone(img) ? 0 : addToExternrefTable0(img));
-}
-
-/**
- * @param {number | undefined} [num]
- */
-export function get_and_give_f64(num) {
-    wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
 }
 
 function handleError(f, args) {

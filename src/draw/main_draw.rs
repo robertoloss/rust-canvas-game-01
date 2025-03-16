@@ -17,6 +17,7 @@ use super::draw_map::*;
 use crate::coins::types::Coin;
 
 pub fn main_draw(
+    lethal_tiles: &mut Vec<Tile>,
     collision_map: &mut HashMap<(usize, usize), Tile>,
     player: &mut Player,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
@@ -123,11 +124,11 @@ pub fn main_draw(
 
             if player.is_dead {
                 return manage_death(
+                    lethal_tiles,
                     player, 
                     &ctx, 
                     collision_map, 
                     enemies,
-                    coins
                 )
             }
             

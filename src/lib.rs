@@ -140,6 +140,7 @@ pub fn render() -> Result<(), JsValue> {
     );
 
     let res = main_draw(
+        &mut lethal_tiles,
         &mut collision_map,
         &mut player,
         &mut enemies,
