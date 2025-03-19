@@ -1,4 +1,4 @@
-use crate::{coins::types::Coin, get_map, log_out_f, Player, Vec2, Vec2usize};
+use crate::{coins::types::Coin, get_map, Player, Vec2, Vec2usize};
 
 
 pub fn generate_persisting_entities(
@@ -11,7 +11,6 @@ pub fn generate_persisting_entities(
     }
     let num_of_tiles = player.screen_tiles;
     let tile_size = player.tile_size;
-    log_out_f(18 - (18 % num_of_tiles));
 
     for y in 0..game_map.len() {
         for x in 0..game_map[0].len() {

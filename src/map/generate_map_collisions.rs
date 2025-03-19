@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 use crate::log_out_f;
+use crate::particles::lava_particles::lava_particles;
+use crate::particles::types::Particle;
 use crate::utils::extern_c::get_random;
 use crate::{ 
     coins::types::Coin, enemies::{self, climber::climber::Climber, crawler::crawler::Crawler, types::EnemyTrait}, get_map, Player, Tile, Vec2, Vec2usize 
@@ -11,6 +13,7 @@ pub fn generate_map_collisions(
     player: &Player,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
     generate_enemies: bool,
+    particles: &mut Vec<Particle>
 ) -> (
     HashMap<(usize,usize),Tile>,
     Vec<Tile>
@@ -74,7 +77,8 @@ pub fn generate_map_collisions(
                 );
             }
             if game_map[y][x] == 9 {
-                lethal_tiles.push(tile.clone())
+                lethal_tiles.push(tile.clone());
+                lava_particles(particles, tile.position.clone());
             }
 
             if !generate_enemies {

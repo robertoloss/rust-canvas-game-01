@@ -34,17 +34,19 @@ pub fn main_draw(
             ctx.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
             ctx.set_fill_style_str(&"black");
             ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
-
+            
             particles
                 .into_iter()
                 .for_each(|particle| {
-                    ctx.set_fill_style_str(&particle.color);
-                    ctx.fill_rect(
-                        particle.position.x, 
-                        particle.position.y, 
-                        6.0, 
-                        6.0
-                    );
+                    if particle.should_die {
+                        ctx.set_fill_style_str(&particle.color);
+                        ctx.fill_rect(
+                            particle.position.x, 
+                            particle.position.y, 
+                            6.0, 
+                            6.0
+                        );
+                    }
                 });
 
             do_draw_map(
@@ -52,19 +54,20 @@ pub fn main_draw(
                 ctx,
                 collision_map
             )?;
-            
 
-            {
-                let mut lava_sprite_sheet = player.sprite_sheets.get_mut("lava").unwrap();
-                let lava_pointer_y_limit = lava_sprite_sheet.pointer_y_limit;
-                manage_sprite_sheet::<fn()>(
-                    &mut lava_sprite_sheet,
-                    1.0,
-                    lava_pointer_y_limit,
-                    None,
-                    tile_size
-                );
-            }
+            particles
+                .into_iter()
+                .for_each(|particle| {
+                    if !particle.should_die {
+                        ctx.set_fill_style_str(&particle.color);
+                        ctx.fill_rect(
+                            particle.position.x, 
+                            particle.position.y, 
+                            6.0, 
+                            6.0
+                        );
+                    }
+                });
 
             for coin in &mut *coins {
                 let coin_in_screen = coin.map_origin == player.map_origin;
@@ -129,6 +132,7 @@ pub fn main_draw(
                     &ctx, 
                     collision_map, 
                     enemies,
+                    particles
                 )
             }
             

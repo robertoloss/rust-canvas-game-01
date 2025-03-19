@@ -1,34 +1,38 @@
 use crate::{log_out_f, Vec2};
 
 #[derive(Debug)]
-enum ColorChange {
-    Darken,
-    Shift(String)
-}
-
-#[derive(Debug)]
 pub struct Particle {
+    pub init_position: Vec2,
     pub position: Vec2,
     pub velocity: Vec2,
+    pub init_velocity: Vec2,
     pub velocity_change: Vec2,
     pub color: String,
+    pub init_color: String,
     pub active: bool,
     pub counter: u64,
     pub limit: u64,
-    pub behavior: ColorChange
+    pub darken: bool,
+    pub color_change: Option<String>,
+    pub should_die: bool
 }
 
 impl Default for Particle {
     fn default() -> Self {
         Self {
             position: Vec2 { x: 0.0, y: 0.0 },
+            should_die: true,
+            init_position: Vec2 { x: 0.0, y: 0.0 },
             velocity: Vec2 { x: 0.0, y: 0.0 },
+            init_velocity: Vec2 { x: 0.0, y: 0.0 },
             velocity_change: Vec2 { x: 0.0, y: 0.0 },
+            init_color: "#ffffff".to_string(),
             color: "#ffffff".to_string(),
             active: true,  
             counter: 0,    
             limit: 50,
-            behavior: ColorChange::Darken
+            darken: true,
+            color_change: None
         }
     }
 }
@@ -36,7 +40,14 @@ impl Default for Particle {
 impl Particle {
     pub fn moves(&mut self, delta: f64) {
         if self.counter >= self.limit {
-            self.active = false;
+            if self.should_die {
+                self.active = false;
+            } else {
+                self.position = self.init_position.clone();
+                self.color = self.init_color.clone();
+                self.velocity = self.init_velocity.clone();
+                self.counter = 0;
+            }
             return
         }
         self.velocity.x += self.velocity_change.x;
@@ -45,13 +56,11 @@ impl Particle {
         self.position.x += self.velocity.x / delta;
         self.position.y += self.velocity.y / delta;
 
-        match &self.behavior {
-            ColorChange::Darken => { 
-                self.color = darken_color(&self.color);
-            }
-            ColorChange::Shift(target_color) => { 
-                self.color = shift_towards_color(&self.color, &target_color);
-            }
+        if self.darken { 
+            self.color = darken_color(&self.color);
+        }
+        if let Some(target_color) = &self.color_change { 
+            self.color = shift_towards_color(&self.color, &target_color);
         }
 
         self.counter += 1;

@@ -10,6 +10,7 @@ fn update_collisions_and_lethal_tiles(
     lethal_tiles: &mut Vec<Tile>,
     collision_map: &mut HashMap<(usize, usize), Tile>,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
+    particles: &mut Vec<Particle>
 ) {
     *lethal_tiles = vec![];
     (*collision_map,*lethal_tiles) = generate_map_collisions(
@@ -17,7 +18,8 @@ fn update_collisions_and_lethal_tiles(
         player.map_origin.y, 
         &(*player), 
         enemies,
-        true
+        true,
+        particles
     );
 }
 pub fn map_move(
@@ -59,6 +61,7 @@ pub fn map_move(
             lethal_tiles, 
             collision_map, 
             enemies, 
+            particles
         );
     }
 }

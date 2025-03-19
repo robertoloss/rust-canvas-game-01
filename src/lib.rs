@@ -38,6 +38,7 @@ lazy_static! {
     static ref LETHAL_TILES: Mutex<Vec<Tile>> = Mutex::new(vec![]);
     static ref ENEMIES: Mutex<Vec<Box<dyn EnemyTrait>>> = Mutex::new(vec![]);
     static ref PARTICLES: Mutex<Vec<Particle>> = Mutex::new(vec![]);
+    static ref LAVA_TILES: Mutex<Vec<Tile>> = Mutex::new(vec![]);
     static ref COINS: Mutex<Vec<Coin>> = Mutex::new(vec![]);
 }
 
@@ -49,6 +50,8 @@ pub fn initialize() {
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
     let mut enemies = ENEMIES.lock().unwrap();
     let mut coins = COINS.lock().unwrap();
+    let mut particles = PARTICLES.lock().unwrap();
+    let mut lava_tiles = LAVA_TILES.lock().unwrap();
     let player = PLAYER.lock().unwrap();
 
     (*collision_map,*lethal_tiles) = generate_map_collisions(
@@ -56,7 +59,8 @@ pub fn initialize() {
         player.map_origin.y, 
         &player, 
         &mut enemies,
-        true
+        true,
+        &mut particles
     );
     generate_persisting_entities(
         &mut coins, 

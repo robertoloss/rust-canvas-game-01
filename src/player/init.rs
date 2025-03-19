@@ -65,17 +65,9 @@ impl Default for Player {
                 (String::from("cling_still_R"), ThreadSafeImage(None)),
                 (String::from("cling_still_L"), ThreadSafeImage(None)),
                 (String::from("spawn"), ThreadSafeImage(None)),
+                (String::from("lava"), ThreadSafeImage(None)),
             ]),
             sprite_sheets: HashMap::from([
-                (String::from("lava"), 
-                 SpriteSheet {
-                    sheet: ThreadSafeImage(None),
-                    pointer_y: 0.,
-                    tile_position_pointer_y: 0.,
-                    counter: 0,
-                    counter_limit: 8,
-                    pointer_y_limit: 8. * tile_size,
-                }),
                 (String::from("plus"), 
                  SpriteSheet {
                     sheet: ThreadSafeImage(None),
