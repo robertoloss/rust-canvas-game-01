@@ -1,10 +1,8 @@
 use std::collections::HashMap;
 use wasm_bindgen::JsValue;
 use web_sys::CanvasRenderingContext2d;
-use crate::coins::types::Coin;
 use crate::enemies::types::EnemyTrait;
 use crate::generate_map_collisions;
-use crate::particles;
 use crate::particles::types::Particle;
 use crate::HtmlImageElement;
 use crate::Player;
@@ -17,7 +15,8 @@ pub fn manage_death(
     ctx: &CanvasRenderingContext2d,
     collision_map: &mut HashMap<(usize, usize), Tile>,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
-    particles: &mut Vec<Particle>
+    particles: &mut Vec<Particle>,
+    lava_tiles: &mut Vec<Tile>
 ) 
     -> Result<(), JsValue>
 {
@@ -60,7 +59,7 @@ pub fn manage_death(
                 &player, 
                 enemies,
                 true,
-                particles
+                lava_tiles
             );
             player.map_origin = player.map_origin_spawn.clone();
             player.is_dead = false;

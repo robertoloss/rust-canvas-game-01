@@ -147,8 +147,6 @@ function getDataViewMemory0() {
     }
     return cachedDataViewMemory0;
 }
-
-function notDefined(what) { return () => { throw new Error(`${what} is not defined`); }; }
 /**
  * @param {number} key_code
  */
@@ -183,6 +181,7 @@ export function get_and_give_f64(num) {
     wasm.get_and_give_f64(!isLikeNone(num), isLikeNone(num) ? 0 : num);
 }
 
+function notDefined(what) { return () => { throw new Error(`${what} is not defined`); }; }
 /**
  * @param {number} key_code
  */
@@ -259,11 +258,11 @@ function __wbg_get_imports() {
         return ret;
     };
     imports.wbg.__wbg_screensize_53f1d2fd205ae306 = typeof window.screen_size == 'function' ? window.screen_size : notDefined('window.screen_size');
-    imports.wbg.__wbg_isgamepaused_b10417fb6998d7a7 = typeof window.is_game_paused == 'function' ? window.is_game_paused : notDefined('window.is_game_paused');
     imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
         const ret = getStringFromWasm0(arg0, arg1);
         return ret;
     };
+    imports.wbg.__wbg_isgamepaused_b10417fb6998d7a7 = typeof window.is_game_paused == 'function' ? window.is_game_paused : notDefined('window.is_game_paused');
     imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
         const ret = new Error();
         return ret;

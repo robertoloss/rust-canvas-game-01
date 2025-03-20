@@ -13,7 +13,7 @@ pub fn generate_map_collisions(
     player: &Player,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
     generate_enemies: bool,
-    particles: &mut Vec<Particle>
+    lava_tiles: &mut Vec<Tile>
 ) -> (
     HashMap<(usize,usize),Tile>,
     Vec<Tile>
@@ -78,7 +78,7 @@ pub fn generate_map_collisions(
             }
             if game_map[y][x] == 9 {
                 lethal_tiles.push(tile.clone());
-                lava_particles(particles, tile.position.clone());
+                lava_tiles.push(tile.clone());
             }
 
             if !generate_enemies {

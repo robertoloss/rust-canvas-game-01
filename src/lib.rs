@@ -12,6 +12,7 @@ use enemies::enemies_move::enemies_move;
 use enemies::types::EnemyTrait;
 use map::generate_persisting_entities::generate_persisting_entities;
 use map::restore_sand_tiles::restore_sand_tiles;
+use particles::lava_particles::lava_particles;
 use particles::manage_particles::manage_particles;
 use particles::spawn_particles::spawn_particles;
 use particles::types::Particle;
@@ -50,7 +51,6 @@ pub fn initialize() {
     let mut lethal_tiles = LETHAL_TILES.lock().unwrap();
     let mut enemies = ENEMIES.lock().unwrap();
     let mut coins = COINS.lock().unwrap();
-    let mut particles = PARTICLES.lock().unwrap();
     let mut lava_tiles = LAVA_TILES.lock().unwrap();
     let player = PLAYER.lock().unwrap();
 
@@ -60,7 +60,7 @@ pub fn initialize() {
         &player, 
         &mut enemies,
         true,
-        &mut particles
+        &mut lava_tiles
     );
     generate_persisting_entities(
         &mut coins, 
@@ -76,6 +76,7 @@ pub fn render() -> Result<(), JsValue> {
     let mut enemies = ENEMIES.lock().unwrap();
     let mut particles = PARTICLES.lock().unwrap();
     let mut coins = COINS.lock().unwrap();
+    let mut lava_tiles = LAVA_TILES.lock().unwrap();
     
     let mut delta = (player.delta / 60.).clamp(0.9, 1.1);
     if screen_size() < 800 { 
@@ -106,7 +107,7 @@ pub fn render() -> Result<(), JsValue> {
             &mut lethal_tiles,
             &mut collision_map,
             &mut enemies,
-            &mut coins
+            &mut lava_tiles
         );
         manage_player_collision_with_tile(
             &mut(*player), 
@@ -121,6 +122,14 @@ pub fn render() -> Result<(), JsValue> {
             &mut particles
         );
     }
+    lava_tiles
+        .iter()
+        .for_each(|tile| {
+            lava_particles(
+                &mut particles, 
+                tile.position.clone()
+            );
+        });
 
     manage_particles(
         &mut particles,
@@ -149,7 +158,8 @@ pub fn render() -> Result<(), JsValue> {
         &mut player,
         &mut enemies,
         &mut particles,
-        &mut coins
+        &mut coins,
+        &mut lava_tiles
     );
     res
 }

@@ -22,7 +22,8 @@ pub fn main_draw(
     player: &mut Player,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
     particles: &mut Vec<Particle>,
-    coins: &mut Vec<Coin>
+    coins: &mut Vec<Coin>,
+    lava_tiles: &mut Vec<Tile>
 ) 
     -> Result<(), JsValue> 
 {
@@ -38,7 +39,7 @@ pub fn main_draw(
             particles
                 .into_iter()
                 .for_each(|particle| {
-                    if particle.should_die {
+                    if !particle.in_front {
                         ctx.set_fill_style_str(&particle.color);
                         ctx.fill_rect(
                             particle.position.x, 
@@ -58,7 +59,7 @@ pub fn main_draw(
             particles
                 .into_iter()
                 .for_each(|particle| {
-                    if !particle.should_die {
+                    if particle.in_front {
                         ctx.set_fill_style_str(&particle.color);
                         ctx.fill_rect(
                             particle.position.x, 
@@ -132,7 +133,8 @@ pub fn main_draw(
                     &ctx, 
                     collision_map, 
                     enemies,
-                    particles
+                    particles,
+                    lava_tiles
                 )
             }
             

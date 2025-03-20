@@ -14,7 +14,10 @@ pub struct Particle {
     pub limit: u64,
     pub darken: bool,
     pub color_change: Option<String>,
-    pub should_die: bool
+    pub should_die: bool,
+    pub in_front: bool,
+    pub darken_counter: u16,
+    pub darken_counter_limit: u16
 }
 
 impl Default for Particle {
@@ -32,7 +35,10 @@ impl Default for Particle {
             counter: 0,    
             limit: 50,
             darken: true,
-            color_change: None
+            color_change: None,
+            in_front: false,
+            darken_counter: 0,
+            darken_counter_limit: 0,
         }
     }
 }
@@ -57,7 +63,12 @@ impl Particle {
         self.position.y += self.velocity.y / delta;
 
         if self.darken { 
-            self.color = darken_color(&self.color);
+            if self.darken_counter >= self.darken_counter_limit {
+                self.color = darken_color(&self.color);
+                self.darken_counter = 0;
+            } else {
+                self.darken_counter += 1;
+            }
         }
         if let Some(target_color) = &self.color_change { 
             self.color = shift_towards_color(&self.color, &target_color);

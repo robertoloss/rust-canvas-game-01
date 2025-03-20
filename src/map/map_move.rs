@@ -10,7 +10,8 @@ fn update_collisions_and_lethal_tiles(
     lethal_tiles: &mut Vec<Tile>,
     collision_map: &mut HashMap<(usize, usize), Tile>,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
-    particles: &mut Vec<Particle>
+    particles: &mut Vec<Particle>,
+    lava_tiles: &mut Vec<Tile>
 ) {
     *lethal_tiles = vec![];
     (*collision_map,*lethal_tiles) = generate_map_collisions(
@@ -19,7 +20,7 @@ fn update_collisions_and_lethal_tiles(
         &(*player), 
         enemies,
         true,
-        particles
+        lava_tiles
     );
 }
 pub fn map_move(
@@ -28,7 +29,7 @@ pub fn map_move(
     lethal_tiles: &mut Vec<Tile>,
     collision_map: &mut HashMap<(usize, usize), Tile>,
     enemies: &mut Vec<Box<dyn EnemyTrait>>,
-    coins: &mut Vec<Coin>
+    lava_tiles: &mut Vec<Tile>
 ) {
     let tile_size = player.tile_size;
     let num_of_tiles = player.screen_tiles;
@@ -56,12 +57,15 @@ pub fn map_move(
     }
     if update {
         *particles = vec![];
+        *lava_tiles = vec![];
+
         update_collisions_and_lethal_tiles(
             player, 
             lethal_tiles, 
             collision_map, 
             enemies, 
-            particles
+            particles,
+            lava_tiles
         );
     }
 }
