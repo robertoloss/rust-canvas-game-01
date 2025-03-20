@@ -53,6 +53,8 @@ pub fn manage_death(
 
             player.map_origin = player.map_origin_spawn.clone();
 
+            *lava_tiles = vec![];
+
             (*collision_map,*lethal_tiles) = generate_map_collisions(
                 player.map_origin.x, 
                 player.map_origin.y, 
