@@ -7,7 +7,7 @@ pub fn lava_particles(
     tile_position: Vec2
 ) {
     let chance = get_random_int(0, 100);
-    if chance < 85 {
+    if chance < 92 {
         return
     }
     let num_part = get_random_int(0, 1);
