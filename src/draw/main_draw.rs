@@ -201,8 +201,14 @@ pub fn main_draw(
                 }
                 ctx.draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
                     &player_sprite,
-                    0., pointer_y * tile_size, tile_size, tile_size,
-                    player.position.x, player.position.y, tile_size, tile_size,
+                    0., 
+                    pointer_y * tile_size, 
+                    tile_size, 
+                    tile_size,
+                    player.position.x, 
+                    player.position.y, 
+                    tile_size, 
+                    tile_size,
                 )?;
             } 
             else {

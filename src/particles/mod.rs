@@ -5,3 +5,4 @@ pub mod utils;
 pub mod hit_ground_particles;
 pub mod spawn_particles;
 pub mod lava_particles;
+pub mod wind_particles;

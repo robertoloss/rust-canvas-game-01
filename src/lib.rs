@@ -16,6 +16,7 @@ use particles::lava_particles::lava_particles;
 use particles::manage_particles::manage_particles;
 use particles::spawn_particles::spawn_particles;
 use particles::types::Particle;
+use particles::wind_particles::wind_particles;
 use utils::extern_c::is_game_paused;
 use utils::extern_c::screen_size;
 use wasm_bindgen::prelude::*;
@@ -122,6 +123,9 @@ pub fn render() -> Result<(), JsValue> {
             &mut particles
         );
     }
+
+    //wind_particles(&mut particles);
+
     lava_tiles
         .iter()
         .for_each(|tile| {
