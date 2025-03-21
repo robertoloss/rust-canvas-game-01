@@ -124,7 +124,7 @@ pub fn render() -> Result<(), JsValue> {
         );
     }
 
-    wind_particles(&mut particles);
+    //wind_particles(&mut particles);
 
     lava_tiles
         .iter()
