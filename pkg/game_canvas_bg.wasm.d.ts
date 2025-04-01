@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
-export function movement(a: number): void;
 export function set_image(a: number, b: number, c: number, d: number): void;
 export function get_and_give_f64(a: number, b: number): void;
+export function movement(a: number): void;
 export function stop_movement(a: number): void;
 export function initialize(): void;
 export function render(): Array;

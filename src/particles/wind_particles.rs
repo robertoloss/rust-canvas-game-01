@@ -12,10 +12,10 @@ pub fn wind_particles(
     let num_part = get_random_int(0, 2);
     for _ in 0..num_part {
         let pos_y = get_random(48., 800.);
-        let color = random_gray(60, 140);
-        let vel_x = get_random(5., 9.);
+        let color = random_gray(10, 60);
+        let vel_x = get_random(1., 3.);
         let vel_y = get_random(-3., 3.);
-        let change_vel_y = -(vel_y / 100.);
+        let change_vel_y = -(vel_y /500.);
         let p = Particle {
             in_front: false,
             position: Vec2 { 

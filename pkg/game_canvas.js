@@ -147,12 +147,6 @@ function getDataViewMemory0() {
     }
     return cachedDataViewMemory0;
 }
-/**
- * @param {number} key_code
- */
-export function movement(key_code) {
-    wasm.movement(key_code);
-}
 
 function isLikeNone(x) {
     return x === undefined || x === null;
@@ -182,6 +176,13 @@ export function get_and_give_f64(num) {
 }
 
 function notDefined(what) { return () => { throw new Error(`${what} is not defined`); }; }
+/**
+ * @param {number} key_code
+ */
+export function movement(key_code) {
+    wasm.movement(key_code);
+}
+
 /**
  * @param {number} key_code
  */
