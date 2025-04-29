@@ -10,54 +10,43 @@ pub fn manage_player_collision_with_tile(
     collision_map: &mut HashMap<(usize, usize), Tile>,
     particles: &mut Vec<Particle>
 ) {
-    let [
-        top_right,
-        top_left,
-        bottom_right,
-        bottom_left
-    ] = get_tiles_around_player(player);
+    let [top_right, top_left, bottom_right, bottom_left] = get_tiles_around_player(player);
 
     if player.velocity.x == 0. && player.velocity.y == 0. { return }
 
+    let up_down = if player.velocity.y <= 0. {
+        UpDown::Up
+    } else {
+        UpDown::Down
+    };
+    let left_right = if player.velocity.x < 0. {
+        LeftRight::Left
+    } else {
+        LeftRight::Right
+    };
+
+    let mut collision_tiles = ((0,0),(0,0),(0,0));
+
     if player.velocity.y <= 0. {
         if player.velocity.x < 0. {
-            manage_collision(
-                collision_map,
-                (top_left, top_right, bottom_left),
-                player,
-                UpDown::Up, 
-                LeftRight::Left,
-                particles
-            )
+            collision_tiles = (top_left, top_right, bottom_left)
         } else {
-            manage_collision(
-                collision_map,
-                (top_right, top_left, bottom_right),
-                player,
-                UpDown::Up, 
-                LeftRight::Right,
-                particles
-            );
+            collision_tiles = (top_right, top_left, bottom_right)
         }
     } else if player.velocity.y > 0. {
         if player.velocity.x < 0. {
-            manage_collision(
-                collision_map,
-                (bottom_left, bottom_right, top_left),
-                player,
-                UpDown::Down,
-                LeftRight::Left,
-                particles
-            );
+            collision_tiles = (bottom_left, bottom_right, top_left)
         } else {
-            manage_collision(
-                collision_map,
-                (bottom_right, bottom_left, top_right),
-                player, 
-                UpDown::Down,
-                LeftRight::Right,
-                particles
-            );
+            collision_tiles = (bottom_right, bottom_left, top_right)
         } 
     }
+
+    manage_collision(
+        collision_map,
+        collision_tiles,
+        player,
+        up_down,
+        left_right,
+        particles
+    );
 }
