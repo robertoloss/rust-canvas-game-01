@@ -21,6 +21,7 @@ use utils::extern_c::is_game_paused;
 use utils::extern_c::screen_size;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
+use web_sys::console;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
 use std::{collections::HashMap, sync::Mutex};
 use crate::player::types::*;
@@ -92,7 +93,8 @@ pub fn render() -> Result<(), JsValue> {
     if !player.is_dead {
         enemies_check_collisions(
             &mut player, 
-            &mut enemies);
+            &mut enemies
+        );
         manage_lethal_tile_collision(
             &lethal_tiles, 
             &mut player
@@ -124,7 +126,7 @@ pub fn render() -> Result<(), JsValue> {
         );
     }
 
-    //wind_particles(&mut particles);
+    wind_particles(&mut particles);
 
     lava_tiles
         .iter()
