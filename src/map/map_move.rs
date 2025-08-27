@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use crate::coins::types::Coin;
 use crate::enemies::types::EnemyTrait;
 use crate::generate_map_collisions;
+use crate::particles::init_wind_particles::init_wind_particles;
 use crate::particles::types::Particle;
 use crate::{Tile, Player};
 
@@ -58,6 +59,7 @@ pub fn map_move(
     if update {
         *particles = vec![];
         *lava_tiles = vec![];
+        init_wind_particles(particles);
 
         update_collisions_and_lethal_tiles(
             player, 

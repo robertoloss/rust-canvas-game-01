@@ -24,6 +24,7 @@ use lazy_static::lazy_static;
 use web_sys::console;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
 use std::{collections::HashMap, sync::Mutex};
+use crate::particles::init_wind_particles::init_wind_particles;
 use crate::player::types::*;
 use crate::utils::utils::*;
 use crate::player::player_move::*;
@@ -55,6 +56,7 @@ pub fn initialize() {
     let mut coins = COINS.lock().unwrap();
     let mut lava_tiles = LAVA_TILES.lock().unwrap();
     let player = PLAYER.lock().unwrap();
+    let mut particles = PARTICLES.lock().unwrap();
 
     (*collision_map,*lethal_tiles) = generate_map_collisions(
         player.map_origin.x, 
@@ -68,6 +70,7 @@ pub fn initialize() {
         &mut coins, 
         &player
     );
+    init_wind_particles(&mut particles);
 }
 
 #[wasm_bindgen]
@@ -126,7 +129,6 @@ pub fn render() -> Result<(), JsValue> {
         );
     }
 
-    wind_particles(&mut particles);
 
     lava_tiles
         .iter()
@@ -136,6 +138,7 @@ pub fn render() -> Result<(), JsValue> {
                 tile.position.clone()
             );
         });
+    wind_particles(&mut particles);
 
     manage_particles(
         &mut particles,

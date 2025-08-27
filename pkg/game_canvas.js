@@ -179,13 +179,6 @@ function notDefined(what) { return () => { throw new Error(`${what} is not defin
 /**
  * @param {number} key_code
  */
-export function movement(key_code) {
-    wasm.movement(key_code);
-}
-
-/**
- * @param {number} key_code
- */
 export function stop_movement(key_code) {
     wasm.stop_movement(key_code);
 }
@@ -205,6 +198,13 @@ export function render() {
     if (ret[1]) {
         throw takeFromExternrefTable0(ret[0]);
     }
+}
+
+/**
+ * @param {number} key_code
+ */
+export function movement(key_code) {
+    wasm.movement(key_code);
 }
 
 function handleError(f, args) {
