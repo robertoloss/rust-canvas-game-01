@@ -1,4 +1,4 @@
-use crate::{utils::{extern_c::{get_random, get_random_int}, utils::log_out_s}, Vec2};
+use crate::{utils::{extern_c::{get_random, get_random_int}}, Vec2};
 use super::{types::Particle, utils::{random_gray}};
 
 pub fn init_wind_particles(

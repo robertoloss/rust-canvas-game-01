@@ -1,5 +1,5 @@
-use crate::{utils::extern_c::{get_random, get_random_int}, Player, Vec2};
-use super::{types::Particle, utils::{random_gray, random_yellow}};
+use crate::{utils::extern_c::{get_random, get_random_int}, Vec2};
+use super::{types::Particle, utils::{random_gray}};
 
 
 pub fn wind_particles(

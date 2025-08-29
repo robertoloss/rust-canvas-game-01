@@ -1,4 +1,4 @@
-use crate::{log_out_f, utils::extern_c::get_random_int};
+use crate::{utils::extern_c::get_random_int};
 
 
 pub fn random_gray(min: u32, max: u32) -> String {

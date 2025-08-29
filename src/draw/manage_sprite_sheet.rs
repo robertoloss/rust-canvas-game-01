@@ -1,4 +1,4 @@
-use crate::{log_out_f, SpriteSheet};
+use crate::{SpriteSheet};
 
 pub fn manage_sprite_sheet <F>(
     sheet: &mut SpriteSheet,

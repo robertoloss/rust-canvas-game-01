@@ -1,5 +1,3 @@
-use web_sys::console;
-
 use crate::PLAYER;
 use crate::wasm_bindgen;
 

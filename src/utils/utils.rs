@@ -1,6 +1,5 @@
 use std::fmt::Debug;
-
-use crate::{ enemies, wasm_bindgen, CanvasRenderingContext2d, HashMap, HtmlCanvasElement, JsValue, Player, SpriteSheet, ThreadSafeImage, ENEMIES, PLAYER };
+use crate::{ wasm_bindgen, CanvasRenderingContext2d, HashMap, HtmlCanvasElement, JsValue, Player, SpriteSheet, ThreadSafeImage, PLAYER };
 use wasm_bindgen::JsCast;
 use web_sys::console;
 use crate::HtmlImageElement;
@@ -52,10 +51,11 @@ pub fn get_context(player: &Player) -> Result<(CanvasRenderingContext2d,HtmlCanv
     Ok((context,canvas))
 }
 
-
+#[allow(dead_code)]
 pub fn log_out_s(s: &str) {
     console::log_1(&JsValue::from_str(s))
 }
+#[allow(dead_code)]
 pub fn log_out_f<T: Debug>(f: T) {
     console::log_1(&JsValue::from_str(&format!("{:?}", f)))
 }

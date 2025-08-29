@@ -96,7 +96,7 @@ export const images = [
 			isSheet: true,
 		},
 		{
-			src: './assets/coin_6.png',
+			src: './assets/coin_7.png',
 			name: 'coin',
 			isSheet: true,
 		},

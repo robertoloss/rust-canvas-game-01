@@ -3,7 +3,6 @@ use std::collections::HashMap;
 use crate::JsValue;
 use draw_sand::draw_sand;
 use draw_this::draw_this;
-use draw_this_sw_sh::draw_this_sw_sh;
 use web_sys::{CanvasRenderingContext2d, HtmlImageElement};
 use crate::{get_map, Player, Tile};
 

@@ -84,7 +84,7 @@ impl Default for Player {
                     tile_position_pointer_y: 0.,
                     counter: 0,
                     counter_limit: 16,
-                    pointer_y_limit: 24. * tile_size,
+                    pointer_y_limit: 32. * tile_size,
                 }),
                 (String::from("sand"), 
                  SpriteSheet {

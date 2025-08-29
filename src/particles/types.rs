@@ -1,4 +1,4 @@
-use crate::{log_out_f, Vec2};
+use crate::Vec2;
 
 #[derive(Debug)]
 pub struct Particle {

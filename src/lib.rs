@@ -21,7 +21,6 @@ use utils::extern_c::is_game_paused;
 use utils::extern_c::screen_size;
 use wasm_bindgen::prelude::*;
 use lazy_static::lazy_static;
-use web_sys::console;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, HtmlImageElement};
 use std::{collections::HashMap, sync::Mutex};
 use crate::particles::init_wind_particles::init_wind_particles;
