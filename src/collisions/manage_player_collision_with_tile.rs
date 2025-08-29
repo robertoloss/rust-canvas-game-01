@@ -10,7 +10,12 @@ pub fn manage_player_collision_with_tile(
     collision_map: &mut HashMap<(usize, usize), Tile>,
     particles: &mut Vec<Particle>
 ) {
-    let [top_right, top_left, bottom_right, bottom_left] = get_tiles_around_player(player);
+    let [
+        top_right, 
+        top_left, 
+        bottom_right, 
+        bottom_left
+    ] = get_tiles_around_player(player);
 
     if player.velocity.x == 0. && player.velocity.y == 0. { return }
 

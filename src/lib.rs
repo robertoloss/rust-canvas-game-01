@@ -116,7 +116,7 @@ pub fn render() -> Result<(), JsValue> {
             &mut lava_tiles
         );
         manage_player_collision_with_tile(
-            &mut(*player), 
+            &mut player, 
             &mut collision_map,
             &mut particles
         ); 

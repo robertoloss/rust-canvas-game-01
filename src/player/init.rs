@@ -15,7 +15,7 @@ impl Default for Player {
             is_dead: false,
             position_spawn: initial_spawn,
             hitbox: Direction {
-                left: 6. * 2.0, // pixels per sprite-pixel * num of sprite-pixels
+                left: 10. * 2.0, // pixels per sprite-pixel * num of sprite-pixels
                 right: 6. * 2.0,
             },
             velocity: Vec2 {

@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use crate::player::types::Direction;
 use crate::utils::extern_c::play;
 use crate::{Player, Tile};
 use crate::collisions::types::LeftRight;
@@ -19,10 +20,18 @@ pub fn player_move(
         if player.velocity.x < player.horizontal_velocity {
             player.velocity.x += acceleration 
         }
+        player.hitbox =  Direction {
+            left: 10. * 2.0, // pixels per sprite-pixel * num of sprite-pixels
+            right: 6. * 2.0,
+        };
     } else if player.moves.left{
         if player.velocity.x > -player.horizontal_velocity {
             player.velocity.x -= acceleration
         }
+        player.hitbox =  Direction {
+            left: 6. * 2.0, // pixels per sprite-pixel * num of sprite-pixels
+            right: 10. * 2.0,
+        };
     } else if !player.is_hanging {
         if player.velocity.x >= brake {
             player.velocity.x -= brake

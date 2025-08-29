@@ -7,24 +7,6 @@ use std::collections::HashMap;
 use crate::collisions::types::{LeftRight,UpDown};
 use crate::collisions::get_manage_collision_params::*;
 
-pub fn tile_collision(
-    tuple: (usize, usize), 
-    collision_map: &mut HashMap<(usize, usize), Tile>
-) -> Option<&mut Tile> {
-    collision_map.get_mut(&tuple)
-}
-
-fn player_can_cling(
-    left_right: &LeftRight, 
-    tile: &mut Tile,
-    player: &mut Player
-) {
-    player.can_cling = left_right.clone();
-    player.clinging_tile_coord = Some((
-        tile.tile_pos.x,
-        tile.tile_pos.y
-    ))
-}
 
 pub fn manage_collision(
     collision_map: &mut HashMap<(usize, usize), Tile>,
@@ -155,3 +137,21 @@ pub fn manage_collision(
     }
 }
 
+pub fn tile_collision(
+    tuple: (usize, usize), 
+    collision_map: &mut HashMap<(usize, usize), Tile>
+) -> Option<&mut Tile> {
+    collision_map.get_mut(&tuple)
+}
+
+fn player_can_cling(
+    left_right: &LeftRight, 
+    tile: &mut Tile,
+    player: &mut Player
+) {
+    player.can_cling = left_right.clone();
+    player.clinging_tile_coord = Some((
+        tile.tile_pos.x,
+        tile.tile_pos.y
+    ))
+}
